@@ -3,41 +3,61 @@
 #include <clang-c/CXCompilationDatabase.h>
 #include <stdlib.h>
 
-void analyzeCommand(CXCompileCommand command)
+
+enum CXChildVisitResult cursor_visitor(CXCursor cursor, CXCursor parent, CXClientData client_data)
+{
+   //printf("Visitando cositasss");
+   //if( cursor.kind == CXCursor_FunctionDecl){
+      CXString usr = clang_getCursorUSR(cursor);
+      printf("thing: %s \n",clang_getCString(usr));
+      printf("kind: %u \n",cursor.kind);
+      clang_disposeString(usr);
+   //}
+   clang_visitChildren(
+      cursor,
+      cursor_visitor,
+      0
+   );
+}
+
+void analyze_command(CXCompileCommand command, CXIndex cxindex)
 {
    CXString filename = clang_CompileCommand_getFilename(command);
 
    unsigned int num_args = clang_CompileCommand_getNumArgs(command);
 
-   CXString args[] = malloc(num_args * sizeof(CXString));
+   CXString* args = (CXString*) malloc(num_args * sizeof(CXString));
    for( unsigned int i = 0; i < num_args; i++ )
    {
       args[i] = clang_CompileCommand_getArg(command,i);
    }
 
-   char* cargs[] = malloc(num_args * sizeof(char*));
+   const char** cargs = malloc(num_args * sizeof(char*));
    for( unsigned int i = 0; i < num_args; i++ )
    {
       cargs[i] = clang_getCString(args[i]);
    }
 
-   CXIndex cxindex = clang_createIndex(1, 0);//esto hay que compartirlo entre todos los parse!!
+
    CXTranslationUnit tu;
-   clang_parseTranslationUnit2(//o talvez clang_parseTranslationUnit2FullArgv ?
+   clang_parseTranslationUnit2FullArgv(//o talvez clang_parseTranslationUnit2FullArgv ?
       cxindex,
-      clang_getCString(filename),
+      NULL,
       cargs,num_args,
       0,0,
       CXTranslationUnit_None,
       &tu
    );
 
+   CXCursor cursor = clang_getTranslationUnitCursor(tu);
+   printf("cursor kind: %u",cursor.kind);
    clang_visitChildren(
-      clang_getTranslationUnitCursor(tu),
-
+      cursor,
+      cursor_visitor,
+      0
    );
 
-   clang_disposeTranslationUnit(CXTranslationUnit);//noo, no disponer!! crear todas, almacenarlas, recorrerlas todas con clang_visitchildren, y sólo entonces hacer dispose!!!!
+   clang_disposeTranslationUnit(tu);
 
    clang_disposeString(filename);
    for(unsigned int i = 0; i < num_args; i++ )
@@ -45,13 +65,14 @@ void analyzeCommand(CXCompileCommand command)
       clang_disposeString(args[i]);
    }
    free(args);
+   free(cargs);
 }
 
 int main(int argc, char *argv[]) {
    if(argc < 2)
    {
       printf("Please pass the build folder where compile_commands.json is located.");
-      exit();
+      exit(0);
    }
 
    CXCompilationDatabase_Error error;
@@ -60,21 +81,21 @@ int main(int argc, char *argv[]) {
    {
       printf("A compile_commands.json in that directory cannot be loaded.");
       clang_CompilationDatabase_dispose(db);
-      exit();
+      exit(0);
    }
 
    CXCompileCommands commands = clang_CompilationDatabase_getAllCompileCommands(db);
    unsigned int commands_number = clang_CompileCommands_getSize(commands);
+   CXIndex index = clang_createIndex(1, 0);//esto hay que compartirlo entre todos los parse!!
+   clang_CXIndex_setInvocationEmissionPathOption(index,"clang.log");
    printf("Number of commands found: %u\n",commands_number);
    for(unsigned int c=0; c < commands_number; c++)
    {
       printf("Analyzing command: %u of %u\n", c, commands_number);
       CXCompileCommand command = clang_CompileCommands_getCommand(commands,c);
-
-      analyzeCommand(command);
-
-      clang_CompileCommand_dispose(command);
+      analyze_command(command, index);
    }
+   clang_disposeIndex(index);
    clang_CompileCommands_dispose(commands);
    clang_CompilationDatabase_dispose(db);
 
