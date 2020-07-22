@@ -6,18 +6,22 @@
 
 enum CXChildVisitResult cursor_visitor(CXCursor cursor, CXCursor parent, CXClientData client_data)
 {
-   //printf("Visitando cositasss");
-   //if( cursor.kind == CXCursor_FunctionDecl){
-      CXString usr = clang_getCursorUSR(cursor);
-      printf("thing: %s \n",clang_getCString(usr));
-      printf("kind: %u \n",cursor.kind);
+   //if( cursor.kind == CXCursor_FunctionDecl)//decl
+   if( cursor.kind == CXCursor_DeclRefExpr){
+      CXCursor def = clang_getCursorReferenced(cursor);
+      CXString usr = clang_getCursorUSR(def);
+      printf("A call to: %s \n",clang_getCString(usr));
       clang_disposeString(usr);
-   //}
-   clang_visitChildren(
-      cursor,
-      cursor_visitor,
-      0
-   );
+   }
+   
+   CXString usr = clang_getCursorUSR(cursor);
+   printf("thing: %s \n",clang_getCString(usr));
+   printf("kind: %u \n",cursor.kind);
+   clang_disposeString(usr);
+   
+
+
+   return CXChildVisit_Recurse;
 }
 
 void analyze_command(CXCompileCommand command, CXIndex cxindex)
