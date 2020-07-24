@@ -33,18 +33,7 @@ void analyze_command(CXCompileCommand command, CXIndex cxindex, GatheredCallgrap
       CXTranslationUnit_None,
       &tu
    );
-
    visit_translationUnit(tu,gathered_callgraph);
-   /*
-   CXCursor cursor = clang_getTranslationUnitCursor(tu);
-   printf("cursor kind: %u",cursor.kind);
-   clang_visitChildren(
-      cursor,
-      cursor_visitor,
-      gathered_callgraph
-   );
-   */
-
    clang_disposeTranslationUnit(tu);
 
    clang_disposeString(filename);
