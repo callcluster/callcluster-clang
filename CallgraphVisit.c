@@ -1,9 +1,21 @@
 #include "CallgraphVisit.h"
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct {
     GatheredCallgraph Callgraph;
+    CXCursor CurrentCaller;
 } CallgraphVisitImpl;
+
+
+char* copied_usr(CXCursor c){
+    CXString usr = clang_getCursorUSR(c);
+    const char* cstr = clang_getCString(usr);
+    char* copied = malloc( sizeof(char) * ( strlen(cstr) + 1 ) );
+    strcpy(copied,cstr);
+    clang_disposeString(usr);
+    return copied;
+}
 
 CallgraphVisit CallgraphVisit_create(GatheredCallgraph modified)
 {
@@ -19,21 +31,19 @@ void CallgraphVisit_dispose(CallgraphVisit v)
 
 void CallgraphVisit_addCall(CallgraphVisit v, CXCursor called)
 {
-    CXString usr = clang_getCursorUSR(called);
-    printf("called: %s \n",clang_getCString(usr));
-    clang_disposeString(usr);
+    CallgraphVisitImpl* visit = (CallgraphVisitImpl*) v;
+    GatheredCallgraph_addCall(visit->Callgraph, copied_usr(visit->CurrentCaller), copied_usr(called));
 }
 
 void CallgraphVisit_addFunctionDeclaration(CallgraphVisit v, CXCursor declared)
 {
-    CXString usr = clang_getCursorUSR(declared);
-    printf("declared: %s \n",clang_getCString(usr));
-    clang_disposeString(usr);
+    CallgraphVisitImpl* visit = (CallgraphVisitImpl*) v;
+    GatheredCallgraph_addDeclaration(visit->Callgraph, copied_usr(declared));
 }
 
 void CallgraphVisit_setCurrentFunctionDefinition(CallgraphVisit v, CXCursor defined)
 {
-    CXString usr = clang_getCursorUSR(defined);
-    printf("defined: %s \n",clang_getCString(usr));
-    clang_disposeString(usr);
+    CallgraphVisitImpl* visit = (CallgraphVisitImpl*) v;
+    GatheredCallgraph_addDefinition(visit, copied_usr(defined));
+    visit->CurrentCaller=defined;
 }
