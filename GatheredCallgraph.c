@@ -13,7 +13,7 @@ typedef struct FunctionList FunctionList;
 struct CallsSet {
     unsigned int from;
     unsigned int to;
-    struct CallsSet* next;
+    struct CallsSet* Next;
 };
 
 typedef struct CallsSet CallsSet;
@@ -63,9 +63,9 @@ void disposeGatheredCallgraph(GatheredCallgraph callgraph)
     {
         CallsSet* current = cg->Calls;
         while(current!=NULL){
-            CallsSet* next = current->next;
+            CallsSet* Next = current->Next;
             free(current);
-            current = next;
+            current = Next;
         }
     }
 
@@ -83,7 +83,7 @@ void GatheredCallgraph_addCall(GatheredCallgraph callgraph, const char * from, c
     CallsSet* new_set = malloc(sizeof(CallsSet));
     new_set->from = from_id;
     new_set->to = to_id;
-    new_set->next = cg->Calls;
+    new_set->Next = cg->Calls;
 
     printf("%d -> %d\n", from_id, to_id);
 
@@ -123,4 +123,31 @@ void GatheredCallgraph_addDefinition(GatheredCallgraph callgraph, const char * d
 void GatheredCallgraph_addDeclaration(GatheredCallgraph callgraph, const  char * declared)
 {
     GatheredCallgraph_addDefinition(callgraph, declared);
+}
+
+void GatheredCallgraph_visitCalls(GatheredCallgraph gathered_callgraph, CallsVisitor visitor, void* data)
+{
+    GatheredCallgraphImpl* cg = (GatheredCallgraphImpl*) gathered_callgraph;
+    CallsSet* current = cg->Calls;
+    while(current!=NULL){
+        visitor(current->from, current->to, data);
+        current = current->Next;
+    }
+}
+void GatheredCallgraph_visitFunctions(GatheredCallgraph gathered_callgraph, FunctionsVisitor visitor, void* data)
+{
+    GatheredCallgraphImpl* cg = (GatheredCallgraphImpl*) gathered_callgraph;
+    FunctionList** functions = malloc(sizeof(FunctionList*)*(cg->FunctonsSize));
+    {
+        FunctionList* current = cg->LastFunction;
+        unsigned int current_index = (cg->FunctonsSize) - 1;
+        while(current!=NULL){
+            functions[current_index] = current;
+            current = current->Previous; current_index--;
+        }
+    }
+    for(unsigned int i = 0; i < (cg->FunctonsSize); i++){
+        visitor(functions[i]->FunctionName,data);
+    }
+    free(functions);
 }
