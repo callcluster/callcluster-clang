@@ -10,18 +10,33 @@ struct FunctionList {
 
 typedef struct FunctionList FunctionList;
 
-typedef struct {
+struct CallsSet {
     unsigned int from;
     unsigned int to;
     struct CallsSet* next;
-} CallsSet;
+};
 
-typedef struct {
+typedef struct CallsSet CallsSet;
+
+typedef struct  {
     FunctionList* Last;
     unsigned int FunctonsSize;
     CallsSet* Calls;
 } GatheredCallgraphImpl;
 
+
+int functionId(GatheredCallgraphImpl* cg, const char * name)
+{
+    FunctionList* current = cg -> Last;
+    int i = cg->FunctonsSize - 1;
+    while(current != NULL){
+        if(strcmp(current->FunctionName,name)==0){
+            return i;
+        }
+        current = current -> Previous; i--;
+    }
+    return i;
+}
 
 GatheredCallgraph createGatheredCallgraph()
 {
@@ -39,11 +54,21 @@ void disposeGatheredCallgraph(GatheredCallgraph cg)
 }
 
 
-void GatheredCallgraph_addCall(GatheredCallgraph callgraph, char * from,  char * to)
+void GatheredCallgraph_addCall(GatheredCallgraph callgraph, const char * from, const char * to)
 {
-    printf("%s -> %s \n",from,to);
-    free(from);
-    free(to);
+    GatheredCallgraphImpl* cg = (GatheredCallgraphImpl*) callgraph;
+    
+    int from_id = functionId(cg, from);
+    int to_id = functionId(cg, to);
+
+    CallsSet* new_set = malloc(sizeof(CallsSet));
+    new_set->from = from_id;
+    new_set->to = to_id;
+    new_set->next = cg->Calls;
+
+    printf("%d -> %d\n", from_id, to_id);
+
+    cg->Calls = new_set;
 }
 
 FunctionList* createFunctionList(char* name, FunctionList* previous){
@@ -66,26 +91,10 @@ void addFunction(GatheredCallgraphImpl* cg, char * name)
     }
 }
 
-int functionId(GatheredCallgraphImpl* cg, char * name)
-{
-    FunctionList* current = cg -> Last;
-    int i = cg->FunctonsSize - 1;
-    while(current != NULL){
-        if(strcmp(current->FunctionName,name)==0){
-            return i;
-        }
-        current = current -> Previous; i--;
-    }
-    return i;
-}
-
 void GatheredCallgraph_addDefinition(GatheredCallgraph callgraph,  char * def_usr)
 {
     GatheredCallgraphImpl* cg = (GatheredCallgraphImpl*) callgraph;
     int id = functionId(cg,def_usr);
-
-    printf("def %d: %s\n", id, def_usr);
-
     if(id < 0){
         addFunction(cg,def_usr);
     }
@@ -93,7 +102,5 @@ void GatheredCallgraph_addDefinition(GatheredCallgraph callgraph,  char * def_us
 
 void GatheredCallgraph_addDeclaration(GatheredCallgraph callgraph,  char * declared)
 {
-    printf("decl: %s\n",declared);
     GatheredCallgraph_addDefinition(callgraph, declared);
-
 }

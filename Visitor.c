@@ -36,7 +36,6 @@ enum CXChildVisitResult declaration_visitor(CXCursor cursor, CXCursor parent, CX
 void visit_translationUnit(CXTranslationUnit tu, GatheredCallgraph gathered_callgraph)
 {
     CXCursor cursor = clang_getTranslationUnitCursor(tu);
-    printf("cursor kind: %u",cursor.kind);
     CallgraphVisit visit = CallgraphVisit_create(gathered_callgraph);
     clang_visitChildren(
         cursor,

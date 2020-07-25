@@ -6,7 +6,7 @@ GatheredCallgraph createGatheredCallgraph();
 
 void disposeGatheredCallgraph(GatheredCallgraph cg);
 
-void GatheredCallgraph_addCall(GatheredCallgraph, char * from,  char * to);
+void GatheredCallgraph_addCall(GatheredCallgraph, const char * from, const char * to);
 
 void GatheredCallgraph_addDefinition(GatheredCallgraph,  char * def_usr);
 

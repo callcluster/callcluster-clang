@@ -32,7 +32,11 @@ void CallgraphVisit_dispose(CallgraphVisit v)
 void CallgraphVisit_addCall(CallgraphVisit v, CXCursor called)
 {
     CallgraphVisitImpl* visit = (CallgraphVisitImpl*) v;
-    GatheredCallgraph_addCall(visit->Callgraph, copied_usr(visit->CurrentCaller), copied_usr(called));
+    char * current_usr = copied_usr(visit->CurrentCaller);
+    char * called_usr = copied_usr(called);
+    GatheredCallgraph_addCall(visit->Callgraph, current_usr, called_usr);
+    free(current_usr);
+    free(called_usr);
 }
 
 void CallgraphVisit_addFunctionDeclaration(CallgraphVisit v, CXCursor declared)
