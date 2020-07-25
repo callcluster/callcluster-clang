@@ -2,6 +2,7 @@
 #include <clang-c/Index.h>
 #include <clang-c/CXCompilationDatabase.h>
 #include <stdlib.h>
+#include "serialization.h"
 #include "GatheredCallgraph.h"
 #include "Visitor.h"
 
@@ -74,6 +75,7 @@ int main(int argc, char *argv[]) {
       CXCompileCommand command = clang_CompileCommands_getCommand(commands,c);
       analyze_command(command, index, gathered_callgraph);
    }
+   save(gathered_callgraph,"analysis.json");
    disposeGatheredCallgraph(gathered_callgraph);
    clang_disposeIndex(index);
    clang_CompileCommands_dispose(commands);
