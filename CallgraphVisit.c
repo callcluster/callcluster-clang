@@ -44,6 +44,6 @@ void CallgraphVisit_addFunctionDeclaration(CallgraphVisit v, CXCursor declared)
 void CallgraphVisit_setCurrentFunctionDefinition(CallgraphVisit v, CXCursor defined)
 {
     CallgraphVisitImpl* visit = (CallgraphVisitImpl*) v;
-    GatheredCallgraph_addDefinition(visit, copied_usr(defined));
+    GatheredCallgraph_addDefinition(visit->Callgraph, copied_usr(defined));
     visit->CurrentCaller=defined;
 }

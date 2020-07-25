@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "*.tcc": "c",
+        "functional": "c",
+        "fstream": "c",
+        "istream": "c",
+        "ranges": "c",
+        "streambuf": "c",
+        "ostream": "c",
+        "numeric": "c",
+        "cmath": "c"
+    }
+}

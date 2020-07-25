@@ -46,12 +46,13 @@ void analyze_command(CXCompileCommand command, CXIndex cxindex, GatheredCallgrap
 }
 
 int main(int argc, char *argv[]) {
+   /*
    if(argc < 2)
    {
       printf("Please pass the build folder where compile_commands.json is located.");
       exit(0);
    }
-
+   */
    CXCompilationDatabase_Error error;
    CXCompilationDatabase db = clang_CompilationDatabase_fromDirectory("./test-projects/simple/build", &error);
    if(error == CXCompilationDatabase_CanNotLoadDatabase)
