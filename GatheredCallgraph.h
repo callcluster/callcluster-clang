@@ -8,8 +8,8 @@ void disposeGatheredCallgraph(GatheredCallgraph cg);
 
 void GatheredCallgraph_addCall(GatheredCallgraph, const char * from, const char * to);
 
-void GatheredCallgraph_addDefinition(GatheredCallgraph,  char * def_usr);
+void GatheredCallgraph_addDefinition(GatheredCallgraph, const char * def_usr);
 
-void GatheredCallgraph_addDeclaration(GatheredCallgraph,  char * declared);
+void GatheredCallgraph_addDeclaration(GatheredCallgraph, const char * declared);
 
 #endif /* GATHERED_CALLGRAPH_H */

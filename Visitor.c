@@ -1,6 +1,5 @@
 #include "Visitor.h"
 #include "CallgraphVisit.h"
-#include <stdio.h>
 
 enum CXChildVisitResult call_visitor(CXCursor cursor, CXCursor parent, CXClientData client_data)
 {
@@ -21,7 +20,7 @@ enum CXChildVisitResult declaration_visitor(CXCursor cursor, CXCursor parent, CX
 
     if(cursor.kind == CXCursor_FunctionDecl){
         CallgraphVisit_addFunctionDeclaration(visit, cursor);
-        if(clang_isCursorDefinition(cursor)){
+        if(clang_isCursorDefinition(cursor) != 0){
             CallgraphVisit_setCurrentFunctionDefinition(visit, cursor);
             clang_visitChildren(
                 cursor,
@@ -30,6 +29,7 @@ enum CXChildVisitResult declaration_visitor(CXCursor cursor, CXCursor parent, CX
             );
         }
     }
+    
     return CXChildVisit_Continue;
 }
 

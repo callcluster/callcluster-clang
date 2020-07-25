@@ -2,7 +2,7 @@
 #include "cJSON.h"
 #include <stdio.h>
 #include <string.h>
-
+#include <stdlib.h>
 cJSON* createCallsArray(GatheredCallgraph gathered_callgraph){
     return cJSON_CreateArray();
 }
@@ -24,4 +24,6 @@ void save(GatheredCallgraph gathered_callgraph, const char * filename){
     FILE* f = fopen(filename,"w");
     fwrite(json,sizeof(char),strlen(json),f);
     fclose(f);
+    free(json);
+    cJSON_Delete(o);
 }

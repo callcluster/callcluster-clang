@@ -1,21 +1,10 @@
 #include "CallgraphVisit.h"
 #include <stdlib.h>
-#include <string.h>
 
 typedef struct {
     GatheredCallgraph Callgraph;
     CXCursor CurrentCaller;
 } CallgraphVisitImpl;
-
-
-char* copied_usr(CXCursor c){
-    CXString usr = clang_getCursorUSR(c);
-    const char* cstr = clang_getCString(usr);
-    char* copied = malloc( sizeof(char) * ( strlen(cstr) + 1 ) );
-    strcpy(copied,cstr);
-    clang_disposeString(usr);
-    return copied;
-}
 
 CallgraphVisit CallgraphVisit_create(GatheredCallgraph modified)
 {
@@ -32,22 +21,33 @@ void CallgraphVisit_dispose(CallgraphVisit v)
 void CallgraphVisit_addCall(CallgraphVisit v, CXCursor called)
 {
     CallgraphVisitImpl* visit = (CallgraphVisitImpl*) v;
-    char * current_usr = copied_usr(visit->CurrentCaller);
-    char * called_usr = copied_usr(called);
-    GatheredCallgraph_addCall(visit->Callgraph, current_usr, called_usr);
-    free(current_usr);
-    free(called_usr);
+
+    CXString current_usr = clang_getCursorUSR(visit->CurrentCaller);
+    CXString called_usr = clang_getCursorUSR(called);
+
+    GatheredCallgraph_addCall(
+        visit->Callgraph, 
+        clang_getCString(current_usr), 
+        clang_getCString(called_usr)
+    );
+
+    clang_disposeString(current_usr);
+    clang_disposeString(called_usr);
 }
 
 void CallgraphVisit_addFunctionDeclaration(CallgraphVisit v, CXCursor declared)
 {
     CallgraphVisitImpl* visit = (CallgraphVisitImpl*) v;
-    GatheredCallgraph_addDeclaration(visit->Callgraph, copied_usr(declared));
+    CXString usr = clang_getCursorUSR(declared);
+    GatheredCallgraph_addDeclaration(visit->Callgraph, clang_getCString(usr));
+    clang_disposeString(usr);
 }
 
 void CallgraphVisit_setCurrentFunctionDefinition(CallgraphVisit v, CXCursor defined)
 {
     CallgraphVisitImpl* visit = (CallgraphVisitImpl*) v;
-    GatheredCallgraph_addDefinition(visit->Callgraph, copied_usr(defined));
+    CXString usr = clang_getCursorUSR(defined);
+    GatheredCallgraph_addDefinition(visit->Callgraph, clang_getCString(usr));
+    clang_disposeString(usr);
     visit->CurrentCaller=defined;
 }
