@@ -1,5 +1,6 @@
 #include "CallgraphVisit.h"
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct {
     GatheredCallgraph Callgraph;
@@ -39,20 +40,35 @@ void CallgraphVisit_addFunctionDeclaration(CallgraphVisit v, CXCursor declared)
 {
     CallgraphVisitImpl* visit = (CallgraphVisitImpl*) v;
 
+    CXString display = clang_getCursorDisplayName(declared);
+
     CXString usr = clang_getCursorUSR(declared);
-    GatheredCallgraph_addDeclaration(visit->Callgraph, clang_getCString(usr));
+    GatheredCallgraph_addDeclaration(visit->Callgraph, clang_getCString(usr), clang_getCString(display));
     clang_disposeString(usr);
+
+    clang_disposeString(display);
+}
+
+char* create_location_string(CXCursor c)
+{
+    char* ret=malloc(sizeof(char)*5);
+    strcpy(ret,"hola");
+    //CXSourceLocation loc = clang_getCursorLocation(c);
+    //clang_getPresumedLocation(loc,....);
+    return ret;
 }
 
 void CallgraphVisit_setCurrentFunctionDefinition(CallgraphVisit v, CXCursor defined)
 {
-    CXString display = clang_getCursorDisplayName(defined);
+    
 
     CallgraphVisitImpl* visit = (CallgraphVisitImpl*) v;
     CXString usr = clang_getCursorUSR(defined);
-    GatheredCallgraph_addDefinition(visit->Callgraph, clang_getCString(usr), clang_getCString(display));
+
+    char* location = create_location_string(defined);
+    GatheredCallgraph_addDefinition(visit->Callgraph, clang_getCString(usr), location);
     clang_disposeString(usr);
     visit->CurrentCaller=defined;
-
-    clang_disposeString(display);
+    
+    free(location);
 }
