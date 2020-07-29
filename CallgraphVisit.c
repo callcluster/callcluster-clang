@@ -71,7 +71,7 @@ void CallgraphVisit_setCurrentFunctionDefinition(CallgraphVisit v, CXCursor defi
     CXString usr = clang_getCursorUSR(defined);
 
     char* location = create_location_string(defined);
-    GatheredCallgraph_addDefinition(visit->Callgraph, clang_getCString(usr), location);
+    GatheredCallgraph_addDefinition(visit->Callgraph, clang_getCString(usr), location, 25);
     clang_disposeString(usr);
     visit->CurrentCaller=defined;
     

@@ -7,6 +7,7 @@ struct FunctionList {
     char* FunctionUsr;
     char* Location;
     char* DisplayName;
+    unsigned int NumberOfLines;
     struct FunctionList* Previous;
 };
 
@@ -129,6 +130,7 @@ FunctionList* createFunctionList(const char* name, FunctionList* previous)
     ret->Previous = previous;
     ret->DisplayName = NULL;
     ret->Location = NULL;
+    ret->NumberOfLines = 0;
     return ret;
 }
 
@@ -155,13 +157,14 @@ FunctionList* get_or_add_function(GatheredCallgraphImpl* cg, const char * usr)
     return ret;
 }
 
-void GatheredCallgraph_addDefinition(GatheredCallgraph callgraph, const char * def_usr, const char * location)
+void GatheredCallgraph_addDefinition(GatheredCallgraph callgraph, const char * def_usr, const char * location, unsigned int number_of_lines)
 {
     GatheredCallgraphImpl* cg = (GatheredCallgraphImpl*) callgraph;
     FunctionList* fun = get_or_add_function(cg,def_usr);
     if(fun->Location==NULL){
         fun->Location=mallocopy(location);
     }
+    fun->NumberOfLines=number_of_lines;
 }
 
 void GatheredCallgraph_addDeclaration(GatheredCallgraph callgraph, const char * declared_usr, const char * def_display_name)
@@ -195,7 +198,13 @@ void GatheredCallgraph_visitFunctions(GatheredCallgraph gathered_callgraph, Func
         }
     }
     for(unsigned int i = 0; i < (cg->FunctonsSize); i++){
-        visitor(functions[i]->DisplayName,functions[i]->FunctionUsr,functions[i]->Location,data);
+        visitor(
+            functions[i]->DisplayName,
+            functions[i]->FunctionUsr,
+            functions[i]->Location, 
+            functions[i]->NumberOfLines,
+            data
+        );
     }
     free(functions);
 }

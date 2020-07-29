@@ -1,320 +1,424 @@
 {
 	"functions":	[{
 			"name":	"__underflow(_IO_FILE *)",
-			"usr":	"c:@F@__underflow"
+			"usr":	"c:@F@__underflow",
+			"numberOfLines":	0
 		}, {
 			"name":	"__uflow(_IO_FILE *)",
-			"usr":	"c:@F@__uflow"
+			"usr":	"c:@F@__uflow",
+			"numberOfLines":	0
 		}, {
 			"name":	"__overflow(_IO_FILE *, int)",
-			"usr":	"c:@F@__overflow"
+			"usr":	"c:@F@__overflow",
+			"numberOfLines":	0
 		}, {
 			"name":	"_IO_getc(_IO_FILE *)",
-			"usr":	"c:@F@_IO_getc"
+			"usr":	"c:@F@_IO_getc",
+			"numberOfLines":	0
 		}, {
 			"name":	"_IO_putc(int, _IO_FILE *)",
-			"usr":	"c:@F@_IO_putc"
+			"usr":	"c:@F@_IO_putc",
+			"numberOfLines":	0
 		}, {
 			"name":	"_IO_feof(_IO_FILE *)",
-			"usr":	"c:@F@_IO_feof"
+			"usr":	"c:@F@_IO_feof",
+			"numberOfLines":	0
 		}, {
 			"name":	"_IO_ferror(_IO_FILE *)",
-			"usr":	"c:@F@_IO_ferror"
+			"usr":	"c:@F@_IO_ferror",
+			"numberOfLines":	0
 		}, {
 			"name":	"_IO_peekc_locked(_IO_FILE *)",
-			"usr":	"c:@F@_IO_peekc_locked"
+			"usr":	"c:@F@_IO_peekc_locked",
+			"numberOfLines":	0
 		}, {
 			"name":	"_IO_flockfile(_IO_FILE *)",
-			"usr":	"c:@F@_IO_flockfile"
+			"usr":	"c:@F@_IO_flockfile",
+			"numberOfLines":	0
 		}, {
 			"name":	"_IO_funlockfile(_IO_FILE *)",
-			"usr":	"c:@F@_IO_funlockfile"
+			"usr":	"c:@F@_IO_funlockfile",
+			"numberOfLines":	0
 		}, {
 			"name":	"_IO_ftrylockfile(_IO_FILE *)",
-			"usr":	"c:@F@_IO_ftrylockfile"
+			"usr":	"c:@F@_IO_ftrylockfile",
+			"numberOfLines":	0
 		}, {
 			"name":	"_IO_vfscanf(_IO_FILE *restrict, const char *restrict, struct __va_list_tag *, int *restrict)",
-			"usr":	"c:@F@_IO_vfscanf"
+			"usr":	"c:@F@_IO_vfscanf",
+			"numberOfLines":	0
 		}, {
 			"name":	"_IO_vfprintf(_IO_FILE *restrict, const char *restrict, struct __va_list_tag *)",
-			"usr":	"c:@F@_IO_vfprintf"
+			"usr":	"c:@F@_IO_vfprintf",
+			"numberOfLines":	0
 		}, {
 			"name":	"_IO_padn(_IO_FILE *, int, __ssize_t)",
-			"usr":	"c:@F@_IO_padn"
+			"usr":	"c:@F@_IO_padn",
+			"numberOfLines":	0
 		}, {
 			"name":	"_IO_sgetn(_IO_FILE *, void *, size_t)",
-			"usr":	"c:@F@_IO_sgetn"
+			"usr":	"c:@F@_IO_sgetn",
+			"numberOfLines":	0
 		}, {
 			"name":	"_IO_seekoff(_IO_FILE *, __off64_t, int, int)",
-			"usr":	"c:@F@_IO_seekoff"
+			"usr":	"c:@F@_IO_seekoff",
+			"numberOfLines":	0
 		}, {
 			"name":	"_IO_seekpos(_IO_FILE *, __off64_t, int)",
-			"usr":	"c:@F@_IO_seekpos"
+			"usr":	"c:@F@_IO_seekpos",
+			"numberOfLines":	0
 		}, {
 			"name":	"_IO_free_backup_area(_IO_FILE *)",
-			"usr":	"c:@F@_IO_free_backup_area"
+			"usr":	"c:@F@_IO_free_backup_area",
+			"numberOfLines":	0
 		}, {
 			"name":	"remove(const char *)",
-			"usr":	"c:@F@remove"
+			"usr":	"c:@F@remove",
+			"numberOfLines":	0
 		}, {
 			"name":	"rename(const char *, const char *)",
-			"usr":	"c:@F@rename"
+			"usr":	"c:@F@rename",
+			"numberOfLines":	0
 		}, {
 			"name":	"renameat(int, const char *, int, const char *)",
-			"usr":	"c:@F@renameat"
+			"usr":	"c:@F@renameat",
+			"numberOfLines":	0
 		}, {
 			"name":	"tmpfile()",
-			"usr":	"c:@F@tmpfile"
+			"usr":	"c:@F@tmpfile",
+			"numberOfLines":	0
 		}, {
 			"name":	"tmpnam(char *)",
-			"usr":	"c:@F@tmpnam"
+			"usr":	"c:@F@tmpnam",
+			"numberOfLines":	0
 		}, {
 			"name":	"tmpnam_r(char *)",
-			"usr":	"c:@F@tmpnam_r"
+			"usr":	"c:@F@tmpnam_r",
+			"numberOfLines":	0
 		}, {
 			"name":	"tempnam(const char *, const char *)",
-			"usr":	"c:@F@tempnam"
+			"usr":	"c:@F@tempnam",
+			"numberOfLines":	0
 		}, {
 			"name":	"fclose(FILE *)",
-			"usr":	"c:@F@fclose"
+			"usr":	"c:@F@fclose",
+			"numberOfLines":	0
 		}, {
 			"name":	"fflush(FILE *)",
-			"usr":	"c:@F@fflush"
+			"usr":	"c:@F@fflush",
+			"numberOfLines":	0
 		}, {
 			"name":	"fflush_unlocked(FILE *)",
-			"usr":	"c:@F@fflush_unlocked"
+			"usr":	"c:@F@fflush_unlocked",
+			"numberOfLines":	0
 		}, {
 			"name":	"fopen(const char *restrict, const char *restrict)",
-			"usr":	"c:@F@fopen"
+			"usr":	"c:@F@fopen",
+			"numberOfLines":	0
 		}, {
 			"name":	"freopen(const char *restrict, const char *restrict, FILE *restrict)",
-			"usr":	"c:@F@freopen"
+			"usr":	"c:@F@freopen",
+			"numberOfLines":	0
 		}, {
 			"name":	"fdopen(int, const char *)",
-			"usr":	"c:@F@fdopen"
+			"usr":	"c:@F@fdopen",
+			"numberOfLines":	0
 		}, {
 			"name":	"fmemopen(void *, size_t, const char *)",
-			"usr":	"c:@F@fmemopen"
+			"usr":	"c:@F@fmemopen",
+			"numberOfLines":	0
 		}, {
 			"name":	"open_memstream(char **, size_t *)",
-			"usr":	"c:@F@open_memstream"
+			"usr":	"c:@F@open_memstream",
+			"numberOfLines":	0
 		}, {
 			"name":	"setbuf(FILE *restrict, char *restrict)",
-			"usr":	"c:@F@setbuf"
+			"usr":	"c:@F@setbuf",
+			"numberOfLines":	0
 		}, {
 			"name":	"setvbuf(FILE *restrict, char *restrict, int, size_t)",
-			"usr":	"c:@F@setvbuf"
+			"usr":	"c:@F@setvbuf",
+			"numberOfLines":	0
 		}, {
 			"name":	"setbuffer(FILE *restrict, char *restrict, size_t)",
-			"usr":	"c:@F@setbuffer"
+			"usr":	"c:@F@setbuffer",
+			"numberOfLines":	0
 		}, {
 			"name":	"setlinebuf(FILE *)",
-			"usr":	"c:@F@setlinebuf"
+			"usr":	"c:@F@setlinebuf",
+			"numberOfLines":	0
 		}, {
 			"name":	"fprintf(FILE *restrict, const char *restrict, ...)",
-			"usr":	"c:@F@fprintf"
+			"usr":	"c:@F@fprintf",
+			"numberOfLines":	0
 		}, {
 			"name":	"printf(const char *restrict, ...)",
-			"usr":	"c:@F@printf"
+			"usr":	"c:@F@printf",
+			"numberOfLines":	0
 		}, {
 			"name":	"sprintf(char *restrict, const char *restrict, ...)",
-			"usr":	"c:@F@sprintf"
+			"usr":	"c:@F@sprintf",
+			"numberOfLines":	0
 		}, {
 			"name":	"vfprintf(FILE *restrict, const char *restrict, struct __va_list_tag *)",
-			"usr":	"c:@F@vfprintf"
+			"usr":	"c:@F@vfprintf",
+			"numberOfLines":	0
 		}, {
 			"name":	"vprintf(const char *restrict, struct __va_list_tag *)",
-			"usr":	"c:@F@vprintf"
+			"usr":	"c:@F@vprintf",
+			"numberOfLines":	0
 		}, {
 			"name":	"vsprintf(char *restrict, const char *restrict, struct __va_list_tag *)",
-			"usr":	"c:@F@vsprintf"
+			"usr":	"c:@F@vsprintf",
+			"numberOfLines":	0
 		}, {
 			"name":	"snprintf(char *restrict, size_t, const char *restrict, ...)",
-			"usr":	"c:@F@snprintf"
+			"usr":	"c:@F@snprintf",
+			"numberOfLines":	0
 		}, {
 			"name":	"vsnprintf(char *restrict, size_t, const char *restrict, struct __va_list_tag *)",
-			"usr":	"c:@F@vsnprintf"
+			"usr":	"c:@F@vsnprintf",
+			"numberOfLines":	0
 		}, {
 			"name":	"vdprintf(int, const char *restrict, struct __va_list_tag *)",
-			"usr":	"c:@F@vdprintf"
+			"usr":	"c:@F@vdprintf",
+			"numberOfLines":	0
 		}, {
 			"name":	"dprintf(int, const char *restrict, ...)",
-			"usr":	"c:@F@dprintf"
+			"usr":	"c:@F@dprintf",
+			"numberOfLines":	0
 		}, {
 			"name":	"fscanf(FILE *restrict, const char *restrict, ...)",
-			"usr":	"c:@F@fscanf"
+			"usr":	"c:@F@fscanf",
+			"numberOfLines":	0
 		}, {
 			"name":	"scanf(const char *restrict, ...)",
-			"usr":	"c:@F@scanf"
+			"usr":	"c:@F@scanf",
+			"numberOfLines":	0
 		}, {
 			"name":	"sscanf(const char *restrict, const char *restrict, ...)",
-			"usr":	"c:@F@sscanf"
+			"usr":	"c:@F@sscanf",
+			"numberOfLines":	0
 		}, {
 			"name":	"vfscanf(FILE *restrict, const char *restrict, struct __va_list_tag *)",
-			"usr":	"c:@F@vfscanf"
+			"usr":	"c:@F@vfscanf",
+			"numberOfLines":	0
 		}, {
 			"name":	"vscanf(const char *restrict, struct __va_list_tag *)",
-			"usr":	"c:@F@vscanf"
+			"usr":	"c:@F@vscanf",
+			"numberOfLines":	0
 		}, {
 			"name":	"vsscanf(const char *restrict, const char *restrict, struct __va_list_tag *)",
-			"usr":	"c:@F@vsscanf"
+			"usr":	"c:@F@vsscanf",
+			"numberOfLines":	0
 		}, {
 			"name":	"fgetc(FILE *)",
-			"usr":	"c:@F@fgetc"
+			"usr":	"c:@F@fgetc",
+			"numberOfLines":	0
 		}, {
 			"name":	"getc(FILE *)",
-			"usr":	"c:@F@getc"
+			"usr":	"c:@F@getc",
+			"numberOfLines":	0
 		}, {
 			"name":	"getchar()",
-			"usr":	"c:@F@getchar"
+			"usr":	"c:@F@getchar",
+			"numberOfLines":	0
 		}, {
 			"name":	"getc_unlocked(FILE *)",
-			"usr":	"c:@F@getc_unlocked"
+			"usr":	"c:@F@getc_unlocked",
+			"numberOfLines":	0
 		}, {
 			"name":	"getchar_unlocked()",
-			"usr":	"c:@F@getchar_unlocked"
+			"usr":	"c:@F@getchar_unlocked",
+			"numberOfLines":	0
 		}, {
 			"name":	"fgetc_unlocked(FILE *)",
-			"usr":	"c:@F@fgetc_unlocked"
+			"usr":	"c:@F@fgetc_unlocked",
+			"numberOfLines":	0
 		}, {
 			"name":	"fputc(int, FILE *)",
-			"usr":	"c:@F@fputc"
+			"usr":	"c:@F@fputc",
+			"numberOfLines":	0
 		}, {
 			"name":	"putc(int, FILE *)",
-			"usr":	"c:@F@putc"
+			"usr":	"c:@F@putc",
+			"numberOfLines":	0
 		}, {
 			"name":	"putchar(int)",
-			"usr":	"c:@F@putchar"
+			"usr":	"c:@F@putchar",
+			"numberOfLines":	0
 		}, {
 			"name":	"fputc_unlocked(int, FILE *)",
-			"usr":	"c:@F@fputc_unlocked"
+			"usr":	"c:@F@fputc_unlocked",
+			"numberOfLines":	0
 		}, {
 			"name":	"putc_unlocked(int, FILE *)",
-			"usr":	"c:@F@putc_unlocked"
+			"usr":	"c:@F@putc_unlocked",
+			"numberOfLines":	0
 		}, {
 			"name":	"putchar_unlocked(int)",
-			"usr":	"c:@F@putchar_unlocked"
+			"usr":	"c:@F@putchar_unlocked",
+			"numberOfLines":	0
 		}, {
 			"name":	"getw(FILE *)",
-			"usr":	"c:@F@getw"
+			"usr":	"c:@F@getw",
+			"numberOfLines":	0
 		}, {
 			"name":	"putw(int, FILE *)",
-			"usr":	"c:@F@putw"
+			"usr":	"c:@F@putw",
+			"numberOfLines":	0
 		}, {
 			"name":	"fgets(char *restrict, int, FILE *restrict)",
-			"usr":	"c:@F@fgets"
+			"usr":	"c:@F@fgets",
+			"numberOfLines":	0
 		}, {
 			"name":	"__getdelim(char **restrict, size_t *restrict, int, FILE *restrict)",
-			"usr":	"c:@F@__getdelim"
+			"usr":	"c:@F@__getdelim",
+			"numberOfLines":	0
 		}, {
 			"name":	"getdelim(char **restrict, size_t *restrict, int, FILE *restrict)",
-			"usr":	"c:@F@getdelim"
+			"usr":	"c:@F@getdelim",
+			"numberOfLines":	0
 		}, {
 			"name":	"getline(char **restrict, size_t *restrict, FILE *restrict)",
-			"usr":	"c:@F@getline"
+			"usr":	"c:@F@getline",
+			"numberOfLines":	0
 		}, {
 			"name":	"fputs(const char *restrict, FILE *restrict)",
-			"usr":	"c:@F@fputs"
+			"usr":	"c:@F@fputs",
+			"numberOfLines":	0
 		}, {
 			"name":	"puts(const char *)",
-			"usr":	"c:@F@puts"
+			"usr":	"c:@F@puts",
+			"numberOfLines":	0
 		}, {
 			"name":	"ungetc(int, FILE *)",
-			"usr":	"c:@F@ungetc"
+			"usr":	"c:@F@ungetc",
+			"numberOfLines":	0
 		}, {
 			"name":	"fread(void *restrict, size_t, size_t, FILE *restrict)",
-			"usr":	"c:@F@fread"
+			"usr":	"c:@F@fread",
+			"numberOfLines":	0
 		}, {
 			"name":	"fwrite(const void *restrict, size_t, size_t, FILE *restrict)",
-			"usr":	"c:@F@fwrite"
+			"usr":	"c:@F@fwrite",
+			"numberOfLines":	0
 		}, {
 			"name":	"fread_unlocked(void *restrict, size_t, size_t, FILE *restrict)",
-			"usr":	"c:@F@fread_unlocked"
+			"usr":	"c:@F@fread_unlocked",
+			"numberOfLines":	0
 		}, {
 			"name":	"fwrite_unlocked(const void *restrict, size_t, size_t, FILE *restrict)",
-			"usr":	"c:@F@fwrite_unlocked"
+			"usr":	"c:@F@fwrite_unlocked",
+			"numberOfLines":	0
 		}, {
 			"name":	"fseek(FILE *, long, int)",
-			"usr":	"c:@F@fseek"
+			"usr":	"c:@F@fseek",
+			"numberOfLines":	0
 		}, {
 			"name":	"ftell(FILE *)",
-			"usr":	"c:@F@ftell"
+			"usr":	"c:@F@ftell",
+			"numberOfLines":	0
 		}, {
 			"name":	"rewind(FILE *)",
-			"usr":	"c:@F@rewind"
+			"usr":	"c:@F@rewind",
+			"numberOfLines":	0
 		}, {
 			"name":	"fseeko(FILE *, __off_t, int)",
-			"usr":	"c:@F@fseeko"
+			"usr":	"c:@F@fseeko",
+			"numberOfLines":	0
 		}, {
 			"name":	"ftello(FILE *)",
-			"usr":	"c:@F@ftello"
+			"usr":	"c:@F@ftello",
+			"numberOfLines":	0
 		}, {
 			"name":	"fgetpos(FILE *restrict, fpos_t *restrict)",
-			"usr":	"c:@F@fgetpos"
+			"usr":	"c:@F@fgetpos",
+			"numberOfLines":	0
 		}, {
 			"name":	"fsetpos(FILE *, const fpos_t *)",
-			"usr":	"c:@F@fsetpos"
+			"usr":	"c:@F@fsetpos",
+			"numberOfLines":	0
 		}, {
 			"name":	"clearerr(FILE *)",
-			"usr":	"c:@F@clearerr"
+			"usr":	"c:@F@clearerr",
+			"numberOfLines":	0
 		}, {
 			"name":	"feof(FILE *)",
-			"usr":	"c:@F@feof"
+			"usr":	"c:@F@feof",
+			"numberOfLines":	0
 		}, {
 			"name":	"ferror(FILE *)",
-			"usr":	"c:@F@ferror"
+			"usr":	"c:@F@ferror",
+			"numberOfLines":	0
 		}, {
 			"name":	"clearerr_unlocked(FILE *)",
-			"usr":	"c:@F@clearerr_unlocked"
+			"usr":	"c:@F@clearerr_unlocked",
+			"numberOfLines":	0
 		}, {
 			"name":	"feof_unlocked(FILE *)",
-			"usr":	"c:@F@feof_unlocked"
+			"usr":	"c:@F@feof_unlocked",
+			"numberOfLines":	0
 		}, {
 			"name":	"ferror_unlocked(FILE *)",
-			"usr":	"c:@F@ferror_unlocked"
+			"usr":	"c:@F@ferror_unlocked",
+			"numberOfLines":	0
 		}, {
 			"name":	"perror(const char *)",
-			"usr":	"c:@F@perror"
+			"usr":	"c:@F@perror",
+			"numberOfLines":	0
 		}, {
 			"name":	"fileno(FILE *)",
-			"usr":	"c:@F@fileno"
+			"usr":	"c:@F@fileno",
+			"numberOfLines":	0
 		}, {
 			"name":	"fileno_unlocked(FILE *)",
-			"usr":	"c:@F@fileno_unlocked"
+			"usr":	"c:@F@fileno_unlocked",
+			"numberOfLines":	0
 		}, {
 			"name":	"popen(const char *, const char *)",
-			"usr":	"c:@F@popen"
+			"usr":	"c:@F@popen",
+			"numberOfLines":	0
 		}, {
 			"name":	"pclose(FILE *)",
-			"usr":	"c:@F@pclose"
+			"usr":	"c:@F@pclose",
+			"numberOfLines":	0
 		}, {
 			"name":	"ctermid(char *)",
-			"usr":	"c:@F@ctermid"
+			"usr":	"c:@F@ctermid",
+			"numberOfLines":	0
 		}, {
 			"name":	"flockfile(FILE *)",
-			"usr":	"c:@F@flockfile"
+			"usr":	"c:@F@flockfile",
+			"numberOfLines":	0
 		}, {
 			"name":	"ftrylockfile(FILE *)",
-			"usr":	"c:@F@ftrylockfile"
+			"usr":	"c:@F@ftrylockfile",
+			"numberOfLines":	0
 		}, {
 			"name":	"funlockfile(FILE *)",
-			"usr":	"c:@F@funlockfile"
+			"usr":	"c:@F@funlockfile",
+			"numberOfLines":	0
 		}, {
 			"name":	"main()",
 			"usr":	"c:@F@main",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 2"
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 2",
+			"numberOfLines":	25
 		}, {
 			"name":	"there(int, int)",
 			"usr":	"c:@F@there",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 9"
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 9",
+			"numberOfLines":	25
 		}, {
 			"name":	"hello()",
 			"usr":	"c:@F@hello",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 14"
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 14",
+			"numberOfLines":	25
 		}, {
 			"name":	"hello_there()",
 			"usr":	"c:@F@hello_there",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 18"
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 18",
+			"numberOfLines":	25
 		}],
 	"calls":	[{
 			"from":	103,
