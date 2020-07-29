@@ -21,11 +21,12 @@ cJSON* createCallsArray(GatheredCallgraph gathered_callgraph)
     return a;
 }
 
-void functions_visitor(const char * name, void* array)
+void functions_visitor(const char * name, const char * usr, void* array)
 {
     cJSON* a = (cJSON*) array;
     cJSON* f = cJSON_CreateObject();
     cJSON_AddStringToObject(f,"name",name);
+    cJSON_AddStringToObject(f,"usr",usr);
     cJSON_AddItemToArray(a,f);
 }
 

@@ -4,7 +4,8 @@
 #include <string.h>
 
 struct FunctionList {
-    char* FunctionName;
+    char* FunctionUsr;
+    char* DisplayName;
     struct FunctionList* Previous;
 };
 
@@ -25,17 +26,29 @@ typedef struct  {
 } GatheredCallgraphImpl;
 
 
-int functionId(GatheredCallgraphImpl* cg, const char * name)
+void find_function(GatheredCallgraphImpl* cg, const char * name, int* id_out, FunctionList** function_out)
 {
     FunctionList* current = cg -> LastFunction;
     int i = cg->FunctonsSize - 1;
     while(current != NULL){
-        if(strcmp(current->FunctionName,name)==0){
-            return i;
+        if(strcmp(current->FunctionUsr,name)==0){
+            if(id_out!=NULL){
+                *id_out = i;
+            }
+            if(function_out!=NULL){
+                *function_out = current;
+            }
+            return;
         }
         current = current -> Previous; i--;
     }
-    return i;
+    if(id_out!=NULL){
+        *id_out = -1;
+    }
+    if(function_out!=NULL){
+        *function_out = NULL;
+    }
+    return;
 }
 
 GatheredCallgraph createGatheredCallgraph()
@@ -55,7 +68,7 @@ void disposeGatheredCallgraph(GatheredCallgraph callgraph)
         FunctionList* current = cg->LastFunction;
         while(current != NULL){
             FunctionList* prev = current->Previous;
-            free(current->FunctionName);
+            free(current->FunctionUsr);
             free(current);
             current = prev;
         }
@@ -77,8 +90,11 @@ void GatheredCallgraph_addCall(GatheredCallgraph callgraph, const char * from, c
 {
     GatheredCallgraphImpl* cg = (GatheredCallgraphImpl*) callgraph;
     
-    int from_id = functionId(cg, from);
-    int to_id = functionId(cg, to);
+    int from_id = -1;
+    int to_id = -1;
+
+    find_function(cg,from,&from_id,NULL);
+    find_function(cg,to,&to_id,NULL);
 
     CallsSet* new_set = malloc(sizeof(CallsSet));
     new_set->from = from_id;
@@ -90,39 +106,55 @@ void GatheredCallgraph_addCall(GatheredCallgraph callgraph, const char * from, c
     cg->Calls = new_set;
 }
 
-FunctionList* createFunctionList(const char* name, FunctionList* previous){
+char* mallocopy(const char* copied)
+{
+    char* ret = malloc( sizeof(char) * (strlen(copied) + 1) );
+    strcpy(ret,copied);
+    return ret;
+}
+
+FunctionList* createFunctionList(const char* name, FunctionList* previous)
+{
     FunctionList* ret = malloc(sizeof(FunctionList));
-    ret->FunctionName = malloc( sizeof(name) * (strlen(name) + 1) );
-    strcpy(ret->FunctionName,name);
+    ret->FunctionUsr = mallocopy(name);
     ret->Previous = previous;
     return ret;
 }
 
-void addFunction(GatheredCallgraphImpl* cg, const char * name)
+FunctionList* addFunction(GatheredCallgraphImpl* cg, const char * name)
 {
     if(cg->LastFunction == NULL){
         cg->LastFunction = createFunctionList(name,NULL);
         cg->FunctonsSize = 1;
     }else{
-        
         FunctionList* previous = cg->LastFunction;
         cg->LastFunction = createFunctionList(name,previous);
         cg->FunctonsSize += 1;
     }
+    return cg->LastFunction;
 }
 
-void GatheredCallgraph_addDefinition(GatheredCallgraph callgraph, const char * def_usr)
+FunctionList* get_or_add_function(GatheredCallgraphImpl* cg, const char * usr)
+{
+    FunctionList* ret;
+    find_function(cg,usr,NULL,&ret);
+    if(ret==NULL){
+        ret = addFunction(cg,usr);
+    }
+    return ret;
+}
+
+void GatheredCallgraph_addDefinition(GatheredCallgraph callgraph, const char * def_usr, const char * def_display_name)
 {
     GatheredCallgraphImpl* cg = (GatheredCallgraphImpl*) callgraph;
-    int id = functionId(cg,def_usr);
-    if(id < 0){
-        addFunction(cg,def_usr);
-    }
+    FunctionList* fun = get_or_add_function(cg,def_usr);
+    fun->DisplayName = mallocopy(def_display_name);
 }
 
-void GatheredCallgraph_addDeclaration(GatheredCallgraph callgraph, const  char * declared)
+void GatheredCallgraph_addDeclaration(GatheredCallgraph callgraph, const  char * declared_usr)
 {
-    GatheredCallgraph_addDefinition(callgraph, declared);
+    GatheredCallgraphImpl* cg = (GatheredCallgraphImpl*) callgraph;
+    FunctionList* fun = get_or_add_function(cg,declared_usr);
 }
 
 void GatheredCallgraph_visitCalls(GatheredCallgraph gathered_callgraph, CallsVisitor visitor, void* data)
@@ -147,7 +179,7 @@ void GatheredCallgraph_visitFunctions(GatheredCallgraph gathered_callgraph, Func
         }
     }
     for(unsigned int i = 0; i < (cg->FunctonsSize); i++){
-        visitor(functions[i]->FunctionName,data);
+        visitor(functions[i]->DisplayName,functions[i]->FunctionUsr,data);
     }
     free(functions);
 }

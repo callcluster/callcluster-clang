@@ -1,212 +1,216 @@
 {
 	"functions":	[{
-			"name":	"c:@F@__underflow"
+			"usr":	"c:@F@__underflow"
 		}, {
-			"name":	"c:@F@__uflow"
+			"usr":	"c:@F@__uflow"
 		}, {
-			"name":	"c:@F@__overflow"
+			"usr":	"c:@F@__overflow"
 		}, {
-			"name":	"c:@F@_IO_getc"
+			"usr":	"c:@F@_IO_getc"
 		}, {
-			"name":	"c:@F@_IO_putc"
+			"usr":	"c:@F@_IO_putc"
 		}, {
-			"name":	"c:@F@_IO_feof"
+			"usr":	"c:@F@_IO_feof"
 		}, {
-			"name":	"c:@F@_IO_ferror"
+			"usr":	"c:@F@_IO_ferror"
 		}, {
-			"name":	"c:@F@_IO_peekc_locked"
+			"usr":	"c:@F@_IO_peekc_locked"
 		}, {
-			"name":	"c:@F@_IO_flockfile"
+			"usr":	"c:@F@_IO_flockfile"
 		}, {
-			"name":	"c:@F@_IO_funlockfile"
+			"usr":	"c:@F@_IO_funlockfile"
 		}, {
-			"name":	"c:@F@_IO_ftrylockfile"
+			"usr":	"c:@F@_IO_ftrylockfile"
 		}, {
-			"name":	"c:@F@_IO_vfscanf"
+			"usr":	"c:@F@_IO_vfscanf"
 		}, {
-			"name":	"c:@F@_IO_vfprintf"
+			"usr":	"c:@F@_IO_vfprintf"
 		}, {
-			"name":	"c:@F@_IO_padn"
+			"usr":	"c:@F@_IO_padn"
 		}, {
-			"name":	"c:@F@_IO_sgetn"
+			"usr":	"c:@F@_IO_sgetn"
 		}, {
-			"name":	"c:@F@_IO_seekoff"
+			"usr":	"c:@F@_IO_seekoff"
 		}, {
-			"name":	"c:@F@_IO_seekpos"
+			"usr":	"c:@F@_IO_seekpos"
 		}, {
-			"name":	"c:@F@_IO_free_backup_area"
+			"usr":	"c:@F@_IO_free_backup_area"
 		}, {
-			"name":	"c:@F@remove"
+			"usr":	"c:@F@remove"
 		}, {
-			"name":	"c:@F@rename"
+			"usr":	"c:@F@rename"
 		}, {
-			"name":	"c:@F@renameat"
+			"usr":	"c:@F@renameat"
 		}, {
-			"name":	"c:@F@tmpfile"
+			"usr":	"c:@F@tmpfile"
 		}, {
-			"name":	"c:@F@tmpnam"
+			"usr":	"c:@F@tmpnam"
 		}, {
-			"name":	"c:@F@tmpnam_r"
+			"usr":	"c:@F@tmpnam_r"
 		}, {
-			"name":	"c:@F@tempnam"
+			"usr":	"c:@F@tempnam"
 		}, {
-			"name":	"c:@F@fclose"
+			"usr":	"c:@F@fclose"
 		}, {
-			"name":	"c:@F@fflush"
+			"usr":	"c:@F@fflush"
 		}, {
-			"name":	"c:@F@fflush_unlocked"
+			"usr":	"c:@F@fflush_unlocked"
 		}, {
-			"name":	"c:@F@fopen"
+			"usr":	"c:@F@fopen"
 		}, {
-			"name":	"c:@F@freopen"
+			"usr":	"c:@F@freopen"
 		}, {
-			"name":	"c:@F@fdopen"
+			"usr":	"c:@F@fdopen"
 		}, {
-			"name":	"c:@F@fmemopen"
+			"usr":	"c:@F@fmemopen"
 		}, {
-			"name":	"c:@F@open_memstream"
+			"usr":	"c:@F@open_memstream"
 		}, {
-			"name":	"c:@F@setbuf"
+			"usr":	"c:@F@setbuf"
 		}, {
-			"name":	"c:@F@setvbuf"
+			"usr":	"c:@F@setvbuf"
 		}, {
-			"name":	"c:@F@setbuffer"
+			"usr":	"c:@F@setbuffer"
 		}, {
-			"name":	"c:@F@setlinebuf"
+			"usr":	"c:@F@setlinebuf"
 		}, {
-			"name":	"c:@F@fprintf"
+			"usr":	"c:@F@fprintf"
 		}, {
-			"name":	"c:@F@printf"
+			"usr":	"c:@F@printf"
 		}, {
-			"name":	"c:@F@sprintf"
+			"usr":	"c:@F@sprintf"
 		}, {
-			"name":	"c:@F@vfprintf"
+			"usr":	"c:@F@vfprintf"
 		}, {
-			"name":	"c:@F@vprintf"
+			"usr":	"c:@F@vprintf"
 		}, {
-			"name":	"c:@F@vsprintf"
+			"usr":	"c:@F@vsprintf"
 		}, {
-			"name":	"c:@F@snprintf"
+			"usr":	"c:@F@snprintf"
 		}, {
-			"name":	"c:@F@vsnprintf"
+			"usr":	"c:@F@vsnprintf"
 		}, {
-			"name":	"c:@F@vdprintf"
+			"usr":	"c:@F@vdprintf"
 		}, {
-			"name":	"c:@F@dprintf"
+			"usr":	"c:@F@dprintf"
 		}, {
-			"name":	"c:@F@fscanf"
+			"usr":	"c:@F@fscanf"
 		}, {
-			"name":	"c:@F@scanf"
+			"usr":	"c:@F@scanf"
 		}, {
-			"name":	"c:@F@sscanf"
+			"usr":	"c:@F@sscanf"
 		}, {
-			"name":	"c:@F@vfscanf"
+			"usr":	"c:@F@vfscanf"
 		}, {
-			"name":	"c:@F@vscanf"
+			"usr":	"c:@F@vscanf"
 		}, {
-			"name":	"c:@F@vsscanf"
+			"usr":	"c:@F@vsscanf"
 		}, {
-			"name":	"c:@F@fgetc"
+			"usr":	"c:@F@fgetc"
 		}, {
-			"name":	"c:@F@getc"
+			"usr":	"c:@F@getc"
 		}, {
-			"name":	"c:@F@getchar"
+			"usr":	"c:@F@getchar"
 		}, {
-			"name":	"c:@F@getc_unlocked"
+			"usr":	"c:@F@getc_unlocked"
 		}, {
-			"name":	"c:@F@getchar_unlocked"
+			"usr":	"c:@F@getchar_unlocked"
 		}, {
-			"name":	"c:@F@fgetc_unlocked"
+			"usr":	"c:@F@fgetc_unlocked"
 		}, {
-			"name":	"c:@F@fputc"
+			"usr":	"c:@F@fputc"
 		}, {
-			"name":	"c:@F@putc"
+			"usr":	"c:@F@putc"
 		}, {
-			"name":	"c:@F@putchar"
+			"usr":	"c:@F@putchar"
 		}, {
-			"name":	"c:@F@fputc_unlocked"
+			"usr":	"c:@F@fputc_unlocked"
 		}, {
-			"name":	"c:@F@putc_unlocked"
+			"usr":	"c:@F@putc_unlocked"
 		}, {
-			"name":	"c:@F@putchar_unlocked"
+			"usr":	"c:@F@putchar_unlocked"
 		}, {
-			"name":	"c:@F@getw"
+			"usr":	"c:@F@getw"
 		}, {
-			"name":	"c:@F@putw"
+			"usr":	"c:@F@putw"
 		}, {
-			"name":	"c:@F@fgets"
+			"usr":	"c:@F@fgets"
 		}, {
-			"name":	"c:@F@__getdelim"
+			"usr":	"c:@F@__getdelim"
 		}, {
-			"name":	"c:@F@getdelim"
+			"usr":	"c:@F@getdelim"
 		}, {
-			"name":	"c:@F@getline"
+			"usr":	"c:@F@getline"
 		}, {
-			"name":	"c:@F@fputs"
+			"usr":	"c:@F@fputs"
 		}, {
-			"name":	"c:@F@puts"
+			"usr":	"c:@F@puts"
 		}, {
-			"name":	"c:@F@ungetc"
+			"usr":	"c:@F@ungetc"
 		}, {
-			"name":	"c:@F@fread"
+			"usr":	"c:@F@fread"
 		}, {
-			"name":	"c:@F@fwrite"
+			"usr":	"c:@F@fwrite"
 		}, {
-			"name":	"c:@F@fread_unlocked"
+			"usr":	"c:@F@fread_unlocked"
 		}, {
-			"name":	"c:@F@fwrite_unlocked"
+			"usr":	"c:@F@fwrite_unlocked"
 		}, {
-			"name":	"c:@F@fseek"
+			"usr":	"c:@F@fseek"
 		}, {
-			"name":	"c:@F@ftell"
+			"usr":	"c:@F@ftell"
 		}, {
-			"name":	"c:@F@rewind"
+			"usr":	"c:@F@rewind"
 		}, {
-			"name":	"c:@F@fseeko"
+			"usr":	"c:@F@fseeko"
 		}, {
-			"name":	"c:@F@ftello"
+			"usr":	"c:@F@ftello"
 		}, {
-			"name":	"c:@F@fgetpos"
+			"usr":	"c:@F@fgetpos"
 		}, {
-			"name":	"c:@F@fsetpos"
+			"usr":	"c:@F@fsetpos"
 		}, {
-			"name":	"c:@F@clearerr"
+			"usr":	"c:@F@clearerr"
 		}, {
-			"name":	"c:@F@feof"
+			"usr":	"c:@F@feof"
 		}, {
-			"name":	"c:@F@ferror"
+			"usr":	"c:@F@ferror"
 		}, {
-			"name":	"c:@F@clearerr_unlocked"
+			"usr":	"c:@F@clearerr_unlocked"
 		}, {
-			"name":	"c:@F@feof_unlocked"
+			"usr":	"c:@F@feof_unlocked"
 		}, {
-			"name":	"c:@F@ferror_unlocked"
+			"usr":	"c:@F@ferror_unlocked"
 		}, {
-			"name":	"c:@F@perror"
+			"usr":	"c:@F@perror"
 		}, {
-			"name":	"c:@F@fileno"
+			"usr":	"c:@F@fileno"
 		}, {
-			"name":	"c:@F@fileno_unlocked"
+			"usr":	"c:@F@fileno_unlocked"
 		}, {
-			"name":	"c:@F@popen"
+			"usr":	"c:@F@popen"
 		}, {
-			"name":	"c:@F@pclose"
+			"usr":	"c:@F@pclose"
 		}, {
-			"name":	"c:@F@ctermid"
+			"usr":	"c:@F@ctermid"
 		}, {
-			"name":	"c:@F@flockfile"
+			"usr":	"c:@F@flockfile"
 		}, {
-			"name":	"c:@F@ftrylockfile"
+			"usr":	"c:@F@ftrylockfile"
 		}, {
-			"name":	"c:@F@funlockfile"
+			"usr":	"c:@F@funlockfile"
 		}, {
-			"name":	"c:@F@main"
+			"name":	"main()",
+			"usr":	"c:@F@main"
 		}, {
-			"name":	"c:@F@there"
+			"name":	"there(int, int)",
+			"usr":	"c:@F@there"
 		}, {
-			"name":	"c:@F@hello"
+			"name":	"hello()",
+			"usr":	"c:@F@hello"
 		}, {
-			"name":	"c:@F@hello_there"
+			"name":	"hello_there()",
+			"usr":	"c:@F@hello_there"
 		}],
 	"calls":	[{
 			"from":	103,
