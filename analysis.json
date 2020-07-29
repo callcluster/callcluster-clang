@@ -302,19 +302,19 @@
 		}, {
 			"name":	"main()",
 			"usr":	"c:@F@main",
-			"location":	"hola"
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 2"
 		}, {
 			"name":	"there(int, int)",
 			"usr":	"c:@F@there",
-			"location":	"hola"
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 9"
 		}, {
 			"name":	"hello()",
 			"usr":	"c:@F@hello",
-			"location":	"hola"
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 14"
 		}, {
 			"name":	"hello_there()",
 			"usr":	"c:@F@hello_there",
-			"location":	"hola"
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 18"
 		}],
 	"calls":	[{
 			"from":	103,

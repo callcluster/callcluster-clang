@@ -1,6 +1,7 @@
 #include "CallgraphVisit.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 typedef struct {
     GatheredCallgraph Callgraph;
@@ -51,17 +52,21 @@ void CallgraphVisit_addFunctionDeclaration(CallgraphVisit v, CXCursor declared)
 
 char* create_location_string(CXCursor c)
 {
-    char* ret=malloc(sizeof(char)*5);
-    strcpy(ret,"hola");
-    //CXSourceLocation loc = clang_getCursorLocation(c);
-    //clang_getPresumedLocation(loc,....);
+    CXSourceLocation loc = clang_getCursorLocation(c);
+    CXString filename;
+    unsigned int line;
+    unsigned int column;
+    clang_getPresumedLocation(loc,&filename,&line,&column);
+    const char* c_filename = clang_getCString(filename);
+    
+    char* ret=malloc(sizeof(char)*(strlen(c_filename) + 50));
+    sprintf(ret,"file: %s line: %d",c_filename,line);
+
     return ret;
 }
 
 void CallgraphVisit_setCurrentFunctionDefinition(CallgraphVisit v, CXCursor defined)
 {
-    
-
     CallgraphVisitImpl* visit = (CallgraphVisitImpl*) v;
     CXString usr = clang_getCursorUSR(defined);
 
