@@ -75,7 +75,7 @@ void disposeGatheredCallgraph(GatheredCallgraph callgraph)
                 free(current->Location);
             }
 
-            if(current->Location!=NULL){
+            if(current->DisplayName!=NULL){
                 free(current->DisplayName);
             }
             free(current);
@@ -159,14 +159,18 @@ void GatheredCallgraph_addDefinition(GatheredCallgraph callgraph, const char * d
 {
     GatheredCallgraphImpl* cg = (GatheredCallgraphImpl*) callgraph;
     FunctionList* fun = get_or_add_function(cg,def_usr);
-    fun->Location=mallocopy(location);
+    if(fun->Location==NULL){
+        fun->Location=mallocopy(location);
+    }
 }
 
 void GatheredCallgraph_addDeclaration(GatheredCallgraph callgraph, const char * declared_usr, const char * def_display_name)
 {
     GatheredCallgraphImpl* cg = (GatheredCallgraphImpl*) callgraph;
     FunctionList* fun = get_or_add_function(cg,declared_usr);
-    fun->DisplayName = mallocopy(def_display_name);
+    if(fun->DisplayName==NULL){
+        fun->DisplayName = mallocopy(def_display_name);
+    }
 }
 
 void GatheredCallgraph_visitCalls(GatheredCallgraph gathered_callgraph, CallsVisitor visitor, void* data)
