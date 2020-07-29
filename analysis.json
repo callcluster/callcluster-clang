@@ -403,22 +403,22 @@
 			"name":	"main()",
 			"usr":	"c:@F@main",
 			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 2",
-			"numberOfLines":	25
+			"numberOfLines":	3
 		}, {
 			"name":	"there(int, int)",
 			"usr":	"c:@F@there",
 			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 9",
-			"numberOfLines":	25
+			"numberOfLines":	3
 		}, {
 			"name":	"hello()",
 			"usr":	"c:@F@hello",
 			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 14",
-			"numberOfLines":	25
+			"numberOfLines":	2
 		}, {
 			"name":	"hello_there()",
 			"usr":	"c:@F@hello_there",
 			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 18",
-			"numberOfLines":	25
+			"numberOfLines":	4
 		}],
 	"calls":	[{
 			"from":	103,
