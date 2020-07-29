@@ -18,18 +18,3 @@ void dispose_DefinitionData(DefinitionData* d)
     }
     free(d);
 }
-
-char* dd_mallocopy(const char* copied)
-{
-    char* ret = malloc( sizeof(char) * (strlen(copied) + 1) );
-    strcpy(ret,copied);
-    return ret;
-}
-
-DefinitionData* create_DefinitionData_with_params(const char* location, unsigned int number_of_lines)
-{
-    DefinitionData* ret = create_DefinitionData();
-    ret->Location = dd_mallocopy(location);
-    ret->NumberOfLines = number_of_lines;
-    return ret;
-}
