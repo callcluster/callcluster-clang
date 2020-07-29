@@ -1,7 +1,7 @@
 #ifndef CALLGRAPH_VISIT_H
 #define CALLGRAPH_VISIT_H
-#include "GatheredCallgraph.h"
 #include <clang-c/Index.h>
+#include "GatheredCallgraph.h"
 
 typedef void* CallgraphVisit;
 

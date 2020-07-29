@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "DefinitionData.h"
 
 typedef struct {
     GatheredCallgraph Callgraph;
@@ -86,7 +87,13 @@ void CallgraphVisit_setCurrentFunctionDefinition(CallgraphVisit v, CXCursor defi
     CXString usr = clang_getCursorUSR(defined);
 
     char* location = create_location_string(defined);
-    GatheredCallgraph_addDefinition(visit->Callgraph, clang_getCString(usr), location, lines_of(defined));
+
+    GatheredCallgraph_addDefinition(
+        visit->Callgraph, 
+        clang_getCString(usr), 
+        create_DefinitionData_with_params(location, lines_of(defined))
+    );
+
     clang_disposeString(usr);
     visit->CurrentCaller=defined;
     

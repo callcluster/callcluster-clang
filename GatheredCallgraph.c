@@ -5,9 +5,8 @@
 
 struct FunctionList {
     char* FunctionUsr;
-    char* Location;
+    DefinitionData* data;
     char* DisplayName;
-    unsigned int NumberOfLines;
     struct FunctionList* Previous;
 };
 
@@ -71,11 +70,9 @@ void disposeGatheredCallgraph(GatheredCallgraph callgraph)
         while(current != NULL){
             FunctionList* prev = current->Previous;
             free(current->FunctionUsr);
-
-            if(current->Location!=NULL){
-                free(current->Location);
+            if(current->data!=NULL){
+                dispose_DefinitionData(current->data);
             }
-
             if(current->DisplayName!=NULL){
                 free(current->DisplayName);
             }
@@ -129,8 +126,7 @@ FunctionList* createFunctionList(const char* name, FunctionList* previous)
     ret->FunctionUsr = mallocopy(name);
     ret->Previous = previous;
     ret->DisplayName = NULL;
-    ret->Location = NULL;
-    ret->NumberOfLines = 0;
+    ret->data = NULL;
     return ret;
 }
 
@@ -157,14 +153,14 @@ FunctionList* get_or_add_function(GatheredCallgraphImpl* cg, const char * usr)
     return ret;
 }
 
-void GatheredCallgraph_addDefinition(GatheredCallgraph callgraph, const char * def_usr, const char * location, unsigned int number_of_lines)
+void GatheredCallgraph_addDefinition(GatheredCallgraph callgraph, const char * def_usr, DefinitionData* data)
 {
     GatheredCallgraphImpl* cg = (GatheredCallgraphImpl*) callgraph;
     FunctionList* fun = get_or_add_function(cg,def_usr);
-    if(fun->Location==NULL){
-        fun->Location=mallocopy(location);
+
+    if(fun->data==NULL){
+        fun->data=data;
     }
-    fun->NumberOfLines=number_of_lines;
 }
 
 void GatheredCallgraph_addDeclaration(GatheredCallgraph callgraph, const char * declared_usr, const char * def_display_name)
@@ -201,8 +197,7 @@ void GatheredCallgraph_visitFunctions(GatheredCallgraph gathered_callgraph, Func
         visitor(
             functions[i]->DisplayName,
             functions[i]->FunctionUsr,
-            functions[i]->Location, 
-            functions[i]->NumberOfLines,
+            functions[i]->data,
             data
         );
     }
