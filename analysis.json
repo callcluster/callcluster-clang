@@ -303,24 +303,64 @@
 			"name":	"main()",
 			"usr":	"c:@F@main",
 			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 2",
-			"numberOfLines":	4
+			"numberOfLines":	4,
+			"numberOfStatements":	2
 		}, {
 			"name":	"there(int, int)",
 			"usr":	"c:@F@there",
 			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 9",
-			"numberOfLines":	4
+			"numberOfLines":	4,
+			"numberOfStatements":	2
 		}, {
 			"name":	"hello()",
 			"usr":	"c:@F@hello",
 			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 14",
-			"numberOfLines":	3
+			"numberOfLines":	3,
+			"numberOfStatements":	1
 		}, {
 			"name":	"hello_there()",
 			"usr":	"c:@F@hello_there",
 			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 18",
-			"numberOfLines":	5
+			"numberOfLines":	5,
+			"numberOfStatements":	3
+		}, {
+			"name":	"checkin_it()",
+			"usr":	"c:@F@checkin_it",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 24",
+			"numberOfLines":	24,
+			"numberOfStatements":	20
+		}, {
+			"name":	"for_five()",
+			"usr":	"c:@F@for_five",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 49",
+			"numberOfLines":	17,
+			"numberOfStatements":	15
+		}, {
+			"name":	"while_while()",
+			"usr":	"c:@F@while_while",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 67",
+			"numberOfLines":	11,
+			"numberOfStatements":	6
 		}],
 	"calls":	[{
+			"from":	104,
+			"to":	101
+		}, {
+			"from":	104,
+			"to":	101
+		}, {
+			"from":	104,
+			"to":	101
+		}, {
+			"from":	104,
+			"to":	102
+		}, {
+			"from":	104,
+			"to":	101
+		}, {
+			"from":	104,
+			"to":	102
+		}, {
 			"from":	103,
 			"to":	100
 		}, {

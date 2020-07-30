@@ -20,3 +20,58 @@ int hello_there() {
    there(5, 6 + main());
    return 0;
 }
+
+int checkin_it(){
+   int b = 1;
+   if(b==0){
+      hello();
+      b=2;
+      there(b,b);
+   }
+   for(int i=0;i<15;i++){
+      hello();
+      there(3,3);
+      there(3,3);
+      there(3,3);
+      i;
+      i;
+      i;
+      i;
+      i;
+      i;
+      i;
+      i;
+      i;
+      i;
+   }
+}
+
+int for_five(){
+   for(int i=0;i<5;i++){
+      i;
+   }
+   for(int i=0;i<5;i++){
+      i;
+   }
+   for(int i=0;i<5;i++){
+      i;
+   }
+   for(int i=0;i<5;i++){
+      i;
+   }
+   for(int i=0;i<5;i++){
+      i;
+   }
+}
+
+int while_while(){
+   while(1){
+      int i=0;
+      1;
+      2;
+      3;
+   }
+   while(8){
+      5;
+   }
+}

@@ -1,7 +1,5 @@
 #include "CallgraphVisit.h"
 #include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 #include "DefinitionData.h"
 #include "definition_analysis.h"
 

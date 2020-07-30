@@ -32,9 +32,29 @@ unsigned int lines_of(CXCursor c)
     return line_end - line_start + 1;
 }
 
+// It doesn't count statements but the syntax rule called 'expression_statement' here: https://www.lysator.liu.se/c/ANSI-C-grammar-y.html#expression
+enum CXChildVisitResult statement_counter(CXCursor cursor, CXCursor parent, CXClientData client_data)
+{
+    unsigned int* statements = (unsigned int*)client_data;
+    
+    printf("kind of stmt:%s, child of:%s\n",
+        clang_getCString(clang_getCursorKindSpelling(clang_getCursorKind(cursor))),
+        clang_getCString(clang_getCursorKindSpelling(clang_getCursorKind(parent)))
+    );
+    enum CXCursorKind k = clang_getCursorKind(cursor);
+    if(clang_isExpression(k) && clang_isStatement(clang_getCursorKind(parent))){
+        (*statements) += 1;
+    }
+    
+    return CXChildVisit_Recurse;
+}
+
 unsigned int number_of_statements(CXCursor c)
 {
-    return 3;
+    printf("//--------//--------//--------//--------//--------//\n");
+    unsigned int statements = 0;
+    clang_visitChildren(c,statement_counter, (CXClientData) &statements);
+    return statements;
 }
 
 DefinitionData* analyze(CXCursor c){

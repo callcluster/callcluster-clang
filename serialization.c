@@ -30,6 +30,7 @@ void functions_visitor(const char * name, const char * usr, DefinitionData* data
     if(data!=NULL){
         cJSON_AddStringToObject(f,"location",data->Location);
         cJSON_AddNumberToObject(f,"numberOfLines",data->NumberOfLines);
+        cJSON_AddNumberToObject(f,"numberOfStatements",data->NumberOfStatements);
     }
     cJSON_AddItemToArray(a,f);
 }
