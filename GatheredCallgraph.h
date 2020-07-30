@@ -18,7 +18,7 @@ typedef void (*CallsVisitor)(unsigned int from, unsigned int to, void* data);
 
 void GatheredCallgraph_visitCalls(GatheredCallgraph, CallsVisitor, void* data);
 
-typedef  void (*FunctionsVisitor)(const char * name, const char * usr, DefinitionData* def_data, void* data);
+typedef  void (*FunctionsVisitor)(const char * name, const char * usr, unsigned int index, DefinitionData* def_data, void* data);
 
 void GatheredCallgraph_visitFunctions(GatheredCallgraph, FunctionsVisitor, void* data);
 

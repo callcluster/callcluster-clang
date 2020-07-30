@@ -1,4 +1,3 @@
-
 cd test-projects/simple
 bash build.sh
 cd ../..

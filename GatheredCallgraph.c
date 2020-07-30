@@ -197,6 +197,7 @@ void GatheredCallgraph_visitFunctions(GatheredCallgraph gathered_callgraph, Func
         visitor(
             functions[i]->DisplayName,
             functions[i]->FunctionUsr,
+            i,
             functions[i]->data,
             data
         );

@@ -3,6 +3,7 @@
 
 struct DefinitionData {
     char* Location;
+    char* Filename;
     unsigned int NumberOfLines;
     unsigned int NumberOfStatements;
 };

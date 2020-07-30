@@ -18,6 +18,24 @@ char* create_location_string(CXCursor c)
     return ret;
 }
 
+char* mallocopy_da(const char* copied)
+{
+    char* ret = malloc( sizeof(char) * (strlen(copied) + 1) );
+    strcpy(ret,copied);
+    return ret;
+}
+
+char* create_filename_string(CXCursor c)
+{
+    CXSourceLocation loc = clang_getCursorLocation(c);
+    CXString filename;
+    clang_getPresumedLocation(loc,&filename,NULL,NULL);
+    const char* c_filename = clang_getCString(filename);
+    char* ret=mallocopy_da(c_filename);
+    clang_disposeString(filename);
+    return ret;
+}
+
 unsigned int lines_of(CXCursor c)
 {
     CXSourceRange r = clang_getCursorExtent(c);
@@ -36,22 +54,15 @@ unsigned int lines_of(CXCursor c)
 enum CXChildVisitResult statement_counter(CXCursor cursor, CXCursor parent, CXClientData client_data)
 {
     unsigned int* statements = (unsigned int*)client_data;
-    
-    printf("kind of stmt:%s, child of:%s\n",
-        clang_getCString(clang_getCursorKindSpelling(clang_getCursorKind(cursor))),
-        clang_getCString(clang_getCursorKindSpelling(clang_getCursorKind(parent)))
-    );
     enum CXCursorKind k = clang_getCursorKind(cursor);
     if(clang_isExpression(k) && clang_isStatement(clang_getCursorKind(parent))){
         (*statements) += 1;
     }
-    
     return CXChildVisit_Recurse;
 }
 
 unsigned int number_of_statements(CXCursor c)
 {
-    printf("//--------//--------//--------//--------//--------//\n");
     unsigned int statements = 0;
     clang_visitChildren(c,statement_counter, (CXClientData) &statements);
     return statements;
@@ -63,5 +74,6 @@ DefinitionData* analyze(CXCursor c){
     ret->Location = create_location_string(c);
     ret->NumberOfLines = lines_of(c);
     ret->NumberOfStatements = number_of_statements(c);
+    ret->Filename = create_filename_string(c);
     return ret;
 }

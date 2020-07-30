@@ -304,43 +304,50 @@
 			"usr":	"c:@F@main",
 			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 2",
 			"numberOfLines":	4,
-			"numberOfStatements":	2
+			"numberOfStatements":	2,
+			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c"
 		}, {
 			"name":	"there(int, int)",
 			"usr":	"c:@F@there",
 			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 9",
 			"numberOfLines":	4,
-			"numberOfStatements":	2
+			"numberOfStatements":	2,
+			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c"
 		}, {
 			"name":	"hello()",
 			"usr":	"c:@F@hello",
 			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 14",
 			"numberOfLines":	3,
-			"numberOfStatements":	1
+			"numberOfStatements":	1,
+			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c"
 		}, {
 			"name":	"hello_there()",
 			"usr":	"c:@F@hello_there",
 			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 18",
 			"numberOfLines":	5,
-			"numberOfStatements":	3
+			"numberOfStatements":	3,
+			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c"
 		}, {
 			"name":	"checkin_it()",
 			"usr":	"c:@F@checkin_it",
 			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 24",
 			"numberOfLines":	24,
-			"numberOfStatements":	20
+			"numberOfStatements":	20,
+			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c"
 		}, {
 			"name":	"for_five()",
 			"usr":	"c:@F@for_five",
 			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 49",
 			"numberOfLines":	17,
-			"numberOfStatements":	15
+			"numberOfStatements":	15,
+			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c"
 		}, {
 			"name":	"while_while()",
 			"usr":	"c:@F@while_while",
 			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 67",
 			"numberOfLines":	11,
-			"numberOfStatements":	6
+			"numberOfStatements":	6,
+			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c"
 		}],
 	"calls":	[{
 			"from":	104,
