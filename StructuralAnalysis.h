@@ -6,6 +6,7 @@ typedef void* StructuralAnalysis;
 typedef void* Community;
 
 typedef void (*CommunityVisitor) (
+    Community community,
     char* name, 
     unsigned int functions[], 
     unsigned int functions_size,

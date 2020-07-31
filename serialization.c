@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "GatheredCallgraph.h"
+#include "StructuralAnalysis.h"
 
 void calls_visitor(unsigned int from, unsigned int to, void* array)
 {
@@ -43,9 +44,38 @@ cJSON* createFunctionsArray(GatheredCallgraph gathered_callgraph)
     return a;
 }
 
+void children_visitor(Community community, char* name, unsigned int functions[], unsigned int functions_size, void* children_array);
+
+void add_community_to_json_object(Community c, cJSON* o, char* name, unsigned int functions[], unsigned int functions_size)
+{
+    cJSON_AddStringToObject(o,"name",name);
+    cJSON_AddItemToObject(o,"functions",cJSON_CreateIntArray(functions,functions_size));
+    cJSON* children = cJSON_CreateArray();
+    Community_visitChildren(c,children_visitor,children);
+    cJSON_AddItemToObject(o,"communities",children);
+}
+
+void children_visitor(Community community, char* name, unsigned int functions[], unsigned int functions_size, void* children_array)
+{
+    cJSON* children = (cJSON*) children_array;
+    cJSON* o = cJSON_CreateObject();
+    add_community_to_json_object(community,o,name,functions,functions_size);
+    cJSON_AddItemToArray(children_array,o);
+}
+
+void root_visitor(Community community, char* name, unsigned int functions[], unsigned int functions_size, void* root_object)
+{
+    cJSON* o = (cJSON*) root_object;
+    add_community_to_json_object(community,o,name,functions,functions_size);
+}
+
 cJSON* createCommunityObject(GatheredCallgraph gathered_callgraph)
 {
-    return cJSON_CreateObject();
+    cJSON* o = cJSON_CreateObject();
+    StructuralAnalysis a = create_StructuralAnalysis(gathered_callgraph);
+    StructuralAnalysis_visitRoot(a,root_visitor,o);
+    dispose_StructuralAnalysis(a);
+    return o;
 }
 
 void save(GatheredCallgraph gathered_callgraph, const char * filename)

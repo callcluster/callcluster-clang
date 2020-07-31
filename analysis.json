@@ -399,5 +399,31 @@
 			"to":	38
 		}],
 	"community":	{
+		"functions":	[],
+		"communities":	[{
+				"name":	"home",
+				"functions":	[],
+				"communities":	[{
+						"name":	"jose",
+						"functions":	[],
+						"communities":	[{
+								"name":	"callcluster-clang",
+								"functions":	[],
+								"communities":	[{
+										"name":	"test-projects",
+										"functions":	[],
+										"communities":	[{
+												"name":	"simple",
+												"functions":	[],
+												"communities":	[{
+														"name":	"tutorial.c",
+														"functions":	[106, 105, 104, 103, 102, 101, 100],
+														"communities":	[]
+													}]
+											}]
+									}]
+							}]
+					}]
+			}]
 	}
 }
