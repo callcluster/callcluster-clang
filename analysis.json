@@ -399,6 +399,7 @@
 			"to":	38
 		}],
 	"community":	{
+		"name":	"root",
 		"functions":	[],
 		"communities":	[{
 				"name":	"home",

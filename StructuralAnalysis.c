@@ -1,6 +1,7 @@
 #include "StructuralAnalysis.h"
 #include <stdlib.h>
 #include <string.h>
+
 struct IndexLinkedList{
     unsigned int Index;
     struct IndexLinkedList* Previous;
@@ -68,7 +69,7 @@ void visitor(const char * name, const char * usr, unsigned int index, Definition
     {
         Node* current = (Node*) data;
         char* path=mallocopy_sa(def_data->Filename);
-        const char* token = strtok(path,"/");
+        char* token = strtok(path,"/");
         while(token != NULL){
             current = Node_addOrGetChild(current,token);
             token = strtok(NULL,"/");
@@ -81,6 +82,9 @@ void visitor(const char * name, const char * usr, unsigned int index, Definition
 StructuralAnalysis create_StructuralAnalysis(GatheredCallgraph c)
 {
     Node* ret = malloc(sizeof(Node));
+    ret->LastChild=NULL;
+    ret->LastIndex=NULL;
+    ret->Name=mallocopy_sa("root");
     GatheredCallgraph_visitFunctions(c,visitor,ret);
     return (StructuralAnalysis) ret;
 }
@@ -134,7 +138,28 @@ void Community_visitChildren(Community c, CommunityVisitor visitor, void* data)
 
 void dispose_Node(Node* n)
 {
-
+    IndexLinkedList* last_index = n->LastIndex;
+    NodeLinkedList* last_child = n->LastChild;
+    free(n->Name);
+    free(n);
+    {
+        IndexLinkedList* current = last_index;
+        while (current!=NULL)
+        {
+            IndexLinkedList* previous = current->Previous;
+            free(current);
+            current = previous;
+        }
+    }
+    {
+        NodeLinkedList* current = last_child;
+        while(current!=NULL){
+            NodeLinkedList* previous = current->Previous;
+            dispose_Node(current->Node);
+            free(current);
+            current = previous;
+        }
+    }
 }
 void dispose_StructuralAnalysis(StructuralAnalysis sa)
 {
