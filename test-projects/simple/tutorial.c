@@ -14,13 +14,13 @@ void there(int x, int y){
 void hello(){
    there(1 + main(), main() * 2);
 }
-/*
+
 int hello_there() {
    hello();
    there(5, 6 + main());
    return 0;
 }
-
+/*
 int checkin_it(){
    int b = 1;
    if(b==0){
@@ -76,22 +76,6 @@ int while_while(){
    }
 }
 
-void run_if(){
-   int b=4;
-   if(b==0){
-      hello();
-      b=2;
-      there(b,b);
-   }else{
-      hello();
-   }
-   hello();
-   if(b==2)
-      there(b,b);
-   
-   hello();
-}
-*/
 void compound_compound(){
    hello();
    hello();
@@ -113,3 +97,21 @@ void compound_compound(){
       hello();
    }
 }
+*/
+
+void run_if(){
+   int b=4;
+   if(b==0){
+      hello();
+      b=2;
+      there(b,b);
+   }else{
+      hello();
+   }
+   hello();
+   if(b==2)
+      there(b,b);
+   
+   hello();
+}
+

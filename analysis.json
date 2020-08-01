@@ -324,41 +324,46 @@
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
 			"cyclomaticComplexity":	2
 		}, {
-			"name":	"compound_compound()",
-			"usr":	"c:@F@compound_compound",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 95",
-			"numberOfLines":	21,
-			"numberOfStatements":	10,
+			"name":	"hello_there()",
+			"usr":	"c:@F@hello_there",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 18",
+			"numberOfLines":	5,
+			"numberOfStatements":	3,
+			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
+			"cyclomaticComplexity":	2
+		}, {
+			"name":	"run_if()",
+			"usr":	"c:@F@run_if",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 102",
+			"numberOfLines":	15,
+			"numberOfStatements":	9,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
 			"cyclomaticComplexity":	2
 		}],
 	"calls":	[{
-			"from":	103,
+			"from":	104,
+			"to":	102
+		}, {
+			"from":	104,
+			"to":	101
+		}, {
+			"from":	104,
+			"to":	102
+		}, {
+			"from":	104,
+			"to":	102
+		}, {
+			"from":	104,
+			"to":	101
+		}, {
+			"from":	104,
 			"to":	102
 		}, {
 			"from":	103,
-			"to":	102
-		}, {
-			"from":	103,
-			"to":	102
-		}, {
-			"from":	103,
-			"to":	102
+			"to":	100
 		}, {
 			"from":	103,
 			"to":	101
-		}, {
-			"from":	103,
-			"to":	102
-		}, {
-			"from":	103,
-			"to":	102
-		}, {
-			"from":	103,
-			"to":	102
-		}, {
-			"from":	103,
-			"to":	102
 		}, {
 			"from":	103,
 			"to":	102
@@ -404,7 +409,7 @@
 												"functions":	[],
 												"communities":	[{
 														"name":	"tutorial.c",
-														"functions":	[103, 102, 101, 100],
+														"functions":	[104, 103, 102, 101, 100],
 														"communities":	[]
 													}]
 											}]

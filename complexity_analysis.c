@@ -10,8 +10,11 @@ typedef struct Node Node;
 struct Operation {
     enum CXCursorKind Kind;
     struct Operation* Tail;
-    //properties for CompoundStatement
-    Node* CompoundLast;
+    Node* CompoundLast;//constantly moving end of a compound statement
+    Node* CondPrevious;//Node previous to an if or switch statement 
+    Node* IfTrueEnd;//Final Node in the truthful block of an if statement
+    Node* IfFalseEnd;//Final Node in the truthful block of an if statement
+    unsigned int IfConditionVisited;//boolean, true if the condition for the if statement was visited
 };
 typedef struct Operation Operation;
 
@@ -34,7 +37,10 @@ void Node_addEdge(Node* from, Node* to)
 void Visit_push(Visit* v){
     Operation* new = malloc(sizeof(Operation));
     new->Kind=0;
-    new->CompoundLast=NULL;
+    new->CompoundLast = NULL;
+    new->CondPrevious = NULL;
+    new->IfTrueEnd = NULL;
+    new->IfFalseEnd = NULL;
     new->Tail = v->OpStack;
     v->OpStack = new;
 }
@@ -48,8 +54,10 @@ Node* Visit_getLast(Visit* v)
         {
         case CXCursor_CompoundStmt:
             return v->OpStack->CompoundLast;
+        case CXCursor_IfStmt:
+            return v->OpStack->CondPrevious;
         default:
-            return v->Entry;
+            return NULL;
         }
     }
 }
@@ -67,12 +75,36 @@ void Visit_enter(Visit* v, enum CXCursorKind k)
         v->OpStack->Kind = CXCursor_CompoundStmt;
         v->OpStack->CompoundLast = last;
     }
+    if(k==CXCursor_IfStmt){
+        Node* last = Visit_getLast(v);
+        Visit_push(v);
+        v->OpStack->Kind = CXCursor_IfStmt;
+        v->OpStack->CondPrevious = last;
+    }
 }
 
 void Visit_pop(Visit* v){
     Operation* old = v->OpStack;
     v->OpStack = v->OpStack->Tail;
     free(old);
+}
+
+void Visit_addLooseEnd(Visit* v, Node* end)
+{
+    if(v->OpStack!=NULL){
+        if(v->OpStack->Kind==CXCursor_CompoundStmt){
+            v->OpStack->CompoundLast = end;
+        }
+        if(v->OpStack->Kind==CXCursor_IfStmt){
+            if(v->OpStack->IfTrueEnd==NULL){
+                v->OpStack->IfTrueEnd = end;
+            }else{
+                v->OpStack->IfFalseEnd = end;
+            }
+        }
+
+    }
+    
 }
 
 void Visit_exit(Visit* v)
@@ -86,10 +118,23 @@ void Visit_exit(Visit* v)
         if(v->OpStack->Kind==CXCursor_CompoundStmt){
             Node* last = v->OpStack->CompoundLast;
             Visit_pop(v);
-            if(v->OpStack!=NULL){
-                v->OpStack->CompoundLast = last;
+            Visit_addLooseEnd(v, last);
+            
+        }else if(v->OpStack->Kind == CXCursor_IfStmt){
+            Node* final = Node_create();
+
+            Node_addEdge(v->OpStack->IfTrueEnd,final);
+
+            Node* falseEnd = v->OpStack->IfFalseEnd;
+            if(falseEnd==NULL){
+                Node_addEdge(v->OpStack->CondPrevious,final);
+            }else{
+                Node_addEdge(falseEnd,final);
             }
-        }else{
+            
+            Visit_pop(v);
+            Visit_addLooseEnd(v,final);
+        } else {
             Visit_pop(v);
         }
     }
@@ -98,10 +143,22 @@ void Visit_exit(Visit* v)
 void Visit_expression(Visit* v)
 {
     printf("e\n");
-    if(v->OpStack->Kind==CXCursor_CompoundStmt){
+    if(v->OpStack->Kind == CXCursor_CompoundStmt){
         Node* new = Node_create();
-        Node_addEdge(v->OpStack->CompoundLast,new);
+        Node_addEdge(v->OpStack->CompoundLast, new);
         v->OpStack->CompoundLast = new;
+    } else if(v->OpStack->Kind == CXCursor_IfStmt){
+        if(v->OpStack->IfConditionVisited){
+            Node* new = Node_create();
+            Node_addEdge(v->OpStack->CondPrevious, new);
+            if(v->OpStack->IfTrueEnd==NULL){
+                v->OpStack->IfTrueEnd = new;
+            }else{
+                v->OpStack->IfFalseEnd = new;
+            }
+        }else{
+            v->OpStack->IfConditionVisited = 1;
+        }
     }
 }
 
@@ -110,7 +167,7 @@ enum CXChildVisitResult general_visitor (CXCursor cursor, CXCursor parent, CXCli
 {
     Visit* visit = (Visit*) client_data;
     enum CXCursorKind kind = clang_getCursorKind(cursor);
-    if(clang_isStatement(kind) && kind == CXCursor_CompoundStmt){
+    if( kind == CXCursor_CompoundStmt || kind == CXCursor_IfStmt){
 
         Visit_enter(visit,kind);
         clang_visitChildren(cursor, general_visitor, (CXClientData) visit);
