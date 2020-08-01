@@ -359,12 +359,21 @@
 			"name":	"run_if()",
 			"usr":	"c:@F@run_if",
 			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 79",
-			"numberOfLines":	10,
-			"numberOfStatements":	5,
+			"numberOfLines":	16,
+			"numberOfStatements":	9,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
 			"cyclomaticComplexity":	2
 		}],
 	"calls":	[{
+			"from":	107,
+			"to":	102
+		}, {
+			"from":	107,
+			"to":	101
+		}, {
+			"from":	107,
+			"to":	102
+		}, {
 			"from":	107,
 			"to":	102
 		}, {

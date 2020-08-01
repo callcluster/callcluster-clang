@@ -85,4 +85,10 @@ void run_if(){
    }else{
       hello();
    }
+   hello();
+   if(b==2)
+      there(b,b);
+   
+   
+   hello();
 }
