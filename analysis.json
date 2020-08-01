@@ -324,88 +324,41 @@
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
 			"cyclomaticComplexity":	2
 		}, {
-			"name":	"hello_there()",
-			"usr":	"c:@F@hello_there",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 18",
-			"numberOfLines":	5,
-			"numberOfStatements":	3,
-			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
-		}, {
-			"name":	"checkin_it()",
-			"usr":	"c:@F@checkin_it",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 24",
-			"numberOfLines":	24,
-			"numberOfStatements":	20,
-			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
-		}, {
-			"name":	"for_five()",
-			"usr":	"c:@F@for_five",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 49",
-			"numberOfLines":	17,
-			"numberOfStatements":	15,
-			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
-		}, {
-			"name":	"while_while()",
-			"usr":	"c:@F@while_while",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 67",
-			"numberOfLines":	11,
-			"numberOfStatements":	6,
-			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
-		}, {
-			"name":	"run_if()",
-			"usr":	"c:@F@run_if",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 79",
-			"numberOfLines":	16,
-			"numberOfStatements":	9,
+			"name":	"compound_compound()",
+			"usr":	"c:@F@compound_compound",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 95",
+			"numberOfLines":	21,
+			"numberOfStatements":	10,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
 			"cyclomaticComplexity":	2
 		}],
 	"calls":	[{
-			"from":	107,
-			"to":	102
-		}, {
-			"from":	107,
-			"to":	101
-		}, {
-			"from":	107,
-			"to":	102
-		}, {
-			"from":	107,
-			"to":	102
-		}, {
-			"from":	107,
-			"to":	101
-		}, {
-			"from":	107,
-			"to":	102
-		}, {
-			"from":	104,
-			"to":	101
-		}, {
-			"from":	104,
-			"to":	101
-		}, {
-			"from":	104,
-			"to":	101
-		}, {
-			"from":	104,
-			"to":	102
-		}, {
-			"from":	104,
-			"to":	101
-		}, {
-			"from":	104,
+			"from":	103,
 			"to":	102
 		}, {
 			"from":	103,
-			"to":	100
+			"to":	102
+		}, {
+			"from":	103,
+			"to":	102
+		}, {
+			"from":	103,
+			"to":	102
 		}, {
 			"from":	103,
 			"to":	101
+		}, {
+			"from":	103,
+			"to":	102
+		}, {
+			"from":	103,
+			"to":	102
+		}, {
+			"from":	103,
+			"to":	102
+		}, {
+			"from":	103,
+			"to":	102
 		}, {
 			"from":	103,
 			"to":	102
@@ -451,7 +404,7 @@
 												"functions":	[],
 												"communities":	[{
 														"name":	"tutorial.c",
-														"functions":	[107, 106, 105, 104, 103, 102, 101, 100],
+														"functions":	[103, 102, 101, 100],
 														"communities":	[]
 													}]
 											}]

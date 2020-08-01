@@ -14,7 +14,7 @@ void there(int x, int y){
 void hello(){
    there(1 + main(), main() * 2);
 }
-
+/*
 int hello_there() {
    hello();
    there(5, 6 + main());
@@ -89,6 +89,27 @@ void run_if(){
    if(b==2)
       there(b,b);
    
-   
    hello();
+}
+*/
+void compound_compound(){
+   hello();
+   hello();
+   hello();
+   {
+      hello();
+      hello();
+   }
+
+   there(1,1);
+
+   {
+      hello();
+      hello();
+   }
+
+   {
+      hello();
+      hello();
+   }
 }

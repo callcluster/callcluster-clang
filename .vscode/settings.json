@@ -8,6 +8,7 @@
         "streambuf": "c",
         "ostream": "c",
         "numeric": "c",
-        "cmath": "c"
+        "cmath": "c",
+        "tuple": "c"
     }
 }
