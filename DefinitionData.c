@@ -8,6 +8,7 @@ DefinitionData* create_DefinitionData()
     ret->Location=NULL;
     ret->NumberOfLines=0;
     ret->Filename=NULL;
+    ret->CyclomaticComplexity=0;
     return ret;
 }
 

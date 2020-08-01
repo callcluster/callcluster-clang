@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "complexity_analysis.h"
 
 char* create_location_string(CXCursor c)
 {
@@ -75,5 +76,7 @@ DefinitionData* analyze(CXCursor c){
     ret->NumberOfLines = lines_of(c);
     ret->NumberOfStatements = number_of_statements(c);
     ret->Filename = create_filename_string(c);
+    ret->CyclomaticComplexity = get_complexity(c);
+
     return ret;
 }

@@ -108,8 +108,6 @@ void GatheredCallgraph_addCall(GatheredCallgraph callgraph, const char * from, c
     new_set->to = to_id;
     new_set->Next = cg->Calls;
 
-    printf("%d -> %d\n", from_id, to_id);
-
     cg->Calls = new_set;
 }
 

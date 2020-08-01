@@ -75,3 +75,14 @@ int while_while(){
       5;
    }
 }
+
+void run_if(){
+   int b=4;
+   if(b==0){
+      hello();
+      b=2;
+      there(b,b);
+   }else{
+      hello();
+   }
+}

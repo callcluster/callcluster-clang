@@ -6,6 +6,7 @@ struct DefinitionData {
     char* Filename;
     unsigned int NumberOfLines;
     unsigned int NumberOfStatements;
+    unsigned int CyclomaticComplexity;
 };
 
 typedef struct DefinitionData DefinitionData;
