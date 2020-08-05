@@ -332,33 +332,15 @@
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
 			"cyclomaticComplexity":	2
 		}, {
-			"name":	"run_if()",
-			"usr":	"c:@F@run_if",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 102",
-			"numberOfLines":	15,
-			"numberOfStatements":	9,
+			"name":	"casi()",
+			"usr":	"c:@F@casi",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 120",
+			"numberOfLines":	27,
+			"numberOfStatements":	14,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
 			"cyclomaticComplexity":	2
 		}],
 	"calls":	[{
-			"from":	104,
-			"to":	102
-		}, {
-			"from":	104,
-			"to":	101
-		}, {
-			"from":	104,
-			"to":	102
-		}, {
-			"from":	104,
-			"to":	102
-		}, {
-			"from":	104,
-			"to":	101
-		}, {
-			"from":	104,
-			"to":	102
-		}, {
 			"from":	103,
 			"to":	100
 		}, {

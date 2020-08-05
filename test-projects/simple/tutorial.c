@@ -97,7 +97,6 @@ void compound_compound(){
       hello();
    }
 }
-*/
 
 void run_if(){
    int b=4;
@@ -113,5 +112,36 @@ void run_if(){
       there(b,b);
    
    hello();
+}
+
+*/
+
+
+void casi(){
+   int b = 2;
+   switch(b){
+      b = 8;
+      b < 8;
+      case 1:
+      b+=2;
+      break;
+
+      case 900:
+      b+=2;
+      break;
+
+      case 0:
+      case 2:
+      b=5;
+      break;
+
+      case 3:
+      case 4:
+      case 5:
+      b = 0;
+      default:
+      int q = 8;
+      b = q;
+   }
 }
 
