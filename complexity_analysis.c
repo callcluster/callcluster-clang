@@ -67,6 +67,7 @@ struct Operation {
     Node* CycleLastNode;//CycleLastNode represents the last executable node in a cycle
     unsigned int ForVisitedExpressions;//counts expressions within a for statement
     Node* ContinueNode;//used for cycles, it's CondPrevious but falls through
+    unsigned int WhileConditionVisited;//used for the while cycle 0 means the check expression for this while loop was not seen
 };
 typedef struct Operation Operation;
 
@@ -111,6 +112,8 @@ void Visit_push(Visit* v){
         new->ContinueNode = NULL;
     }
 
+    new->WhileConditionVisited=0;
+
     new->Tail = v->OpStack;
     v->OpStack = new;
 }
@@ -127,6 +130,7 @@ Node* Visit_getLast(Visit* v)
         case CXCursor_IfStmt:
         case CXCursor_SwitchStmt:
         case CXCursor_ForStmt:
+        case CXCursor_WhileStmt:
             return v->OpStack->CondPrevious;
         default:
             return NULL;
@@ -187,10 +191,10 @@ void Visit_enter(Visit* v, enum CXCursorKind k)
         v->OpStack->CondPrevious = last;
         v->OpStack->BreakNode = Node_create();
     }
-    if(k==CXCursor_ForStmt){
+    if( k == CXCursor_ForStmt || k == CXCursor_WhileStmt ){
         Node* last = Visit_getLast(v);
         Visit_push(v);
-        v->OpStack->Kind = CXCursor_ForStmt;
+        v->OpStack->Kind = k;
         v->OpStack->CondPrevious = last;
         v->OpStack->ContinueNode = last;
         v->OpStack->BreakNode = Node_create();
@@ -220,7 +224,7 @@ void Visit_addLooseEnd(Visit* v, Node* end)
         if(v->OpStack->Kind==CXCursor_SwitchStmt){
             Node_addEdge(end,v->OpStack->BreakNode);
         }
-        if(v->OpStack->Kind==CXCursor_ForStmt){
+        if( v->OpStack->Kind==CXCursor_ForStmt || v->OpStack->Kind==CXCursor_WhileStmt ){
             Node*  intermediate = Node_create();
             Node_addEdge(end,intermediate);
             v->OpStack->CycleLastNode = intermediate;
@@ -263,7 +267,7 @@ void Visit_exit(Visit* v)
             Node* final = v->OpStack->BreakNode;
             Visit_pop(v);
             Visit_addLooseEnd(v,final);
-        }else if(v->OpStack->Kind == CXCursor_ForStmt){
+        }else if(v->OpStack->Kind == CXCursor_ForStmt || v->OpStack->Kind == CXCursor_WhileStmt){
             Node_addEdge(v->OpStack->CycleLastNode, v->OpStack->CondPrevious);
             Node_addEdge(v->OpStack->CondPrevious, v->OpStack->BreakNode);
             Node* final = v->OpStack->BreakNode;
@@ -303,6 +307,14 @@ void Visit_expression(Visit* v)
             Node* new = Node_create();
             Node_addEdge(v->OpStack->CondPrevious, new);
             Visit_addLooseEnd(v,new);//this is the  only statement of the for block
+        }
+    }else if (v->OpStack->Kind==CXCursor_WhileStmt){
+        if(v->OpStack->WhileConditionVisited){
+            Node* new = Node_create();
+            Node_addEdge(v->OpStack->CondPrevious, new);
+            Visit_addLooseEnd(v,new);//this is the  only statement of the for block
+        }else{
+            v->OpStack->WhileConditionVisited = 1;
         }
     }
 }
@@ -383,6 +395,7 @@ enum CXChildVisitResult general_visitor (CXCursor cursor, CXCursor parent, CXCli
         case CXCursor_IfStmt:
         case CXCursor_SwitchStmt:
         case CXCursor_ForStmt:
+        case CXCursor_WhileStmt:
         Visit_enter(visit,kind);
         clang_visitChildren(cursor, general_visitor, (CXClientData) visit);
         Visit_exit(visit);

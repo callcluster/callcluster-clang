@@ -308,11 +308,11 @@
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
 			"cyclomaticComplexity":	2
 		}, {
-			"name":	"normal_while()",
-			"usr":	"c:@F@normal_while",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 173",
-			"numberOfLines":	8,
-			"numberOfStatements":	3,
+			"name":	"broken_while()",
+			"usr":	"c:@F@broken_while",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 190",
+			"numberOfLines":	10,
+			"numberOfStatements":	6,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
 			"cyclomaticComplexity":	2
 		}],

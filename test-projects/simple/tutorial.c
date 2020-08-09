@@ -169,7 +169,7 @@ void broken_for(){
 */
 
 
-
+/*
 void normal_while(){
    int q=0;
    while (q<10)
@@ -178,13 +178,15 @@ void normal_while(){
    }
    q=8;
 }
+*/
 /*
 void evil_while(){
    int q=0;
    while(q<10) q+=1;
    q=8;
 }
-
+*/
+/*
 void broken_while(){
    int q = 0;
    while(q < 10){
