@@ -308,66 +308,15 @@
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
 			"cyclomaticComplexity":	2
 		}, {
-			"name":	"there(int, int)",
-			"usr":	"c:@F@there",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 9",
-			"numberOfLines":	4,
-			"numberOfStatements":	2,
-			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
-		}, {
-			"name":	"hello()",
-			"usr":	"c:@F@hello",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 14",
-			"numberOfLines":	3,
-			"numberOfStatements":	1,
-			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
-		}, {
-			"name":	"hello_there()",
-			"usr":	"c:@F@hello_there",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 18",
-			"numberOfLines":	5,
+			"name":	"normal_while()",
+			"usr":	"c:@F@normal_while",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 173",
+			"numberOfLines":	8,
 			"numberOfStatements":	3,
-			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
-		}, {
-			"name":	"casi()",
-			"usr":	"c:@F@casi",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 120",
-			"numberOfLines":	27,
-			"numberOfStatements":	14,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
 			"cyclomaticComplexity":	2
 		}],
 	"calls":	[{
-			"from":	103,
-			"to":	100
-		}, {
-			"from":	103,
-			"to":	101
-		}, {
-			"from":	103,
-			"to":	102
-		}, {
-			"from":	102,
-			"to":	100
-		}, {
-			"from":	102,
-			"to":	100
-		}, {
-			"from":	102,
-			"to":	101
-		}, {
-			"from":	101,
-			"to":	100
-		}, {
-			"from":	101,
-			"to":	101
-		}, {
-			"from":	101,
-			"to":	100
-		}, {
 			"from":	100,
 			"to":	38
 		}],
@@ -391,7 +340,7 @@
 												"functions":	[],
 												"communities":	[{
 														"name":	"tutorial.c",
-														"functions":	[104, 103, 102, 101, 100],
+														"functions":	[101, 100],
 														"communities":	[]
 													}]
 											}]

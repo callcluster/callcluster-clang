@@ -64,6 +64,9 @@ struct Operation {
     unsigned int CompoundCaseSeen;//Node that indicates wether the current Compound has seen a Case statement
     unsigned int CompoundDefaultSeen;//Node that indicates wether the current Compound has seen a Case statement
     Node* CompoundCaseOrigin;//CompoundLast will take this value when a case is seen
+    Node* CycleLastNode;//CycleLastNode represents the last executable node in a cycle
+    unsigned int ForVisitedExpressions;//counts expressions within a for statement
+    Node* ContinueNode;//used for cycles, it's CondPrevious but falls through
 };
 typedef struct Operation Operation;
 
@@ -78,18 +81,36 @@ typedef struct {
 void Visit_push(Visit* v){
     Operation* new = malloc(sizeof(Operation));
     new->Kind=0;
-    new->CompoundLast = NULL;
-    new->CondPrevious = NULL;
+    
     new->IfTrueEnd = NULL;
     new->IfFalseEnd = NULL;
     new->IfConditionVisited = 0;
-    new->BreakNode = NULL;
+    new->CondPrevious = NULL;
+
+    if(v->OpStack!=NULL){
+        new->CompoundLast = v->OpStack->CompoundLast;
+    }else{
+        new->CompoundLast = NULL;
+    }
+    
     if(v->OpStack != NULL){
         new->BreakNode = v->OpStack->BreakNode;
+    }else{
+        new->BreakNode = NULL;
     }
+
     new->CompoundCaseSeen = 0;
     new->CompoundDefaultSeen = 0;
     new->CompoundCaseOrigin = NULL;
+    new->CycleLastNode = NULL;
+    new->ForVisitedExpressions = 0;
+
+    if(v->OpStack != NULL){
+        new->ContinueNode = v->OpStack->ContinueNode;
+    }else{
+        new->ContinueNode = NULL;
+    }
+
     new->Tail = v->OpStack;
     v->OpStack = new;
 }
@@ -105,6 +126,7 @@ Node* Visit_getLast(Visit* v)
             return v->OpStack->CompoundLast;
         case CXCursor_IfStmt:
         case CXCursor_SwitchStmt:
+        case CXCursor_ForStmt:
             return v->OpStack->CondPrevious;
         default:
             return NULL;
@@ -165,7 +187,14 @@ void Visit_enter(Visit* v, enum CXCursorKind k)
         v->OpStack->CondPrevious = last;
         v->OpStack->BreakNode = Node_create();
     }
-    
+    if(k==CXCursor_ForStmt){
+        Node* last = Visit_getLast(v);
+        Visit_push(v);
+        v->OpStack->Kind = CXCursor_ForStmt;
+        v->OpStack->CondPrevious = last;
+        v->OpStack->ContinueNode = last;
+        v->OpStack->BreakNode = Node_create();
+    }
 }
 
 void Visit_pop(Visit* v){
@@ -191,6 +220,11 @@ void Visit_addLooseEnd(Visit* v, Node* end)
         if(v->OpStack->Kind==CXCursor_SwitchStmt){
             Node_addEdge(end,v->OpStack->BreakNode);
         }
+        if(v->OpStack->Kind==CXCursor_ForStmt){
+            Node*  intermediate = Node_create();
+            Node_addEdge(end,intermediate);
+            v->OpStack->CycleLastNode = intermediate;
+        }
 
     }
     
@@ -212,7 +246,9 @@ void Visit_exit(Visit* v)
         }else if(v->OpStack->Kind == CXCursor_IfStmt){
             Node* final = Node_create();
 
-            Node_addEdge(v->OpStack->IfTrueEnd,final);
+            if(v->OpStack->IfTrueEnd!=NULL){
+                Node_addEdge(v->OpStack->IfTrueEnd,final);
+            }
 
             Node* falseEnd = v->OpStack->IfFalseEnd;
             if(falseEnd==NULL){
@@ -227,7 +263,13 @@ void Visit_exit(Visit* v)
             Node* final = v->OpStack->BreakNode;
             Visit_pop(v);
             Visit_addLooseEnd(v,final);
-        } else {
+        }else if(v->OpStack->Kind == CXCursor_ForStmt){
+            Node_addEdge(v->OpStack->CycleLastNode, v->OpStack->CondPrevious);
+            Node_addEdge(v->OpStack->CondPrevious, v->OpStack->BreakNode);
+            Node* final = v->OpStack->BreakNode;
+            Visit_pop(v);
+            Visit_addLooseEnd(v,final);
+        }else{
             Visit_pop(v);
         }
         
@@ -254,6 +296,13 @@ void Visit_expression(Visit* v)
             }
         }else{
             v->OpStack->IfConditionVisited = 1;
+        }
+    } else if(v->OpStack->Kind==CXCursor_ForStmt){
+        v->OpStack->ForVisitedExpressions++;
+        if(v->OpStack->ForVisitedExpressions>4){//the body is an expression
+            Node* new = Node_create();
+            Node_addEdge(v->OpStack->CondPrevious, new);
+            Visit_addLooseEnd(v,new);//this is the  only statement of the for block
         }
     }
 }
@@ -312,6 +361,13 @@ void Visit_break(Visit* v)//PENSADO SOLAMENTE PARA CASE
     op->CompoundLast=NULL;
 }
 
+void Visit_continue(Visit* v)
+{
+    Operation* op = v->OpStack;
+    Node_addEdge(op->CompoundLast, op->ContinueNode);
+    op->CompoundLast=NULL;
+}
+
 void Visit_return(Visit* v)
 {
     printf("return:");
@@ -326,6 +382,7 @@ enum CXChildVisitResult general_visitor (CXCursor cursor, CXCursor parent, CXCli
         case CXCursor_CompoundStmt:
         case CXCursor_IfStmt:
         case CXCursor_SwitchStmt:
+        case CXCursor_ForStmt:
         Visit_enter(visit,kind);
         clang_visitChildren(cursor, general_visitor, (CXClientData) visit);
         Visit_exit(visit);
@@ -343,6 +400,11 @@ enum CXChildVisitResult general_visitor (CXCursor cursor, CXCursor parent, CXCli
 
         case CXCursor_BreakStmt:
         Visit_break(visit);
+        clang_visitChildren(cursor, general_visitor, (CXClientData) visit);
+        return CXChildVisit_Continue;
+
+        case CXCursor_ContinueStmt:
+        Visit_continue(visit);
         clang_visitChildren(cursor, general_visitor, (CXClientData) visit);
         return CXChildVisit_Continue;
 

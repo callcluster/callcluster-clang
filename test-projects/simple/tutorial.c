@@ -5,7 +5,7 @@ int main() {
 }
 
 
-
+/*
 void there(int x, int y){
    main();
    there(main(), x);
@@ -20,7 +20,7 @@ int hello_there() {
    there(5, 6 + main());
    return 0;
 }
-/*
+
 int checkin_it(){
    int b = 1;
    if(b==0){
@@ -116,7 +116,7 @@ void run_if(){
 
 */
 
-
+/*
 void casi(){
    int b = 2;
    switch(b){
@@ -145,3 +145,54 @@ void casi(){
    }
 }
 
+void normal_for(){
+   int q=0;
+   for(int i=0;i<10;i++){
+      q+=i*i;
+   }
+}
+
+void evil_for(){
+   int q=0;
+   for(int i=0;i<10;i++) q+=i*i;   
+}
+
+void broken_for(){
+   int q=0;
+   for(int i=0;i<10;i++){
+      q+=i*i;
+      if(q>8) break;
+      if(i<3) continue;
+      q=8;
+   }
+}
+*/
+
+
+
+void normal_while(){
+   int q=0;
+   while (q<10)
+   {
+      q+=1;
+   }
+   q=8;
+}
+/*
+void evil_while(){
+   int q=0;
+   while(q<10) q+=1;
+   q=8;
+}
+
+void broken_while(){
+   int q = 0;
+   while(q < 10){
+      q += 1;
+      if(q > 8) break;
+      if(q < 3) continue;
+      q = 8;
+   }
+   q = 9;
+}
+*/
