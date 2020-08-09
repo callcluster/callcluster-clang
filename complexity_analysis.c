@@ -58,7 +58,9 @@ struct Operation {
     Node* CompoundLast;//constantly moving end of a compound statement
     Node* CondPrevious;//Node previous to an if or switch statement 
     Node* IfTrueEnd;//Final Node in the truthful block of an if statement
+    unsigned int IfTrueBranchVisited;//wether the true branch was visited
     Node* IfFalseEnd;//Final Node in the truthful block of an if statement
+    unsigned int IfFalseBranchVisited;//wether the true branch was visited
     unsigned int IfConditionVisited;//boolean, true if the condition for the if statement was visited
     struct Node* BreakNode;//Node that will only not be NULL when the current operation can be broken
     unsigned int CompoundCaseSeen;//Node that indicates wether the current Compound has seen a Case statement
@@ -74,7 +76,7 @@ typedef struct Operation Operation;
 typedef struct {
     Operation* OpStack;
     Node* Entry;
-    Node* Exit;
+    Node* ReturnNode;
 } Visit;
 
 
@@ -85,6 +87,8 @@ void Visit_push(Visit* v){
     
     new->IfTrueEnd = NULL;
     new->IfFalseEnd = NULL;
+    new->IfTrueBranchVisited = 0;
+    new->IfFalseBranchVisited = 0;
     new->IfConditionVisited = 0;
     new->CondPrevious = NULL;
 
@@ -210,15 +214,19 @@ void Visit_pop(Visit* v){
 void Visit_addLooseEnd(Visit* v, Node* end)
 {
     printf("ADDING LOOSE END:%d\n", end->NodeNumber);
-    if(v->OpStack!=NULL){
+    if(v->OpStack==NULL){
+        Node_addEdge(end,v->ReturnNode);
+    }else{
         if(v->OpStack->Kind==CXCursor_CompoundStmt){
             v->OpStack->CompoundLast = end;
         }
         if(v->OpStack->Kind==CXCursor_IfStmt){
-            if(v->OpStack->IfTrueEnd==NULL){
+            if(!v->OpStack->IfTrueBranchVisited){
                 v->OpStack->IfTrueEnd = end;
+                v->OpStack->IfTrueBranchVisited = 1;
             }else{
                 v->OpStack->IfFalseEnd = end;
+                v->OpStack->IfFalseBranchVisited = 1;
             }
         }
         if(v->OpStack->Kind==CXCursor_SwitchStmt){
@@ -229,7 +237,6 @@ void Visit_addLooseEnd(Visit* v, Node* end)
             Node_addEdge(end,intermediate);
             v->OpStack->CycleLastNode = intermediate;
         }
-
     }
     
 }
@@ -245,7 +252,7 @@ void Visit_exit(Visit* v)
         if(v->OpStack->Kind==CXCursor_CompoundStmt){
             Node* last = v->OpStack->CompoundLast;
             Visit_pop(v);
-            Visit_addLooseEnd(v, last);
+            if (last!=NULL) Visit_addLooseEnd(v, last);
             
         }else if(v->OpStack->Kind == CXCursor_IfStmt){
             Node* final = Node_create();
@@ -256,7 +263,9 @@ void Visit_exit(Visit* v)
 
             Node* falseEnd = v->OpStack->IfFalseEnd;
             if(falseEnd==NULL){
-                Node_addEdge(v->OpStack->CondPrevious,final);
+                if(!v->OpStack->IfFalseBranchVisited){
+                    Node_addEdge(v->OpStack->CondPrevious,final);
+                }
             }else{
                 Node_addEdge(falseEnd,final);
             }
@@ -287,16 +296,20 @@ void Visit_expression(Visit* v)
     printf("e\n");
     if(v->OpStack->Kind == CXCursor_CompoundStmt){
         Node* new = Node_create();
-        Node_addEdge(v->OpStack->CompoundLast, new);
+        if(v->OpStack->CompoundLast!=NULL){
+            Node_addEdge(v->OpStack->CompoundLast, new);
+        }
         v->OpStack->CompoundLast = new;
     } else if(v->OpStack->Kind == CXCursor_IfStmt){
         if(v->OpStack->IfConditionVisited){
             Node* new = Node_create();
             Node_addEdge(v->OpStack->CondPrevious, new);
-            if(v->OpStack->IfTrueEnd==NULL){
+            if(v->OpStack->IfTrueEnd==NULL && !v->OpStack->IfTrueBranchVisited){
                 v->OpStack->IfTrueEnd = new;
-            }else{
+                v->OpStack->IfTrueBranchVisited = 1;
+            }else if(v->OpStack->IfFalseEnd==NULL && !v->OpStack->IfFalseBranchVisited){
                 v->OpStack->IfFalseEnd = new;
+                v->OpStack->IfFalseBranchVisited=1;
             }
         }else{
             v->OpStack->IfConditionVisited = 1;
@@ -370,19 +383,55 @@ void Visit_break(Visit* v)//PENSADO SOLAMENTE PARA CASE
 {
     Operation* op = v->OpStack;
     Node_addEdge(op->CompoundLast, op->BreakNode);
-    op->CompoundLast=NULL;
+    op->CompoundLast=Node_create();
+
+    while(op->Kind!=CXCursor_IfStmt){
+        op = op->Tail;
+    }
+    if(op != NULL && op==NULL) return;
+
+    if(op->IfTrueBranchVisited){
+        op->IfFalseBranchVisited=1;
+    }else{
+        op->IfTrueBranchVisited=1;
+    }
 }
 
 void Visit_continue(Visit* v)
 {
     Operation* op = v->OpStack;
     Node_addEdge(op->CompoundLast, op->ContinueNode);
-    op->CompoundLast=NULL;
+    op->CompoundLast=Node_create();
+
+    while(op != NULL && op->Kind!=CXCursor_IfStmt){
+        op = op->Tail;
+    }
+    if(op==NULL) return;
+
+    if(op->IfTrueBranchVisited){
+        op->IfFalseBranchVisited=1;
+    }else{
+        op->IfTrueBranchVisited=1;
+    }
 }
 
 void Visit_return(Visit* v)
 {
-    printf("return:");
+    Operation* op = v->OpStack;
+    Node_addEdge(Visit_getLast(v),v->ReturnNode);
+    Visit_addLooseEnd(v,Node_create());
+    op->CompoundLast=Node_create();
+
+    while(op != NULL && op->Kind!=CXCursor_IfStmt){
+        op = op->Tail;
+    }
+    if(op==NULL) return;
+
+    if(op->IfTrueBranchVisited){
+        op->IfFalseBranchVisited=1;
+    }else{
+        op->IfTrueBranchVisited=1;
+    }
 }
 
 enum CXChildVisitResult general_visitor (CXCursor cursor, CXCursor parent, CXClientData client_data)
@@ -437,7 +486,7 @@ Visit* Visit_create()
     Visit* ret = malloc(sizeof(Visit));
     ret->OpStack = NULL;
     ret->Entry = Node_create();
-    ret->Exit = Node_create();
+    ret->ReturnNode = Node_create();
     return ret;
 }
 

@@ -198,3 +198,29 @@ void broken_while(){
    q = 9;
 }
 */
+void while_with_unreachable_part(){
+   int q = 0;
+   while(q < 10){
+      q += 1;
+      if(q > 8){
+         break;
+      }else{
+         return;
+      }
+      if(q < 3) continue;
+      q = 8;
+   }
+   q = 9;
+}
+/*
+void while_with_return(){
+   int q = 0;
+   while(q < 10){
+      q += 1;
+      if(q > 8) return;
+      if(q < 3) continue;
+      q = 8;
+   }
+   q = 9;
+}
+*/

@@ -308,10 +308,10 @@
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
 			"cyclomaticComplexity":	2
 		}, {
-			"name":	"broken_while()",
-			"usr":	"c:@F@broken_while",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 190",
-			"numberOfLines":	10,
+			"name":	"while_with_unreachable_part()",
+			"usr":	"c:@F@while_with_unreachable_part",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 201",
+			"numberOfLines":	14,
 			"numberOfStatements":	6,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
 			"cyclomaticComplexity":	2
