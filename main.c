@@ -5,6 +5,7 @@
 #include "serialization.h"
 #include "GatheredCallgraph.h"
 #include "Visitor.h"
+#include <parameters.h>
 
 void analyze_command(CXCompileCommand command, CXIndex cxindex, GatheredCallgraph gathered_callgraph)
 {
@@ -47,21 +48,21 @@ void analyze_command(CXCompileCommand command, CXIndex cxindex, GatheredCallgrap
 }
 
 int main(int argc, char *argv[]) {
-   /*
    if(argc < 2)
    {
       printf("Please pass the build folder where compile_commands.json is located.");
       exit(0);
    }
-   */
    CXCompilationDatabase_Error error;
-   CXCompilationDatabase db = clang_CompilationDatabase_fromDirectory("./test-projects/simple/build", &error);
+   CXCompilationDatabase db = clang_CompilationDatabase_fromDirectory(argv[1], &error);
    if(error == CXCompilationDatabase_CanNotLoadDatabase)
    {
       printf("A compile_commands.json in that directory cannot be loaded.");
       clang_CompilationDatabase_dispose(db);
       exit(0);
    }
+
+   set_parameters(argc,argv);
 
    CXCompileCommands commands = clang_CompilationDatabase_getAllCompileCommands(db);
    unsigned int commands_number = clang_CompileCommands_getSize(commands);

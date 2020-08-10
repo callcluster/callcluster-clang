@@ -10,5 +10,10 @@
         "numeric": "c",
         "cmath": "c",
         "tuple": "c"
+    },
+    "cmake.debugConfig": {
+        "args": [
+            "./test-projects/simple/build"
+        ]
     }
 }

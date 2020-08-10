@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "parameters.h"
 struct Node;
 
 struct NodeList {
@@ -32,9 +32,8 @@ unsigned int Node_edgeExists(Node* from, Node* to)
 
 void Node_addEdge(Node* from, Node* to)
 {
-    printf("from %d to %d\n",from->NodeNumber,to->NodeNumber);
     if(Node_edgeExists(from,to)) return;
-
+    print_flow_edge(from->NodeNumber,to->NodeNumber);
     NodeList* prev = from->Next;
     from->Next = malloc(sizeof(NodeList));
     from->Next->Head = to;
@@ -168,7 +167,7 @@ void Visit_enter(Visit* v, enum CXCursorKind k)
 
     // print operation type
     CXString s = clang_getCursorKindSpelling(k);
-    printf("enter: %s\n",clang_getCString(s));
+    print_flow_enter(clang_getCString(s));
     clang_disposeString(s);
 
     if(k == CXCursor_CompoundStmt){
@@ -215,7 +214,7 @@ void Visit_pop(Visit* v){
 
 void Visit_addLooseEnd(Visit* v, Node* end)
 {
-    printf("ADDING LOOSE END:%d\n", end->NodeNumber);
+    print_flow_end(end->NodeNumber);
     if(v->OpStack==NULL){
         Node_addEdge(end,v->ReturnNode);
     }else{
@@ -248,7 +247,7 @@ void Visit_exit(Visit* v)
     if(v->OpStack != NULL){
 
         CXString s = clang_getCursorKindSpelling(v->OpStack->Kind);
-        printf("exit: %s\n",clang_getCString(s));
+        print_flow_exit(clang_getCString(s));
         clang_disposeString(s);
 
         if(v->OpStack->Kind==CXCursor_CompoundStmt){
@@ -294,9 +293,6 @@ void Visit_exit(Visit* v)
 void Visit_expression(Visit* v)
 {
     if(!Visit_canReceiveExpressions(v)) return;
-
-    printf("e\n");
-    
     
     if(v->OpStack->Kind == CXCursor_CompoundStmt){
         Node* new = Node_create(v);
@@ -370,7 +366,7 @@ void Operation_visit_case_default(Visit* v)
 
 void Visit_case(Visit* v)
 {
-    printf("Case:");
+    print_flow_case();
     Operation* op = v->OpStack;
     op->CompoundCaseSeen = 1;
     Operation_visit_case_default(v);
@@ -378,7 +374,7 @@ void Visit_case(Visit* v)
 
 void Visit_default(Visit* v)
 {
-    printf("Default:");
+    print_flow_default();
     Operation* op = v->OpStack;
     op->CompoundDefaultSeen = 1;
     Operation_visit_case_default(v);
@@ -445,8 +441,7 @@ void Visit_goto(Visit* v, char* label){
     Node_addEdge(Visit_getLast(v),gone_node);
     Visit_addLooseEnd(v,gone_node);
     gone_node->GotoLabel=label;
-    printf("%d goes to %s\n",gone_node->NodeNumber,gone_node->GotoLabel);
-
+    print_flow_goto(gone_node->NodeNumber,gone_node->GotoLabel);
     op->CompoundLast=Node_create(v);
 
     while(op != NULL && op->Kind!=CXCursor_IfStmt){
@@ -464,7 +459,7 @@ void Visit_label(Visit* v, char* name)
 {
     Visit_expression(v);
     v->OpStack->CompoundLast->Label = name;//assume we are in a CompoundStatement
-    printf("%d is labeled %s\n", v->OpStack->CompoundLast->NodeNumber, v->OpStack->CompoundLast->Label);
+    print_flow_labeled(v->OpStack->CompoundLast->NodeNumber, v->OpStack->CompoundLast->Label);
 }
 
 char* mallocopy_ca(const char* copied)
@@ -564,7 +559,6 @@ void Visit_dispose(Visit* v)
 
 unsigned int get_complexity(CXCursor c)
 {
-    printf("-----\n");
     Visit* v = Visit_create();
     clang_visitChildren(c, general_visitor, (CXClientData) v);
     unsigned int complexity = Visit_get_complexity(v);

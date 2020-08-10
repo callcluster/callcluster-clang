@@ -54,6 +54,7 @@ void CallgraphVisit_setCurrentFunctionDefinition(CallgraphVisit v, CXCursor defi
 {
     CallgraphVisitImpl* visit = (CallgraphVisitImpl*) v;
     CXString usr = clang_getCursorUSR(defined);
+    print_function_usr(clang_getCString(usr));
     GatheredCallgraph_addDefinition(
         visit->Callgraph, 
         clang_getCString(usr), 

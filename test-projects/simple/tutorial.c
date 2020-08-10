@@ -114,9 +114,7 @@ void run_if(){
    hello();
 }
 
-*/
 
-/*
 void casi(){
    int b = 2;
    switch(b){
@@ -197,6 +195,7 @@ void broken_while(){
    }
    q = 9;
 }
+
 void while_with_unreachable_part(){
    int q = 0;
    while(q < 10){
@@ -211,6 +210,7 @@ void while_with_unreachable_part(){
    }
    q = 9;
 }
+
 void while_with_return(){
    int q = 0;
    while(q < 10){
@@ -243,3 +243,18 @@ void gotos(){
    }
    end:return;
 }
+/*
+void gotos_evil(){
+   int q=0;
+   start: q+=1;
+   q=3;
+   q+=1;
+   if(q==0)
+      goto end;
+   else
+      goto start;
+   end:return;
+
+   while(1) goto end;
+}
+*/
