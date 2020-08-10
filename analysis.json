@@ -308,11 +308,11 @@
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
 			"cyclomaticComplexity":	2
 		}, {
-			"name":	"unreachable()",
-			"usr":	"c:@F@unreachable",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 226",
-			"numberOfLines":	7,
-			"numberOfStatements":	3,
+			"name":	"gotos()",
+			"usr":	"c:@F@gotos",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 234",
+			"numberOfLines":	12,
+			"numberOfStatements":	4,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
 			"cyclomaticComplexity":	2
 		}],

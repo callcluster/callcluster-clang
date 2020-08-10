@@ -1,6 +1,7 @@
 #include "complexity_analysis.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct Node;
 
@@ -12,6 +13,8 @@ struct NodeList {
 struct Node {
     struct NodeList* Next;
     unsigned int NodeNumber;
+    char* Label;
+    char* GotoLabel;
 };
 typedef struct Node Node;
 typedef struct NodeList NodeList;
@@ -21,8 +24,10 @@ unsigned int node_number=0;
 Node* Node_create()
 {
     Node* ret = malloc(sizeof(Node));
-    ret->Next=NULL;
-    ret->NodeNumber=node_number;
+    ret->Next = NULL;
+    ret->NodeNumber = node_number;
+    ret->Label = NULL;
+    ret->GotoLabel = NULL;
     node_number++;
     return ret;
 }
@@ -417,7 +422,8 @@ void Visit_return(Visit* v)
 {
     Operation* op = v->OpStack;
     Node_addEdge(Visit_getLast(v),v->ReturnNode);
-    Visit_addLooseEnd(v,Node_create());
+    Node* last_node=Node_create();
+    Visit_addLooseEnd(v,last_node);
     op->CompoundLast=Node_create();
 
     while(op != NULL && op->Kind!=CXCursor_IfStmt){
@@ -430,6 +436,39 @@ void Visit_return(Visit* v)
     }else{
         op->IfTrueBranchVisited=1;
     }
+}
+void Visit_goto(Visit* v, char* label){
+    Operation* op = v->OpStack;
+    Node* last_node=Node_create();
+    Visit_addLooseEnd(v,last_node);
+    last_node->GotoLabel=label;
+    printf("%d goes to %s\n",last_node->NodeNumber,last_node->GotoLabel);
+
+    op->CompoundLast=Node_create();
+
+    while(op != NULL && op->Kind!=CXCursor_IfStmt){
+        op = op->Tail;
+    }
+    if(op==NULL) return;
+
+    if(op->IfTrueBranchVisited){
+        op->IfFalseBranchVisited=1;
+    }else{
+        op->IfTrueBranchVisited=1;
+    }
+}
+void Visit_label(Visit* v, char* name)
+{
+    Visit_expression(v);
+    v->OpStack->CompoundLast->Label = name;//assume we are in a CompoundStatement
+    printf("%d is labeled %s\n", v->OpStack->CompoundLast->NodeNumber, v->OpStack->CompoundLast->Label);
+}
+
+char* mallocopy_ca(const char* copied)
+{
+    char* ret = malloc( sizeof(char) * (strlen(copied) + 1) );
+    strcpy(ret,copied);
+    return ret;
 }
 
 enum CXChildVisitResult general_visitor (CXCursor cursor, CXCursor parent, CXClientData client_data)
@@ -473,8 +512,29 @@ enum CXChildVisitResult general_visitor (CXCursor cursor, CXCursor parent, CXCli
         clang_visitChildren(cursor, general_visitor, (CXClientData) visit);
         return CXChildVisit_Continue;
 
+        case CXCursor_LabelStmt:
+        {
+            CXString d = clang_getCursorDisplayName(cursor);
+            Visit_label(visit,mallocopy_ca(clang_getCString(d)));
+            clang_disposeString(d);
+            clang_visitChildren(cursor, general_visitor, (CXClientData) visit);
+            return CXChildVisit_Continue;
+        }
+        case CXCursor_GotoStmt:
+        {
+            clang_visitChildren(cursor, general_visitor, (CXClientData) visit);
+            return CXChildVisit_Continue;
+        }
+        
+
         default:
-        if(clang_isStatement(clang_getCursorKind(parent))) Visit_expression(visit);
+        if(clang_getCursorKind(cursor) == CXCursor_LabelRef){
+            CXString d = clang_getCursorDisplayName(cursor);
+            Visit_goto(visit,mallocopy_ca(clang_getCString(d)));
+            clang_disposeString(d);
+        }else{
+            if(clang_isStatement(clang_getCursorKind(parent))) Visit_expression(visit);
+        }
         return CXChildVisit_Recurse;
     }
 }

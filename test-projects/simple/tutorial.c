@@ -221,7 +221,6 @@ void while_with_return(){
    }
    q = 9;
 }
-*/
 
 void unreachable(){
    int q=0;
@@ -229,4 +228,18 @@ void unreachable(){
    q++;
    q++;
    q++;
+}
+*/
+
+void gotos(){
+   int q=0;
+   start: q+=1;
+   q=3;
+   q+=1;
+   if(q==0){
+      goto end;
+   }else{
+      goto start;
+   }
+   end:return;
 }
