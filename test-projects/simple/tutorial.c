@@ -197,7 +197,6 @@ void broken_while(){
    }
    q = 9;
 }
-*/
 void while_with_unreachable_part(){
    int q = 0;
    while(q < 10){
@@ -212,7 +211,6 @@ void while_with_unreachable_part(){
    }
    q = 9;
 }
-/*
 void while_with_return(){
    int q = 0;
    while(q < 10){
@@ -224,3 +222,11 @@ void while_with_return(){
    q = 9;
 }
 */
+
+void unreachable(){
+   int q=0;
+   return;
+   q++;
+   q++;
+   q++;
+}

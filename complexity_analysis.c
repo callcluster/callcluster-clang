@@ -79,8 +79,6 @@ typedef struct {
     Node* ReturnNode;
 } Visit;
 
-
-
 void Visit_push(Visit* v){
     Operation* new = malloc(sizeof(Operation));
     new->Kind=0;

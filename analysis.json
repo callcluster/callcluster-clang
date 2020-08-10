@@ -308,11 +308,11 @@
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
 			"cyclomaticComplexity":	2
 		}, {
-			"name":	"while_with_unreachable_part()",
-			"usr":	"c:@F@while_with_unreachable_part",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 201",
-			"numberOfLines":	14,
-			"numberOfStatements":	6,
+			"name":	"unreachable()",
+			"usr":	"c:@F@unreachable",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 226",
+			"numberOfLines":	7,
+			"numberOfStatements":	3,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
 			"cyclomaticComplexity":	2
 		}],
