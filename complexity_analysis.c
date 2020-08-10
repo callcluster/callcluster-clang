@@ -19,19 +19,6 @@ struct Node {
 typedef struct Node Node;
 typedef struct NodeList NodeList;
 
-unsigned int node_number=0;
-
-Node* Node_create()
-{
-    Node* ret = malloc(sizeof(Node));
-    ret->Next = NULL;
-    ret->NodeNumber = node_number;
-    ret->Label = NULL;
-    ret->GotoLabel = NULL;
-    node_number++;
-    return ret;
-}
-
 unsigned int Node_edgeExists(Node* from, Node* to)
 {
     NodeList* current=from->Next;
@@ -82,7 +69,19 @@ typedef struct {
     Operation* OpStack;
     Node* Entry;
     Node* ReturnNode;
+    unsigned int node_number;
 } Visit;
+
+Node* Node_create(Visit* v)
+{
+    Node* ret = malloc(sizeof(Node));
+    ret->Next = NULL;
+    ret->NodeNumber = v->node_number;
+    ret->Label = NULL;
+    ret->GotoLabel = NULL;
+    v->node_number++;
+    return ret;
+}
 
 void Visit_push(Visit* v){
     Operation* new = malloc(sizeof(Operation));
@@ -196,7 +195,7 @@ void Visit_enter(Visit* v, enum CXCursorKind k)
         Visit_push(v);
         v->OpStack->Kind = CXCursor_SwitchStmt;
         v->OpStack->CondPrevious = last;
-        v->OpStack->BreakNode = Node_create();
+        v->OpStack->BreakNode = Node_create(v);
     }
     if( k == CXCursor_ForStmt || k == CXCursor_WhileStmt ){
         Node* last = Visit_getLast(v);
@@ -204,7 +203,7 @@ void Visit_enter(Visit* v, enum CXCursorKind k)
         v->OpStack->Kind = k;
         v->OpStack->CondPrevious = last;
         v->OpStack->ContinueNode = last;
-        v->OpStack->BreakNode = Node_create();
+        v->OpStack->BreakNode = Node_create(v);
     }
 }
 
@@ -236,7 +235,7 @@ void Visit_addLooseEnd(Visit* v, Node* end)
             Node_addEdge(end,v->OpStack->BreakNode);
         }
         if( v->OpStack->Kind==CXCursor_ForStmt || v->OpStack->Kind==CXCursor_WhileStmt ){
-            Node*  intermediate = Node_create();
+            Node*  intermediate = Node_create(v);
             Node_addEdge(end,intermediate);
             v->OpStack->CycleLastNode = intermediate;
         }
@@ -258,7 +257,7 @@ void Visit_exit(Visit* v)
             if (last!=NULL) Visit_addLooseEnd(v, last);
             
         }else if(v->OpStack->Kind == CXCursor_IfStmt){
-            Node* final = Node_create();
+            Node* final = Node_create(v);
 
             if(v->OpStack->IfTrueEnd!=NULL){
                 Node_addEdge(v->OpStack->IfTrueEnd,final);
@@ -297,15 +296,17 @@ void Visit_expression(Visit* v)
     if(!Visit_canReceiveExpressions(v)) return;
 
     printf("e\n");
+    
+    
     if(v->OpStack->Kind == CXCursor_CompoundStmt){
-        Node* new = Node_create();
+        Node* new = Node_create(v);
         if(v->OpStack->CompoundLast!=NULL){
             Node_addEdge(v->OpStack->CompoundLast, new);
         }
         v->OpStack->CompoundLast = new;
     } else if(v->OpStack->Kind == CXCursor_IfStmt){
         if(v->OpStack->IfConditionVisited){
-            Node* new = Node_create();
+            Node* new = Node_create(v);
             Node_addEdge(v->OpStack->CondPrevious, new);
             if(v->OpStack->IfTrueEnd==NULL && !v->OpStack->IfTrueBranchVisited){
                 v->OpStack->IfTrueEnd = new;
@@ -320,13 +321,13 @@ void Visit_expression(Visit* v)
     } else if(v->OpStack->Kind==CXCursor_ForStmt){
         v->OpStack->ForVisitedExpressions++;
         if(v->OpStack->ForVisitedExpressions>4){//the body is an expression
-            Node* new = Node_create();
+            Node* new = Node_create(v);
             Node_addEdge(v->OpStack->CondPrevious, new);
             Visit_addLooseEnd(v,new);//this is the  only statement of the for block
         }
     }else if (v->OpStack->Kind==CXCursor_WhileStmt){
         if(v->OpStack->WhileConditionVisited){
-            Node* new = Node_create();
+            Node* new = Node_create(v);
             Node_addEdge(v->OpStack->CondPrevious, new);
             Visit_addLooseEnd(v,new);//this is the  only statement of the for block
         }else{
@@ -335,13 +336,14 @@ void Visit_expression(Visit* v)
     }
 }
 
-void Operation_visit_case_default(Operation* op)
+void Operation_visit_case_default(Visit* v)
 {
+    Operation* op=v->OpStack;
     if(op->CompoundLast==NULL){
         /*
         the first case of the block OR the first case after a break.
         */
-        Node* new = Node_create();
+        Node* new = Node_create(v);
         Node_addEdge(op->CompoundCaseOrigin,new);
         op->CompoundLast = new;
     }else if(!Node_edgeExists(op->CompoundCaseOrigin,op->CompoundLast)){
@@ -353,7 +355,7 @@ void Operation_visit_case_default(Operation* op)
         case 2:
         case 3:
         */
-        Node* new = Node_create();
+        Node* new = Node_create(v);
         Node_addEdge(op->CompoundCaseOrigin,new);
         Node_addEdge(op->CompoundLast,new);
         op->CompoundLast = new;
@@ -371,7 +373,7 @@ void Visit_case(Visit* v)
     printf("Case:");
     Operation* op = v->OpStack;
     op->CompoundCaseSeen = 1;
-    Operation_visit_case_default(op);
+    Operation_visit_case_default(v);
 }
 
 void Visit_default(Visit* v)
@@ -379,14 +381,14 @@ void Visit_default(Visit* v)
     printf("Default:");
     Operation* op = v->OpStack;
     op->CompoundDefaultSeen = 1;
-    Operation_visit_case_default(op);
+    Operation_visit_case_default(v);
 }
 
 void Visit_break(Visit* v)//PENSADO SOLAMENTE PARA CASE
 {
     Operation* op = v->OpStack;
     Node_addEdge(op->CompoundLast, op->BreakNode);
-    op->CompoundLast=Node_create();
+    op->CompoundLast=Node_create(v);
 
     while(op->Kind!=CXCursor_IfStmt){
         op = op->Tail;
@@ -404,7 +406,7 @@ void Visit_continue(Visit* v)
 {
     Operation* op = v->OpStack;
     Node_addEdge(op->CompoundLast, op->ContinueNode);
-    op->CompoundLast=Node_create();
+    op->CompoundLast=Node_create(v);
 
     while(op != NULL && op->Kind!=CXCursor_IfStmt){
         op = op->Tail;
@@ -422,9 +424,9 @@ void Visit_return(Visit* v)
 {
     Operation* op = v->OpStack;
     Node_addEdge(Visit_getLast(v),v->ReturnNode);
-    Node* last_node=Node_create();
+    Node* last_node=Node_create(v);
     Visit_addLooseEnd(v,last_node);
-    op->CompoundLast=Node_create();
+    op->CompoundLast=Node_create(v);
 
     while(op != NULL && op->Kind!=CXCursor_IfStmt){
         op = op->Tail;
@@ -439,12 +441,13 @@ void Visit_return(Visit* v)
 }
 void Visit_goto(Visit* v, char* label){
     Operation* op = v->OpStack;
-    Node* last_node=Node_create();
-    Visit_addLooseEnd(v,last_node);
-    last_node->GotoLabel=label;
-    printf("%d goes to %s\n",last_node->NodeNumber,last_node->GotoLabel);
+    Node* gone_node=Node_create(v);
+    Node_addEdge(Visit_getLast(v),gone_node);
+    Visit_addLooseEnd(v,gone_node);
+    gone_node->GotoLabel=label;
+    printf("%d goes to %s\n",gone_node->NodeNumber,gone_node->GotoLabel);
 
-    op->CompoundLast=Node_create();
+    op->CompoundLast=Node_create(v);
 
     while(op != NULL && op->Kind!=CXCursor_IfStmt){
         op = op->Tail;
@@ -543,8 +546,9 @@ Visit* Visit_create()
 {
     Visit* ret = malloc(sizeof(Visit));
     ret->OpStack = NULL;
-    ret->Entry = Node_create();
-    ret->ReturnNode = Node_create();
+    ret->node_number = 0;
+    ret->Entry = Node_create(ret);
+    ret->ReturnNode = Node_create(ret);
     return ret;
 }
 
