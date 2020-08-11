@@ -338,7 +338,7 @@ void Visit_default(Visit* v)
     Operation_visit_case_default(v);
 }
 
-void break_flow(Visit* v, Node* target){
+void Visit_break_flow(Visit* v, Node* target){
     Operation* op = v->OpStack;
     Node_addEdge(Visit_getLast(v), target);
     op->CompoundLast=Node_create(v);
@@ -355,35 +355,6 @@ void break_flow(Visit* v, Node* target){
     }
 }
 
-void Visit_break(Visit* v)
-{
-    break_flow(v,v->OpStack->BreakNode);
-}
-
-void Visit_continue(Visit* v)
-{
-    break_flow(v,v->OpStack->ContinueNode);
-}
-
-void Visit_return(Visit* v)
-{
-    break_flow(v,v->ReturnNode);
-}
-
-void Visit_goto(Visit* v, char* label){
-    Node* gone_node=Node_create(v);
-    break_flow(v,gone_node);
-    gone_node->GotoLabel=label;
-    print_flow_goto(gone_node->NodeNumber,gone_node->GotoLabel);
-}
-
-void Visit_label(Visit* v, char* name)
-{
-    Visit_expression(v);
-    v->OpStack->CompoundLast->Label = name;//assume we are in a CompoundStatement
-    print_flow_labeled(v->OpStack->CompoundLast->NodeNumber, v->OpStack->CompoundLast->Label);
-}
-
 
 Visit* Visit_create()
 {
@@ -395,12 +366,49 @@ Visit* Visit_create()
     return ret;
 }
 
-unsigned int Visit_get_complexity(Visit* v)
-{
-    return 2;
-}
 
 void Visit_dispose(Visit* v)
 {
     free(v);
+}
+
+
+
+//// ---------------------- EXTERNAL INTERFACE -----------------////
+
+
+
+void Visit_break(Visit* v)
+{
+    Visit_break_flow(v,v->OpStack->BreakNode);
+}
+
+void Visit_continue(Visit* v)
+{
+    Visit_break_flow(v,v->OpStack->ContinueNode);
+}
+
+void Visit_return(Visit* v)
+{
+    Visit_break_flow(v,v->ReturnNode);
+}
+
+void Visit_goto(Visit* v, char* label){
+    Node* gone_node=Node_create(v);
+    Visit_break_flow(v,gone_node);
+    gone_node->GotoLabel=label;
+    print_flow_goto(gone_node->NodeNumber,gone_node->GotoLabel);
+}
+
+void Visit_label(Visit* v, char* name)
+{
+    Visit_expression(v);
+    Node* last = Visit_getLast(v);
+    last->Label = name;//assume we are in a CompoundStatement
+    print_flow_labeled(last->NodeNumber, name);
+}
+
+unsigned int Visit_get_complexity(Visit* v)
+{
+    return 2;
 }
