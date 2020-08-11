@@ -38,8 +38,8 @@ enum CXChildVisitResult general_visitor (CXCursor cursor, CXCursor parent, CXCli
             Visit* new_visit = Visit_enter(visit,equivalent_operation(kind));
             clang_visitChildren(cursor, general_visitor, (CXClientData) new_visit);
             Visit_exit(new_visit);
+            Visit_dispose(new_visit);
         }
-        
         return CXChildVisit_Continue;
 
         case CXCursor_CaseStmt:

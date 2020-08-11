@@ -15,12 +15,14 @@ const char* spell_kind(enum OperationKind k){
 
 unsigned int Node_edgeExists(Node* from, Node* to)
 {
+    /*
     NodeList* current=from->Next;
     while (current!=NULL)
     {
         if( current->Head == to ) return 1;
         current = current->Tail;
     }
+    */
     return 0;
 }
 
@@ -294,6 +296,9 @@ Visit* Visit_create()
 
 void Visit_dispose(Visit* v)
 {
+    if(v->Previous==NULL){
+        free(v->node_number);
+    }
     free(v);
 }
 
