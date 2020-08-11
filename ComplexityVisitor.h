@@ -5,7 +5,8 @@ enum OperationKind{
     Op_IfStmt,
     Op_SwitchStmt,
     Op_ForStmt,
-    Op_WhileStmt
+    Op_WhileStmt,
+    Op_Function
 };
 
 struct Node;
@@ -23,10 +24,16 @@ struct Node {
 };
 typedef struct Node Node;
 typedef struct NodeList NodeList;
+typedef struct Visit Visit;
 
-struct Operation {
+struct Visit {
+    Visit* Previous;
+    Node* Entry;
+    Node* ReturnNode;
+    unsigned int * node_number;
+
     enum OperationKind Kind;
-    struct Operation* Tail;
+
     Node* CompoundLast;//constantly moving end of a compound statement
     Node* CondPrevious;//Node previous to an if or switch statement 
     Node* IfTrueEnd;//Final Node in the truthful block of an if statement
@@ -41,17 +48,9 @@ struct Operation {
     Node* ContinueNode;//used for cycles, it's CondPrevious but falls through
     unsigned int WhileConditionVisited;//used for the while cycle 0 means the check expression for this while loop was not seen
 };
-typedef struct Operation Operation;
-
-typedef struct {
-    Operation* OpStack;
-    Node* Entry;
-    Node* ReturnNode;
-    unsigned int node_number;
-} Visit;
 
 
-void Visit_enter(Visit* v, enum OperationKind k);
+Visit* Visit_enter(Visit* v, enum OperationKind k);
 void Visit_exit(Visit* v);
 void Visit_case(Visit* v);
 void Visit_default(Visit* v);

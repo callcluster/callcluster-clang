@@ -34,9 +34,12 @@ enum CXChildVisitResult general_visitor (CXCursor cursor, CXCursor parent, CXCli
         case CXCursor_SwitchStmt:
         case CXCursor_ForStmt:
         case CXCursor_WhileStmt:
-        Visit_enter(visit,equivalent_operation(kind));
-        clang_visitChildren(cursor, general_visitor, (CXClientData) visit);
-        Visit_exit(visit);
+        {
+            Visit* new_visit = Visit_enter(visit,equivalent_operation(kind));
+            clang_visitChildren(cursor, general_visitor, (CXClientData) new_visit);
+            Visit_exit(new_visit);
+        }
+        
         return CXChildVisit_Continue;
 
         case CXCursor_CaseStmt:
