@@ -497,12 +497,10 @@ enum CXChildVisitResult general_visitor (CXCursor cursor, CXCursor parent, CXCli
 
         case CXCursor_BreakStmt:
         Visit_break(visit);
-        clang_visitChildren(cursor, general_visitor, (CXClientData) visit);
         return CXChildVisit_Continue;
 
         case CXCursor_ContinueStmt:
         Visit_continue(visit);
-        clang_visitChildren(cursor, general_visitor, (CXClientData) visit);
         return CXChildVisit_Continue;
 
         case CXCursor_ReturnStmt:
