@@ -10,19 +10,26 @@ const char* spell_kind(enum OperationKind k){
         case Op_SwitchStmt: return "SwitchStmt";
         case Op_ForStmt: return "ForStmt";
         case Op_WhileStmt: return "WhileStmt";
+        case Op_Function: return "Function";
     }
 }
-
+ComplexityNode Node_create(Visit* v)
+{
+    return v->Parameters->CreateNode(v->Parameters->NodeClientData);
+}
+void Node_addEdge(Visit* v, ComplexityNode from, ComplexityNode to)
+{
+    v->Parameters->AddEdge(v->Parameters->NodeClientData, from, to);
+}
+/*
 unsigned int Node_edgeExists(Node* from, Node* to)
 {
-    /*
     NodeList* current=from->Next;
     while (current!=NULL)
     {
         if( current->Head == to ) return 1;
         current = current->Tail;
     }
-    */
     return 0;
 }
 
@@ -50,14 +57,14 @@ Node* Node_create(Visit* v)
     (*(v->node_number))++;
     return ret;
 }
+*/
 
-
-void Visit_set_last(Visit* v, Node* last)
+void Visit_set_last(Visit* v, ComplexityNode last)
 {
     switch(v->Kind){
 
         case Op_Function:
-        Node_addEdge(last,v->ReturnNode);
+        Node_addEdge(v,last,v->ReturnNode);
         return;
 
         case Op_CompoundStmt:
@@ -75,14 +82,14 @@ void Visit_set_last(Visit* v, Node* last)
         return;
 
         case Op_SwitchStmt:
-        Node_addEdge(last,v->BreakNode);
+        Node_addEdge(v,last,v->BreakNode);
         return;
 
         case Op_ForStmt:
         case Op_WhileStmt:
         {
-            Node*  intermediate = Node_create(v);
-            Node_addEdge(last,intermediate);
+            ComplexityNode  intermediate = Node_create(v);
+            Node_addEdge(v,last,intermediate);
             v->CycleLastNode = intermediate;
         }
         return;
@@ -114,10 +121,12 @@ Visit* Visit_copy(Visit* v, enum OperationKind kind){
     new->ContinueNode = v->ContinueNode;
     new->WhileConditionVisited=0;
 
+    new->Parameters = v->Parameters;
+
     return new;
 }
 
-Node* Visit_getLast(Visit* v)
+ComplexityNode Visit_getLast(Visit* v)
 {
     switch (v->Kind)
     {
@@ -133,9 +142,9 @@ Node* Visit_getLast(Visit* v)
     }
 }
 
-void Visit_break_flow(Visit* v, Node* target)
+void Visit_break_flow(Visit* v, ComplexityNode target)
 {    
-    Node_addEdge(Visit_getLast(v), target);
+    Node_addEdge(v,Visit_getLast(v), target);
     Visit_set_last(v,Node_create(v));
 }
         
@@ -187,19 +196,19 @@ void Visit_exit(Visit* v)
 
         case Op_IfStmt:
         {
-            Node* final = Node_create(v);
+            ComplexityNode final = Node_create(v);
 
             if(v->IfTrueEnd!=NULL){
-                Node_addEdge(v->IfTrueEnd,final);
+                Node_addEdge(v,v->IfTrueEnd,final);
             }
 
-            Node* falseEnd = v->IfFalseEnd;
+            ComplexityNode falseEnd = v->IfFalseEnd;
             if(falseEnd==NULL){
                 if(!v->IfFalseBranchVisited){
-                    Node_addEdge(v->CondPrevious,final);
+                    Node_addEdge(v,v->CondPrevious,final);
                 }
             }else{
-                Node_addEdge(falseEnd,final);
+                Node_addEdge(v,falseEnd,final);
             }
             
             Visit_set_last(v->Previous,final);
@@ -209,8 +218,8 @@ void Visit_exit(Visit* v)
         case Op_ForStmt:
         case Op_WhileStmt:
         {
-            Node_addEdge(v->CycleLastNode, v->CondPrevious);
-            Node_addEdge(v->CondPrevious, v->BreakNode);
+            Node_addEdge(v,v->CycleLastNode, v->CondPrevious);
+            Node_addEdge(v,v->CondPrevious, v->BreakNode);
             Visit_set_last(v->Previous,v->BreakNode);
         }
         return;
@@ -223,15 +232,15 @@ void Visit_exit(Visit* v)
     }
 }
 
-void Visit_flow_to(Visit* v, Node* next)
+void Visit_flow_to(Visit* v, ComplexityNode next)
 {
-    Node_addEdge(Visit_getLast(v), next);
+    Node_addEdge(v,Visit_getLast(v), next);
 }
 
 void Visit_flow(Visit* v)
 {
-    Node* last = Node_create(v);
-    Node_addEdge(Visit_getLast(v), last);
+    ComplexityNode last = Node_create(v);
+    Node_addEdge(v,Visit_getLast(v), last);
     Visit_set_last(v,last);
 }
 
@@ -264,12 +273,16 @@ void Visit_expression(Visit* v)
             v->WhileConditionVisited = 1;
         }
         return;
+
+        default: return;
     }
 }
 
-Visit* Visit_create()
+Visit* Visit_create(ComplexityParameters* parameters)
 {
     Visit* new = malloc(sizeof(Visit));
+
+    new->Parameters = parameters;
     new->Previous = NULL;
     new->node_number=malloc(sizeof(unsigned int));
     * (new->node_number) = 0;
@@ -290,6 +303,7 @@ Visit* Visit_create()
     new->ForVisitedExpressions = 0;
     new->ContinueNode = NULL;
     new->WhileConditionVisited=0;
+
     return new;
 }
 
@@ -308,9 +322,9 @@ void Visit_dispose(Visit* v)
 
 void Visit_case_default(Visit* v)
 {
-    Node* new = Node_create(v);
-    Node_addEdge(v->CompoundCaseOrigin,new);
-    Node_addEdge(Visit_getLast(v),new);
+    ComplexityNode new = Node_create(v);
+    Node_addEdge(v,v->CompoundCaseOrigin,new);
+    Node_addEdge(v,Visit_getLast(v),new);
     Visit_set_last(v,new);
 }
 
@@ -342,18 +356,16 @@ void Visit_return(Visit* v)
 }
 
 void Visit_goto(Visit* v, char* label){
-    Node* gone_node=Node_create(v);
+    ComplexityNode gone_node=Node_create(v);
     Visit_break_flow(v,gone_node);
-    gone_node->GotoLabel=label;
-    print_flow_goto(gone_node->NodeNumber,gone_node->GotoLabel);
+    v->Parameters->GotoLabel(v->Parameters->NodeClientData,gone_node,label);
 }
 
 void Visit_label(Visit* v, char* name)
 {
     Visit_expression(v);
-    Node* last = Visit_getLast(v);
-    last->Label = name;//assume we are in a CompoundStatement
-    print_flow_labeled(last->NodeNumber, name);
+    ComplexityNode last = Visit_getLast(v);
+    v->Parameters->SetLabel(v->Parameters->NodeClientData,last,name);
 }
 
 unsigned int Visit_get_complexity(Visit* v)

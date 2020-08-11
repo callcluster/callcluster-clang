@@ -91,9 +91,73 @@ enum CXChildVisitResult general_visitor (CXCursor cursor, CXCursor parent, CXCli
     }
 }
 
+typedef void (*LabelFunType)(NodeClientDataType client_data, ComplexityNode node, const char* label);
+
+
+#include "parameters.h"
+typedef struct GraphNode GraphNode;
+struct GraphNode{
+    unsigned int NodeNumber;
+    GraphNode* Previous;
+};
+struct GraphVisit{
+    unsigned int vertices_count;
+    unsigned int edges_count;
+    unsigned int current_node_number;
+    struct GraphNode* LastNode;
+};
+void add_edge(NodeClientDataType client_data, ComplexityNode from, ComplexityNode to)
+{
+    print_flow_edge(
+        ((GraphNode*)from)->NodeNumber,
+        ((GraphNode*)to)->NodeNumber
+    );
+}
+
+ComplexityNode create_node(NodeClientDataType client_data)
+{
+    GraphNode* new = malloc(sizeof(GraphNode));
+    struct GraphVisit* data = ((struct GraphVisit*) client_data);
+    new->Previous=data->LastNode;
+    data->LastNode=new;
+    new->NodeNumber=data->current_node_number;
+    (data->current_node_number)++;
+    (data->vertices_count)++;
+    return (ComplexityNode) new;
+}
+
+void goto_label(NodeClientDataType client_data, ComplexityNode node, const char* label)
+{
+    struct GraphVisit* data = ((struct GraphVisit*) client_data);
+    GraphNode* n = (GraphNode*)node;
+    (data->vertices_count)++;
+    (data->edges_count)++;
+    print_flow_goto(n->NodeNumber,label);
+}
+
+void set_label(NodeClientDataType client_data, ComplexityNode node, const char* label)
+{
+    struct GraphVisit* data = ((struct GraphVisit*) client_data);
+    GraphNode* n = (GraphNode*)node;
+    (data->vertices_count)++;
+    (data->edges_count)++;
+    print_flow_labeled(n->NodeNumber,label);
+}
+
 unsigned int get_complexity(CXCursor c)
 {
-    Visit* v = Visit_create();
+    ComplexityParameters parameters;
+    parameters.AddEdge=add_edge;
+    parameters.CreateNode=create_node;
+    parameters.GotoLabel=goto_label;
+    parameters.SetLabel=set_label;
+    struct GraphVisit visit;
+    visit.edges_count=0;
+    visit.vertices_count=0;
+    visit.current_node_number=0;
+    visit.LastNode=NULL;
+    parameters.NodeClientData=(NodeClientDataType) &visit;
+    Visit* v = Visit_create(&parameters);
     clang_visitChildren(c, general_visitor, (CXClientData) v);
     unsigned int complexity = Visit_get_complexity(v);
     Visit_dispose(v);
