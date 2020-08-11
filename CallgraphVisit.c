@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "DefinitionData.h"
 #include "definition_analysis.h"
+#include "parameters.h"
 
 typedef struct {
     GatheredCallgraph Callgraph;
@@ -55,11 +56,13 @@ void CallgraphVisit_setCurrentFunctionDefinition(CallgraphVisit v, CXCursor defi
     CallgraphVisitImpl* visit = (CallgraphVisitImpl*) v;
     CXString usr = clang_getCursorUSR(defined);
     print_function_usr(clang_getCString(usr));
+    set_current_analyzed_function(clang_getCString(usr));
     GatheredCallgraph_addDefinition(
         visit->Callgraph, 
         clang_getCString(usr), 
         analyze(defined)
     );
+    set_current_analyzed_function(NULL);
     clang_disposeString(usr);
     visit->CurrentCaller = defined;
 }

@@ -69,10 +69,10 @@ int main(int argc, char *argv[]) {
    CXIndex index = clang_createIndex(1, 0);
    GatheredCallgraph gathered_callgraph = createGatheredCallgraph();
    clang_CXIndex_setInvocationEmissionPathOption(index,"clang.log");
-   printf("Number of commands found: %u\n",commands_number);
+   print_progress_total(commands_number);
    for(unsigned int c=0; c < commands_number; c++)
    {
-      printf("Analyzing command: %u of %u\n", c, commands_number);
+      print_progress_current(c,commands_number);
       CXCompileCommand command = clang_CompileCommands_getCommand(commands,c);
       analyze_command(command, index, gathered_callgraph);
    }
