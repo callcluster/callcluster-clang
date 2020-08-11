@@ -9,4 +9,5 @@ cmake -DCMAKE_BUILD_TYPE=Debug .. -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 make
 cd ..
 chmod a+x ./build/callclusterClang
-./build/callclusterClang ./test-projects/simple/build --functions
+#./build/callclusterClang ./test-projects/simple/build --functions
+python3 test.py

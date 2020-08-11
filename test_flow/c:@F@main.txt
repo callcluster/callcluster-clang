@@ -2,7 +2,6 @@
 0 -> 2
 2 -> 1
 #end:3
-4 -> 5
 #exit:CompoundStmt
-#end:5
-5 -> 1
+#end:4
+4 -> 1

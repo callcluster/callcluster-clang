@@ -507,7 +507,6 @@ enum CXChildVisitResult general_visitor (CXCursor cursor, CXCursor parent, CXCli
 
         case CXCursor_ReturnStmt:
         Visit_return(visit);
-        clang_visitChildren(cursor, general_visitor, (CXClientData) visit);
         return CXChildVisit_Continue;
 
         case CXCursor_LabelStmt:
