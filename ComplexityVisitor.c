@@ -373,8 +373,6 @@ void Visit_return(Visit* v)
 {
     Operation* op = v->OpStack;
     Node_addEdge(Visit_getLast(v),v->ReturnNode);
-    Node* last_node=Node_create(v);
-    Visit_addLooseEnd(v,last_node);
     break_flow(v);
 }
 void Visit_goto(Visit* v, char* label){
