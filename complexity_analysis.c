@@ -11,6 +11,18 @@ char* mallocopy_ca(const char* copied)
     return ret;
 }
 
+enum OperationKind equivalent_operation(enum CXCursorKind k)
+{
+    switch(k){
+        case CXCursor_CompoundStmt: return Op_CompoundStmt;
+        case CXCursor_IfStmt: return Op_IfStmt;
+        case CXCursor_SwitchStmt: return Op_SwitchStmt;
+        case CXCursor_ForStmt: return Op_ForStmt;
+        case CXCursor_WhileStmt: return Op_WhileStmt;
+        default: return Op_CompoundStmt;
+    }
+}
+
 enum CXChildVisitResult general_visitor (CXCursor cursor, CXCursor parent, CXClientData client_data)
 {
     Visit* visit = (Visit*) client_data;
@@ -22,7 +34,7 @@ enum CXChildVisitResult general_visitor (CXCursor cursor, CXCursor parent, CXCli
         case CXCursor_SwitchStmt:
         case CXCursor_ForStmt:
         case CXCursor_WhileStmt:
-        Visit_enter(visit,kind);
+        Visit_enter(visit,equivalent_operation(kind));
         clang_visitChildren(cursor, general_visitor, (CXClientData) visit);
         Visit_exit(visit);
         return CXChildVisit_Continue;

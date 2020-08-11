@@ -1,4 +1,12 @@
-#include <clang-c/Index.h>
+#ifndef COMPLEXITY_VISITOR_H
+#define COMPLEXITY_VISITOR_H
+enum OperationKind{
+    Op_CompoundStmt,
+    Op_IfStmt,
+    Op_SwitchStmt,
+    Op_ForStmt,
+    Op_WhileStmt
+};
 
 struct Node;
 
@@ -17,7 +25,7 @@ typedef struct Node Node;
 typedef struct NodeList NodeList;
 
 struct Operation {
-    enum CXCursorKind Kind;
+    enum OperationKind Kind;
     struct Operation* Tail;
     Node* CompoundLast;//constantly moving end of a compound statement
     Node* CondPrevious;//Node previous to an if or switch statement 
@@ -45,7 +53,7 @@ typedef struct {
 } Visit;
 
 
-void Visit_enter(Visit* v, enum CXCursorKind k);
+void Visit_enter(Visit* v, enum OperationKind k);
 void Visit_exit(Visit* v);
 void Visit_case(Visit* v);
 void Visit_default(Visit* v);
@@ -58,3 +66,5 @@ void Visit_expression(Visit* v);
 Visit* Visit_create();
 unsigned int Visit_get_complexity(Visit* v);
 void Visit_dispose(Visit* v);
+
+#endif

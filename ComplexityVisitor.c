@@ -1,7 +1,17 @@
 #include "parameters.h"
-#include <clang-c/Index.h>
 #include "ComplexityVisitor.h"
 #include <stdlib.h>
+
+
+const char* spell_kind(enum OperationKind k){
+    switch(k){
+        case Op_CompoundStmt: return "CompoundStmt";
+        case Op_IfStmt: return "IfStmt";
+        case Op_SwitchStmt: return "SwitchStmt";
+        case Op_ForStmt: return "ForStmt";
+        case Op_WhileStmt: return "WhileStmt";
+    }
+}
 
 unsigned int Node_edgeExists(Node* from, Node* to)
 {
@@ -87,12 +97,12 @@ Node* Visit_getLast(Visit* v)
     }else{
         switch (v->OpStack->Kind)
         {
-        case CXCursor_CompoundStmt:
+        case Op_CompoundStmt:
             return v->OpStack->CompoundLast;
-        case CXCursor_IfStmt:
-        case CXCursor_SwitchStmt:
-        case CXCursor_ForStmt:
-        case CXCursor_WhileStmt:
+        case Op_IfStmt:
+        case Op_SwitchStmt:
+        case Op_ForStmt:
+        case Op_WhileStmt:
             return v->OpStack->CondPrevious;
         default:
             return NULL;
@@ -104,11 +114,11 @@ unsigned int Visit_canReceiveExpressions(Visit* v)
 {
     //not compound statement
     if(v->OpStack==NULL) return 1;
-    if(v->OpStack->Kind != CXCursor_CompoundStmt) return 1;
+    if(v->OpStack->Kind != Op_CompoundStmt) return 1;
 
     //compound statement doesn't come after switch
     if(v->OpStack->Tail==NULL) return 1;
-    if(v->OpStack->Tail->Kind!=CXCursor_SwitchStmt) return 1;
+    if(v->OpStack->Tail->Kind!=Op_SwitchStmt) return 1;
 
     //compound statement that comes after switch fulfills at least one of
     if(v->OpStack->CompoundCaseSeen) return 1;
@@ -118,42 +128,39 @@ unsigned int Visit_canReceiveExpressions(Visit* v)
     return 0;
 }
         
-void Visit_enter(Visit* v, enum CXCursorKind k)
+void Visit_enter(Visit* v, enum OperationKind k)
 {
     if(!Visit_canReceiveExpressions(v)) return;
 
-    // print operation type
-    CXString s = clang_getCursorKindSpelling(k);
-    print_flow_enter(clang_getCString(s));
-    clang_disposeString(s);
+    print_flow_enter(spell_kind(k));
 
-    if(k == CXCursor_CompoundStmt){
+    if(k == Op_CompoundStmt){
         Node* last = Visit_getLast(v);
         Visit_push(v);
-        v->OpStack->Kind = CXCursor_CompoundStmt;
+        v->OpStack->Kind = Op_CompoundStmt;
 
         Operation* previous = v->OpStack->Tail;
-        if(previous!=NULL && previous->Kind==CXCursor_SwitchStmt){
+        if(previous!=NULL && previous->Kind==Op_SwitchStmt){
             v->OpStack->CompoundCaseOrigin = last;
         }else{
             v->OpStack->CompoundLast = last;
         }
         
     }
-    if(k==CXCursor_IfStmt){
+    if(k==Op_IfStmt){
         Node* last = Visit_getLast(v);
         Visit_push(v);
-        v->OpStack->Kind = CXCursor_IfStmt;
+        v->OpStack->Kind = Op_IfStmt;
         v->OpStack->CondPrevious = last;
     }
-    if(k==CXCursor_SwitchStmt){
+    if(k==Op_SwitchStmt){
         Node* last = Visit_getLast(v);
         Visit_push(v);
-        v->OpStack->Kind = CXCursor_SwitchStmt;
+        v->OpStack->Kind = Op_SwitchStmt;
         v->OpStack->CondPrevious = last;
         v->OpStack->BreakNode = Node_create(v);
     }
-    if( k == CXCursor_ForStmt || k == CXCursor_WhileStmt ){
+    if( k == Op_ForStmt || k == Op_WhileStmt ){
         Node* last = Visit_getLast(v);
         Visit_push(v);
         v->OpStack->Kind = k;
@@ -175,10 +182,10 @@ void Visit_addLooseEnd(Visit* v, Node* end)
     if(v->OpStack==NULL){
         Node_addEdge(end,v->ReturnNode);
     }else{
-        if(v->OpStack->Kind==CXCursor_CompoundStmt){
+        if(v->OpStack->Kind==Op_CompoundStmt){
             v->OpStack->CompoundLast = end;
         }
-        if(v->OpStack->Kind==CXCursor_IfStmt){
+        if(v->OpStack->Kind==Op_IfStmt){
             if(!v->OpStack->IfTrueBranchVisited){
                 v->OpStack->IfTrueEnd = end;
                 v->OpStack->IfTrueBranchVisited = 1;
@@ -187,10 +194,10 @@ void Visit_addLooseEnd(Visit* v, Node* end)
                 v->OpStack->IfFalseBranchVisited = 1;
             }
         }
-        if(v->OpStack->Kind==CXCursor_SwitchStmt){
+        if(v->OpStack->Kind==Op_SwitchStmt){
             Node_addEdge(end,v->OpStack->BreakNode);
         }
-        if( v->OpStack->Kind==CXCursor_ForStmt || v->OpStack->Kind==CXCursor_WhileStmt ){
+        if( v->OpStack->Kind==Op_ForStmt || v->OpStack->Kind==Op_WhileStmt ){
             Node*  intermediate = Node_create(v);
             Node_addEdge(end,intermediate);
             v->OpStack->CycleLastNode = intermediate;
@@ -203,16 +210,14 @@ void Visit_exit(Visit* v)
 {
     if(v->OpStack != NULL){
 
-        CXString s = clang_getCursorKindSpelling(v->OpStack->Kind);
-        print_flow_exit(clang_getCString(s));
-        clang_disposeString(s);
+        print_flow_exit(spell_kind(v->OpStack->Kind));
 
-        if(v->OpStack->Kind==CXCursor_CompoundStmt){
+        if(v->OpStack->Kind==Op_CompoundStmt){
             Node* last = v->OpStack->CompoundLast;
             Visit_pop(v);
             if (last!=NULL) Visit_addLooseEnd(v, last);
             
-        }else if(v->OpStack->Kind == CXCursor_IfStmt){
+        }else if(v->OpStack->Kind == Op_IfStmt){
             Node* final = Node_create(v);
 
             if(v->OpStack->IfTrueEnd!=NULL){
@@ -230,11 +235,7 @@ void Visit_exit(Visit* v)
             
             Visit_pop(v);
             Visit_addLooseEnd(v,final);
-        }else if(v->OpStack->Kind == CXCursor_CaseStmt){
-            Node* final = v->OpStack->BreakNode;
-            Visit_pop(v);
-            Visit_addLooseEnd(v,final);
-        }else if(v->OpStack->Kind == CXCursor_ForStmt || v->OpStack->Kind == CXCursor_WhileStmt){
+        }else if(v->OpStack->Kind == Op_ForStmt || v->OpStack->Kind == Op_WhileStmt){
             Node_addEdge(v->OpStack->CycleLastNode, v->OpStack->CondPrevious);
             Node_addEdge(v->OpStack->CondPrevious, v->OpStack->BreakNode);
             Node* final = v->OpStack->BreakNode;
@@ -251,13 +252,13 @@ void Visit_expression(Visit* v)
 {
     if(!Visit_canReceiveExpressions(v)) return;
     
-    if(v->OpStack->Kind == CXCursor_CompoundStmt){
+    if(v->OpStack->Kind == Op_CompoundStmt){
         Node* new = Node_create(v);
         if(v->OpStack->CompoundLast!=NULL){
             Node_addEdge(v->OpStack->CompoundLast, new);
         }
         v->OpStack->CompoundLast = new;
-    } else if(v->OpStack->Kind == CXCursor_IfStmt){
+    } else if(v->OpStack->Kind == Op_IfStmt){
         if(v->OpStack->IfConditionVisited){
             Node* new = Node_create(v);
             Node_addEdge(v->OpStack->CondPrevious, new);
@@ -271,14 +272,14 @@ void Visit_expression(Visit* v)
         }else{
             v->OpStack->IfConditionVisited = 1;
         }
-    } else if(v->OpStack->Kind==CXCursor_ForStmt){
+    } else if(v->OpStack->Kind==Op_ForStmt){
         v->OpStack->ForVisitedExpressions++;
         if(v->OpStack->ForVisitedExpressions>4){//the body is an expression
             Node* new = Node_create(v);
             Node_addEdge(v->OpStack->CondPrevious, new);
             Visit_addLooseEnd(v,new);//this is the  only statement of the for block
         }
-    }else if (v->OpStack->Kind==CXCursor_WhileStmt){
+    }else if (v->OpStack->Kind==Op_WhileStmt){
         if(v->OpStack->WhileConditionVisited){
             Node* new = Node_create(v);
             Node_addEdge(v->OpStack->CondPrevious, new);
@@ -343,7 +344,7 @@ void Visit_break(Visit* v)
     Node_addEdge(op->CompoundLast, op->BreakNode);
     op->CompoundLast=Node_create(v);
 
-    while(op!=NULL && op->Kind!=CXCursor_IfStmt){
+    while(op!=NULL && op->Kind!=Op_IfStmt){
         op = op->Tail;
     }
     if(op==NULL) return;
@@ -361,7 +362,7 @@ void Visit_continue(Visit* v)
     Node_addEdge(op->CompoundLast, op->ContinueNode);
     op->CompoundLast=Node_create(v);
 
-    while(op != NULL && op->Kind!=CXCursor_IfStmt){
+    while(op != NULL && op->Kind!=Op_IfStmt){
         op = op->Tail;
     }
     if(op==NULL) return;
@@ -381,7 +382,7 @@ void Visit_return(Visit* v)
     Visit_addLooseEnd(v,last_node);
     op->CompoundLast=Node_create(v);
 
-    while(op != NULL && op->Kind!=CXCursor_IfStmt){
+    while(op != NULL && op->Kind!=Op_IfStmt){
         op = op->Tail;
     }
     if(op==NULL) return;
@@ -401,7 +402,7 @@ void Visit_goto(Visit* v, char* label){
     print_flow_goto(gone_node->NodeNumber,gone_node->GotoLabel);
     op->CompoundLast=Node_create(v);
 
-    while(op != NULL && op->Kind!=CXCursor_IfStmt){
+    while(op != NULL && op->Kind!=Op_IfStmt){
         op = op->Tail;
     }
     if(op==NULL) return;
@@ -412,6 +413,7 @@ void Visit_goto(Visit* v, char* label){
         op->IfTrueBranchVisited=1;
     }
 }
+
 void Visit_label(Visit* v, char* name)
 {
     Visit_expression(v);
