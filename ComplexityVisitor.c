@@ -49,6 +49,34 @@ Node* Node_create(Visit* v)
     return ret;
 }
 
+
+void Visit_set_last(Visit* v, Node* last)
+{
+    if(v->OpStack==NULL){
+        Node_addEdge(last,v->ReturnNode);
+        return;
+    }
+
+    if(v->OpStack->Kind == Op_CompoundStmt){
+        v->OpStack->CompoundLast = last;
+    } else if(v->OpStack->Kind == Op_IfStmt){
+        if(v->OpStack->IfTrueEnd==NULL && !v->OpStack->IfTrueBranchVisited){
+            v->OpStack->IfTrueEnd = last;
+            v->OpStack->IfTrueBranchVisited = 1;
+        }else if(v->OpStack->IfFalseEnd==NULL && !v->OpStack->IfFalseBranchVisited){
+            v->OpStack->IfFalseEnd = last;
+            v->OpStack->IfFalseBranchVisited=1;
+        }
+    } else if(v->OpStack->Kind==Op_SwitchStmt){
+        Node_addEdge(last,v->OpStack->BreakNode);
+    } else if( v->OpStack->Kind==Op_ForStmt || v->OpStack->Kind==Op_WhileStmt ){
+        Node*  intermediate = Node_create(v);
+        Node_addEdge(last,intermediate);
+        v->OpStack->CycleLastNode = intermediate;
+    }
+}
+
+
 void Visit_push(Visit* v){
     Operation* new = malloc(sizeof(Operation));
     new->Kind=0;
@@ -71,9 +99,6 @@ void Visit_push(Visit* v){
     }else{
         new->BreakNode = NULL;
     }
-
-    new->CompoundCaseSeen = 0;
-    new->CompoundDefaultSeen = 0;
     new->CompoundCaseOrigin = NULL;
     new->CycleLastNode = NULL;
     new->ForVisitedExpressions = 0;
@@ -110,28 +135,15 @@ Node* Visit_getLast(Visit* v)
     }
 }
 
-unsigned int Visit_canReceiveExpressions(Visit* v)
-{
-    //not compound statement
-    if(v->OpStack==NULL) return 1;
-    if(v->OpStack->Kind != Op_CompoundStmt) return 1;
-
-    //compound statement doesn't come after switch
-    if(v->OpStack->Tail==NULL) return 1;
-    if(v->OpStack->Tail->Kind!=Op_SwitchStmt) return 1;
-
-    //compound statement that comes after switch fulfills at least one of
-    if(v->OpStack->CompoundCaseSeen) return 1;
-    if(v->OpStack->CompoundDefaultSeen) return 1;
-
-    //none of the conditions are met
-    return 0;
+void Visit_break_flow(Visit* v, Node* target)
+{    
+    Operation* op = v->OpStack;
+    Node_addEdge(Visit_getLast(v), target);
+    Visit_set_last(v,Node_create(v));
 }
         
 void Visit_enter(Visit* v, enum OperationKind k)
 {
-    if(!Visit_canReceiveExpressions(v)) return;
-
     print_flow_enter(spell_kind(k));
 
     if(k == Op_CompoundStmt){
@@ -140,12 +152,11 @@ void Visit_enter(Visit* v, enum OperationKind k)
         v->OpStack->Kind = Op_CompoundStmt;
 
         Operation* previous = v->OpStack->Tail;
+        v->OpStack->CompoundLast = last;
         if(previous!=NULL && previous->Kind==Op_SwitchStmt){
             v->OpStack->CompoundCaseOrigin = last;
-        }else{
-            v->OpStack->CompoundLast = last;
+            Visit_set_last(v,Node_create(v));
         }
-        
     }
     if(k==Op_IfStmt){
         Node* last = Visit_getLast(v);
@@ -176,35 +187,6 @@ void Visit_pop(Visit* v){
     free(old);
 }
 
-void Visit_addLooseEnd(Visit* v, Node* end)
-{
-    print_flow_end(end->NodeNumber);
-    if(v->OpStack==NULL){
-        Node_addEdge(end,v->ReturnNode);
-    }else{
-        if(v->OpStack->Kind==Op_CompoundStmt){
-            v->OpStack->CompoundLast = end;
-        }
-        if(v->OpStack->Kind==Op_IfStmt){
-            if(!v->OpStack->IfTrueBranchVisited){
-                v->OpStack->IfTrueEnd = end;
-                v->OpStack->IfTrueBranchVisited = 1;
-            }else{
-                v->OpStack->IfFalseEnd = end;
-                v->OpStack->IfFalseBranchVisited = 1;
-            }
-        }
-        if(v->OpStack->Kind==Op_SwitchStmt){
-            Node_addEdge(end,v->OpStack->BreakNode);
-        }
-        if( v->OpStack->Kind==Op_ForStmt || v->OpStack->Kind==Op_WhileStmt ){
-            Node*  intermediate = Node_create(v);
-            Node_addEdge(end,intermediate);
-            v->OpStack->CycleLastNode = intermediate;
-        }
-    }
-    
-}
 
 void Visit_exit(Visit* v)
 {
@@ -215,7 +197,7 @@ void Visit_exit(Visit* v)
         if(v->OpStack->Kind==Op_CompoundStmt){
             Node* last = v->OpStack->CompoundLast;
             Visit_pop(v);
-            if (last!=NULL) Visit_addLooseEnd(v, last);
+            Visit_set_last(v, last);
             
         }else if(v->OpStack->Kind == Op_IfStmt){
             Node* final = Node_create(v);
@@ -234,127 +216,84 @@ void Visit_exit(Visit* v)
             }
             
             Visit_pop(v);
-            Visit_addLooseEnd(v,final);
+            Visit_set_last(v,final);
         }else if(v->OpStack->Kind == Op_ForStmt || v->OpStack->Kind == Op_WhileStmt){
             Node_addEdge(v->OpStack->CycleLastNode, v->OpStack->CondPrevious);
             Node_addEdge(v->OpStack->CondPrevious, v->OpStack->BreakNode);
             Node* final = v->OpStack->BreakNode;
             Visit_pop(v);
-            Visit_addLooseEnd(v,final);
-        }else{
+            Visit_set_last(v,final);
+        }else if(v->OpStack->Kind == Op_SwitchStmt) {
+            Node* last = v->OpStack->BreakNode;
+            Visit_pop(v);
+            Visit_set_last(v,last);
+        }else {
             Visit_pop(v);
         }
-        
     }
 }
 
-void Visit_expression(Visit* v)
+
+
+
+void Visit_flow_to(Visit* v, Node* next)
 {
-    if(!Visit_canReceiveExpressions(v)) return;
-    
+    Node_addEdge(Visit_getLast(v), next);
+}
+
+void Visit_flow(Visit* v)
+{
+    Node* last = Node_create(v);
+    Node_addEdge(Visit_getLast(v), last);
+    Visit_set_last(v,last);
+}
+
+void Visit_expression(Visit* v)
+{   
     if(v->OpStack->Kind == Op_CompoundStmt){
-        Node* new = Node_create(v);
-        if(v->OpStack->CompoundLast!=NULL){
-            Node_addEdge(v->OpStack->CompoundLast, new);
-        }
-        v->OpStack->CompoundLast = new;
+        Visit_flow(v);
     } else if(v->OpStack->Kind == Op_IfStmt){
         if(v->OpStack->IfConditionVisited){
-            Node* new = Node_create(v);
-            Node_addEdge(v->OpStack->CondPrevious, new);
-            if(v->OpStack->IfTrueEnd==NULL && !v->OpStack->IfTrueBranchVisited){
-                v->OpStack->IfTrueEnd = new;
-                v->OpStack->IfTrueBranchVisited = 1;
-            }else if(v->OpStack->IfFalseEnd==NULL && !v->OpStack->IfFalseBranchVisited){
-                v->OpStack->IfFalseEnd = new;
-                v->OpStack->IfFalseBranchVisited=1;
-            }
+            Visit_flow(v);
         }else{
             v->OpStack->IfConditionVisited = 1;
         }
     } else if(v->OpStack->Kind==Op_ForStmt){
         v->OpStack->ForVisitedExpressions++;
         if(v->OpStack->ForVisitedExpressions>4){//the body is an expression
-            Node* new = Node_create(v);
-            Node_addEdge(v->OpStack->CondPrevious, new);
-            Visit_addLooseEnd(v,new);//this is the  only statement of the for block
+            Visit_flow(v);
+            //this is the  only statement of the for block
         }
     }else if (v->OpStack->Kind==Op_WhileStmt){
         if(v->OpStack->WhileConditionVisited){
-            Node* new = Node_create(v);
-            Node_addEdge(v->OpStack->CondPrevious, new);
-            Visit_addLooseEnd(v,new);//this is the  only statement of the for block
+            Visit_flow(v);
+            //this is the  only statement of the for block
         }else{
             v->OpStack->WhileConditionVisited = 1;
         }
     }
 }
 
-void Operation_visit_case_default(Visit* v)
+void Visit_case_default(Visit* v)
 {
-    Operation* op=v->OpStack;
-    if(op->CompoundLast==NULL){
-        /*
-        the first case of the block OR the first case after a break.
-        */
-        Node* new = Node_create(v);
-        Node_addEdge(op->CompoundCaseOrigin,new);
-        op->CompoundLast = new;
-    }else if(!Node_edgeExists(op->CompoundCaseOrigin,op->CompoundLast)){
-        /*
-        the case that comes after a statement or expression that is not a break
-        case 0:
-        q+=1
-        case 1: <--
-        case 2:
-        case 3:
-        */
-        Node* new = Node_create(v);
-        Node_addEdge(op->CompoundCaseOrigin,new);
-        Node_addEdge(op->CompoundLast,new);
-        op->CompoundLast = new;
-    }
-    /*
-    we ignore the case after a case
-    case 2:
-    case 3: <---
-    case 4:
-    */
+    Operation* op = v->OpStack;
+    Node* new = Node_create(v);
+    Node_addEdge(op->CompoundCaseOrigin,new);
+    Node_addEdge(op->CompoundLast,new);
+    op->CompoundLast = new;
 }
 
 void Visit_case(Visit* v)
 {
     print_flow_case();
-    Operation* op = v->OpStack;
-    op->CompoundCaseSeen = 1;
-    Operation_visit_case_default(v);
+    Visit_case_default(v);
 }
 
 void Visit_default(Visit* v)
 {
     print_flow_default();
-    Operation* op = v->OpStack;
-    op->CompoundDefaultSeen = 1;
-    Operation_visit_case_default(v);
+    Visit_case_default(v);
 }
-
-void Visit_break_flow(Visit* v, Node* target){
-    Operation* op = v->OpStack;
-    Node_addEdge(Visit_getLast(v), target);
-    op->CompoundLast=Node_create(v);
-
-    while(op != NULL && op->Kind!=Op_IfStmt){
-        op = op->Tail;
-    }
-    if(op==NULL) return;
-
-    if(op->IfTrueBranchVisited){
-        op->IfFalseBranchVisited=1;
-    }else{
-        op->IfTrueBranchVisited=1;
-    }
-}
-
 
 Visit* Visit_create()
 {

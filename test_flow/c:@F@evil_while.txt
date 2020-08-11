@@ -3,13 +3,10 @@
 2 -> 3
 #enter:WhileStmt
 3 -> 5
-#end:5
 5 -> 6
 #exit:WhileStmt
 6 -> 3
 3 -> 4
-#end:4
 4 -> 7
 #exit:CompoundStmt
-#end:7
 7 -> 1

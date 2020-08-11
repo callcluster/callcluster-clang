@@ -144,6 +144,40 @@ void almost(){
    }
 }
 
+void switch_in_switch(){
+   int b = 2;
+   switch(b){
+      case 0:
+      b = 8;
+      break;
+      case 1:
+      switch(b){
+         case 2:
+         b=3;
+         case 5:
+         b=8;
+      }
+      break;
+   }
+}
+
+void switch_with_garbage(){
+   int b = 2;
+   switch(b){
+      b = 8;
+      b = 8;
+      b = 8;
+      b = 8;
+      b = 8;
+      b = 8;
+      b = 8;
+      b = 8;
+      b = 8;
+      case 0:
+      b = 8;
+   }
+}
+
 void normal_for(){
    int q=0;
    for(int i=0;i<10;i++){

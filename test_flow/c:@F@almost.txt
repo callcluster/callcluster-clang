@@ -3,53 +3,53 @@
 2 -> 3
 #enter:SwitchStmt
 #enter:CompoundStmt
-#case
-3 -> 5
 5 -> 6
 6 -> 7
-7 -> 4
 #case
-3 -> 9
+3 -> 8
+7 -> 8
 8 -> 9
 9 -> 10
-10 -> 11
-11 -> 4
+10 -> 4
 #case
-3 -> 13
+3 -> 12
+11 -> 12
 12 -> 13
 13 -> 14
+14 -> 4
 #case
-3 -> 15
-14 -> 15
+3 -> 16
 15 -> 16
 16 -> 17
-17 -> 4
 #case
-3 -> 19
+3 -> 18
+17 -> 18
 18 -> 19
 19 -> 20
+20 -> 4
 #case
-3 -> 21
-20 -> 21
+3 -> 22
 21 -> 22
-#case
-3 -> 23
 22 -> 23
+#case
+3 -> 24
 23 -> 24
 24 -> 25
-#default
+#case
 3 -> 26
 25 -> 26
-#enter:CompoundStmt
 26 -> 27
 27 -> 28
+#default
+3 -> 29
 28 -> 29
+#enter:CompoundStmt
+29 -> 30
+30 -> 31
+31 -> 32
 #exit:CompoundStmt
-#end:29
 #exit:CompoundStmt
-#end:29
-29 -> 4
+32 -> 4
 #exit:SwitchStmt
 #exit:CompoundStmt
-#end:3
-3 -> 1
+4 -> 1

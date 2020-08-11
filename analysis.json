@@ -380,9 +380,25 @@
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
 			"cyclomaticComplexity":	2
 		}, {
+			"name":	"switch_in_switch()",
+			"usr":	"c:@F@switch_in_switch",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 147",
+			"numberOfLines":	16,
+			"numberOfStatements":	9,
+			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
+			"cyclomaticComplexity":	2
+		}, {
+			"name":	"switch_with_garbage()",
+			"usr":	"c:@F@switch_with_garbage",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 164",
+			"numberOfLines":	16,
+			"numberOfStatements":	12,
+			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
+			"cyclomaticComplexity":	2
+		}, {
 			"name":	"normal_for()",
 			"usr":	"c:@F@normal_for",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 147",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 181",
 			"numberOfLines":	6,
 			"numberOfStatements":	3,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
@@ -390,7 +406,7 @@
 		}, {
 			"name":	"evil_for()",
 			"usr":	"c:@F@evil_for",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 154",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 188",
 			"numberOfLines":	4,
 			"numberOfStatements":	3,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
@@ -398,7 +414,7 @@
 		}, {
 			"name":	"broken_for()",
 			"usr":	"c:@F@broken_for",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 159",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 193",
 			"numberOfLines":	9,
 			"numberOfStatements":	6,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
@@ -406,7 +422,7 @@
 		}, {
 			"name":	"normal_while()",
 			"usr":	"c:@F@normal_while",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 169",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 203",
 			"numberOfLines":	8,
 			"numberOfStatements":	3,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
@@ -414,7 +430,7 @@
 		}, {
 			"name":	"evil_while()",
 			"usr":	"c:@F@evil_while",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 178",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 212",
 			"numberOfLines":	5,
 			"numberOfStatements":	3,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
@@ -422,7 +438,7 @@
 		}, {
 			"name":	"broken_while()",
 			"usr":	"c:@F@broken_while",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 184",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 218",
 			"numberOfLines":	10,
 			"numberOfStatements":	6,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
@@ -430,7 +446,7 @@
 		}, {
 			"name":	"while_with_unreachable_part()",
 			"usr":	"c:@F@while_with_unreachable_part",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 195",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 229",
 			"numberOfLines":	14,
 			"numberOfStatements":	6,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
@@ -438,7 +454,7 @@
 		}, {
 			"name":	"while_with_return()",
 			"usr":	"c:@F@while_with_return",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 210",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 244",
 			"numberOfLines":	10,
 			"numberOfStatements":	6,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
@@ -446,7 +462,7 @@
 		}, {
 			"name":	"unreachable()",
 			"usr":	"c:@F@unreachable",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 221",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 255",
 			"numberOfLines":	7,
 			"numberOfStatements":	3,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
@@ -454,7 +470,7 @@
 		}, {
 			"name":	"gotos()",
 			"usr":	"c:@F@gotos",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 229",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 263",
 			"numberOfLines":	12,
 			"numberOfStatements":	4,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
@@ -462,7 +478,7 @@
 		}, {
 			"name":	"gotos_evil()",
 			"usr":	"c:@F@gotos_evil",
-			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 242",
+			"location":	"file: /home/jose/callcluster-clang/test-projects/simple/tutorial.c line: 276",
 			"numberOfLines":	13,
 			"numberOfStatements":	5,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
@@ -585,7 +601,7 @@
 												"functions":	[],
 												"communities":	[{
 														"name":	"tutorial.c",
-														"functions":	[120, 119, 118, 117, 116, 115, 114, 113, 112, 111, 110, 109, 108, 107, 106, 105, 104, 103, 102, 101, 100],
+														"functions":	[122, 121, 120, 119, 118, 117, 116, 115, 114, 113, 112, 111, 110, 109, 108, 107, 106, 105, 104, 103, 102, 101, 100],
 														"communities":	[]
 													}]
 											}]

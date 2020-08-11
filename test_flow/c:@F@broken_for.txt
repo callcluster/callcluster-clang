@@ -7,21 +7,18 @@
 #enter:IfStmt
 5 -> 4
 #exit:IfStmt
+6 -> 7
 5 -> 7
-#end:7
 #enter:IfStmt
 7 -> 3
 #exit:IfStmt
+8 -> 9
 7 -> 9
-#end:9
 9 -> 10
 #exit:CompoundStmt
-#end:10
 10 -> 11
 #exit:ForStmt
 11 -> 3
 3 -> 4
-#end:4
 #exit:CompoundStmt
-#end:4
 4 -> 1

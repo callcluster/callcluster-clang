@@ -35,8 +35,6 @@ struct Operation {
     unsigned int IfFalseBranchVisited;//wether the true branch was visited
     unsigned int IfConditionVisited;//boolean, true if the condition for the if statement was visited
     struct Node* BreakNode;//Node that will only not be NULL when the current operation can be broken
-    unsigned int CompoundCaseSeen;//Node that indicates wether the current Compound has seen a Case statement
-    unsigned int CompoundDefaultSeen;//Node that indicates wether the current Compound has seen a Case statement
     Node* CompoundCaseOrigin;//CompoundLast will take this value when a case is seen
     Node* CycleLastNode;//CycleLastNode represents the last executable node in a cycle
     unsigned int ForVisitedExpressions;//counts expressions within a for statement

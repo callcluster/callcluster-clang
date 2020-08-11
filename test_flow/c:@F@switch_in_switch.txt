@@ -1,0 +1,36 @@
+#enter:CompoundStmt
+0 -> 2
+2 -> 3
+#enter:SwitchStmt
+#enter:CompoundStmt
+#case
+3 -> 6
+5 -> 6
+6 -> 7
+7 -> 8
+8 -> 4
+#case
+3 -> 10
+9 -> 10
+10 -> 11
+#enter:SwitchStmt
+#enter:CompoundStmt
+#case
+11 -> 14
+13 -> 14
+14 -> 15
+15 -> 16
+#case
+11 -> 17
+16 -> 17
+17 -> 18
+18 -> 19
+#exit:CompoundStmt
+19 -> 12
+#exit:SwitchStmt
+12 -> 4
+#exit:CompoundStmt
+20 -> 4
+#exit:SwitchStmt
+#exit:CompoundStmt
+4 -> 1

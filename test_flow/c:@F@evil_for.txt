@@ -3,12 +3,9 @@
 2 -> 3
 #enter:ForStmt
 3 -> 5
-#end:5
 5 -> 6
 #exit:ForStmt
 6 -> 3
 3 -> 4
-#end:4
 #exit:CompoundStmt
-#end:4
 4 -> 1

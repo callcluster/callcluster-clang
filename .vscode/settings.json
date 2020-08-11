@@ -14,7 +14,7 @@
     "cmake.debugConfig": {
         "args": [
             "./test-projects/simple/build",
-            "--functions",
+            "--functions-flow",
         ]
     }
 }

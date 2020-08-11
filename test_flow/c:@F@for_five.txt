@@ -3,52 +3,41 @@
 #enter:CompoundStmt
 0 -> 3
 #exit:CompoundStmt
-#end:3
 3 -> 4
 #exit:ForStmt
 4 -> 0
 0 -> 2
-#end:2
 #enter:ForStmt
 #enter:CompoundStmt
 2 -> 6
 #exit:CompoundStmt
-#end:6
 6 -> 7
 #exit:ForStmt
 7 -> 2
 2 -> 5
-#end:5
 #enter:ForStmt
 #enter:CompoundStmt
 5 -> 9
 #exit:CompoundStmt
-#end:9
 9 -> 10
 #exit:ForStmt
 10 -> 5
 5 -> 8
-#end:8
 #enter:ForStmt
 #enter:CompoundStmt
 8 -> 12
 #exit:CompoundStmt
-#end:12
 12 -> 13
 #exit:ForStmt
 13 -> 8
 8 -> 11
-#end:11
 #enter:ForStmt
 #enter:CompoundStmt
 11 -> 15
 #exit:CompoundStmt
-#end:15
 15 -> 16
 #exit:ForStmt
 16 -> 11
 11 -> 14
-#end:14
 #exit:CompoundStmt
-#end:14
 14 -> 1
