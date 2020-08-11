@@ -338,28 +338,8 @@ void Visit_default(Visit* v)
     Operation_visit_case_default(v);
 }
 
-void Visit_break(Visit* v)
-{
+void break_flow(Visit* v){
     Operation* op = v->OpStack;
-    Node_addEdge(op->CompoundLast, op->BreakNode);
-    op->CompoundLast=Node_create(v);
-
-    while(op!=NULL && op->Kind!=Op_IfStmt){
-        op = op->Tail;
-    }
-    if(op==NULL) return;
-
-    if(op->IfTrueBranchVisited){
-        op->IfFalseBranchVisited=1;
-    }else{
-        op->IfTrueBranchVisited=1;
-    }
-}
-
-void Visit_continue(Visit* v)
-{
-    Operation* op = v->OpStack;
-    Node_addEdge(op->CompoundLast, op->ContinueNode);
     op->CompoundLast=Node_create(v);
 
     while(op != NULL && op->Kind!=Op_IfStmt){
@@ -372,6 +352,21 @@ void Visit_continue(Visit* v)
     }else{
         op->IfTrueBranchVisited=1;
     }
+}
+
+void Visit_break(Visit* v)
+{
+    Operation* op = v->OpStack;
+    Node_addEdge(op->CompoundLast, op->BreakNode);
+    break_flow(v);
+    
+}
+
+void Visit_continue(Visit* v)
+{
+    Operation* op = v->OpStack;
+    Node_addEdge(op->CompoundLast, op->ContinueNode);
+    break_flow(v);
 }
 
 void Visit_return(Visit* v)
@@ -380,18 +375,7 @@ void Visit_return(Visit* v)
     Node_addEdge(Visit_getLast(v),v->ReturnNode);
     Node* last_node=Node_create(v);
     Visit_addLooseEnd(v,last_node);
-    op->CompoundLast=Node_create(v);
-
-    while(op != NULL && op->Kind!=Op_IfStmt){
-        op = op->Tail;
-    }
-    if(op==NULL) return;
-
-    if(op->IfTrueBranchVisited){
-        op->IfFalseBranchVisited=1;
-    }else{
-        op->IfTrueBranchVisited=1;
-    }
+    break_flow(v);
 }
 void Visit_goto(Visit* v, char* label){
     Operation* op = v->OpStack;
@@ -400,18 +384,7 @@ void Visit_goto(Visit* v, char* label){
     Visit_addLooseEnd(v,gone_node);
     gone_node->GotoLabel=label;
     print_flow_goto(gone_node->NodeNumber,gone_node->GotoLabel);
-    op->CompoundLast=Node_create(v);
-
-    while(op != NULL && op->Kind!=Op_IfStmt){
-        op = op->Tail;
-    }
-    if(op==NULL) return;
-
-    if(op->IfTrueBranchVisited){
-        op->IfFalseBranchVisited=1;
-    }else{
-        op->IfTrueBranchVisited=1;
-    }
+    break_flow(v);
 }
 
 void Visit_label(Visit* v, char* name)
