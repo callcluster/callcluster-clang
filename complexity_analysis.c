@@ -108,6 +108,8 @@ struct GraphVisit{
 };
 void add_edge(NodeClientDataType client_data, ComplexityNode from, ComplexityNode to)
 {
+    struct GraphVisit* data = ((struct GraphVisit*) client_data);
+    (data->edges_count)++;
     print_flow_edge(
         ((GraphNode*)from)->NodeNumber,
         ((GraphNode*)to)->NodeNumber
@@ -159,7 +161,7 @@ unsigned int get_complexity(CXCursor c)
     parameters.NodeClientData=(NodeClientDataType) &visit;
     Visit* v = Visit_create(&parameters);
     clang_visitChildren(c, general_visitor, (CXClientData) v);
-    unsigned int complexity = Visit_get_complexity(v);
+    unsigned int complexity = visit.edges_count-visit.vertices_count+2;
     Visit_dispose(v);
     return complexity;
 }

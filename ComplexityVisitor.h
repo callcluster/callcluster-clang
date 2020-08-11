@@ -82,7 +82,6 @@ void Visit_label(Visit* v, char* name);
 void Visit_goto(Visit* v, char* label);
 void Visit_expression(Visit* v);
 Visit* Visit_create(ComplexityParameters*);
-unsigned int Visit_get_complexity(Visit* v);
 void Visit_dispose(Visit* v);
 
 #endif

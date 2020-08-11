@@ -367,8 +367,3 @@ void Visit_label(Visit* v, char* name)
     ComplexityNode last = Visit_getLast(v);
     v->Parameters->SetLabel(v->Parameters->NodeClientData,last,name);
 }
-
-unsigned int Visit_get_complexity(Visit* v)
-{
-    return 2;
-}

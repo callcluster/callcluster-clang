@@ -306,7 +306,7 @@
 			"numberOfLines":	4,
 			"numberOfStatements":	2,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	1
 		}, {
 			"name":	"there(int, int)",
 			"usr":	"c:@F@there",
@@ -314,7 +314,7 @@
 			"numberOfLines":	4,
 			"numberOfStatements":	2,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	1
 		}, {
 			"name":	"hello()",
 			"usr":	"c:@F@hello",
@@ -322,7 +322,7 @@
 			"numberOfLines":	3,
 			"numberOfStatements":	1,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	1
 		}, {
 			"name":	"hello_there()",
 			"usr":	"c:@F@hello_there",
@@ -330,7 +330,7 @@
 			"numberOfLines":	5,
 			"numberOfStatements":	3,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	1
 		}, {
 			"name":	"checkin_it()",
 			"usr":	"c:@F@checkin_it",
@@ -338,7 +338,7 @@
 			"numberOfLines":	24,
 			"numberOfStatements":	20,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	3
 		}, {
 			"name":	"for_five()",
 			"usr":	"c:@F@for_five",
@@ -346,7 +346,7 @@
 			"numberOfLines":	17,
 			"numberOfStatements":	15,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	6
 		}, {
 			"name":	"while_while()",
 			"usr":	"c:@F@while_while",
@@ -354,7 +354,7 @@
 			"numberOfLines":	11,
 			"numberOfStatements":	6,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	3
 		}, {
 			"name":	"compound_compound()",
 			"usr":	"c:@F@compound_compound",
@@ -362,7 +362,7 @@
 			"numberOfLines":	21,
 			"numberOfStatements":	10,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	1
 		}, {
 			"name":	"run_if()",
 			"usr":	"c:@F@run_if",
@@ -370,7 +370,7 @@
 			"numberOfLines":	15,
 			"numberOfStatements":	9,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	3
 		}, {
 			"name":	"almost()",
 			"usr":	"c:@F@almost",
@@ -378,7 +378,7 @@
 			"numberOfLines":	30,
 			"numberOfStatements":	15,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	8
 		}, {
 			"name":	"switch_in_switch()",
 			"usr":	"c:@F@switch_in_switch",
@@ -386,7 +386,7 @@
 			"numberOfLines":	16,
 			"numberOfStatements":	9,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	3
 		}, {
 			"name":	"switch_with_garbage()",
 			"usr":	"c:@F@switch_with_garbage",
@@ -394,7 +394,7 @@
 			"numberOfLines":	16,
 			"numberOfStatements":	12,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	1
 		}, {
 			"name":	"normal_for()",
 			"usr":	"c:@F@normal_for",
@@ -418,7 +418,7 @@
 			"numberOfLines":	9,
 			"numberOfStatements":	6,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	4
 		}, {
 			"name":	"normal_while()",
 			"usr":	"c:@F@normal_while",
@@ -442,7 +442,7 @@
 			"numberOfLines":	10,
 			"numberOfStatements":	6,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	4
 		}, {
 			"name":	"while_with_unreachable_part()",
 			"usr":	"c:@F@while_with_unreachable_part",
@@ -450,7 +450,7 @@
 			"numberOfLines":	14,
 			"numberOfStatements":	6,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	4
 		}, {
 			"name":	"while_with_return()",
 			"usr":	"c:@F@while_with_return",
@@ -458,7 +458,7 @@
 			"numberOfLines":	10,
 			"numberOfStatements":	6,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	4
 		}, {
 			"name":	"unreachable()",
 			"usr":	"c:@F@unreachable",
@@ -466,7 +466,7 @@
 			"numberOfLines":	7,
 			"numberOfStatements":	3,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	1
 		}, {
 			"name":	"gotos()",
 			"usr":	"c:@F@gotos",
@@ -474,7 +474,7 @@
 			"numberOfLines":	12,
 			"numberOfStatements":	4,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	0
 		}, {
 			"name":	"gotos_evil()",
 			"usr":	"c:@F@gotos_evil",
@@ -482,7 +482,7 @@
 			"numberOfLines":	13,
 			"numberOfStatements":	5,
 			"filename":	"/home/jose/callcluster-clang/test-projects/simple/tutorial.c",
-			"cyclomaticComplexity":	2
+			"cyclomaticComplexity":	0
 		}],
 	"calls":	[{
 			"from":	108,
