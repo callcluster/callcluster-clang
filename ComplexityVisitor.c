@@ -274,27 +274,6 @@ void Visit_expression(Visit* v)
     }
 }
 
-void Visit_case_default(Visit* v)
-{
-    Operation* op = v->OpStack;
-    Node* new = Node_create(v);
-    Node_addEdge(op->CompoundCaseOrigin,new);
-    Node_addEdge(op->CompoundLast,new);
-    op->CompoundLast = new;
-}
-
-void Visit_case(Visit* v)
-{
-    print_flow_case();
-    Visit_case_default(v);
-}
-
-void Visit_default(Visit* v)
-{
-    print_flow_default();
-    Visit_case_default(v);
-}
-
 Visit* Visit_create()
 {
     Visit* ret = malloc(sizeof(Visit));
@@ -315,7 +294,26 @@ void Visit_dispose(Visit* v)
 
 //// ---------------------- EXTERNAL INTERFACE -----------------////
 
+void Visit_case_default(Visit* v)
+{
+    Operation* op = v->OpStack;
+    Node* new = Node_create(v);
+    Node_addEdge(op->CompoundCaseOrigin,new);
+    Node_addEdge(Visit_getLast(v),new);
+    Visit_set_last(v,new);
+}
 
+void Visit_case(Visit* v)
+{
+    print_flow_case();
+    Visit_case_default(v);
+}
+
+void Visit_default(Visit* v)
+{
+    print_flow_default();
+    Visit_case_default(v);
+}
 
 void Visit_break(Visit* v)
 {
