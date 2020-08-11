@@ -4,8 +4,6 @@ int main() {
    return 0;
 }
 
-
-/*
 void there(int x, int y){
    main();
    there(main(), x);
@@ -115,7 +113,7 @@ void run_if(){
 }
 
 
-void casi(){
+void almost(){
    int b = 2;
    switch(b){
       b = 8;
@@ -138,8 +136,11 @@ void casi(){
       case 5:
       b = 0;
       default:
-      int q = 8;
-      b = q;
+      {
+         int q = 8;
+         b = q;
+      }
+      
    }
 }
 
@@ -164,10 +165,7 @@ void broken_for(){
       q=8;
    }
 }
-*/
 
-
-/*
 void normal_while(){
    int q=0;
    while (q<10)
@@ -176,15 +174,13 @@ void normal_while(){
    }
    q=8;
 }
-*/
-/*
+
 void evil_while(){
    int q=0;
    while(q<10) q+=1;
    q=8;
 }
-*/
-/*
+
 void broken_while(){
    int q = 0;
    while(q < 10){
@@ -229,7 +225,6 @@ void unreachable(){
    q++;
    q++;
 }
-*/
 
 void gotos(){
    int q=0;
@@ -243,7 +238,7 @@ void gotos(){
    }
    end:return;
 }
-/*
+
 void gotos_evil(){
    int q=0;
    start: q+=1;
@@ -257,4 +252,3 @@ void gotos_evil(){
 
    while(1) goto end;
 }
-*/

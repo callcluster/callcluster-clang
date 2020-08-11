@@ -1,0 +1,16 @@
+#enter:CompoundStmt
+0 -> 2
+2 -> 3
+#enter:ForStmt
+#enter:CompoundStmt
+3 -> 5
+#exit:CompoundStmt
+#end:5
+5 -> 6
+#exit:ForStmt
+6 -> 3
+3 -> 4
+#end:4
+#exit:CompoundStmt
+#end:4
+4 -> 1

@@ -1,0 +1,28 @@
+#enter:CompoundStmt
+#enter:WhileStmt
+#enter:CompoundStmt
+0 -> 3
+3 -> 4
+4 -> 5
+5 -> 6
+6 -> 7
+#exit:CompoundStmt
+#end:7
+7 -> 8
+#exit:WhileStmt
+8 -> 0
+0 -> 2
+#end:2
+#enter:WhileStmt
+#enter:CompoundStmt
+2 -> 10
+#exit:CompoundStmt
+#end:10
+10 -> 11
+#exit:WhileStmt
+11 -> 2
+2 -> 9
+#end:9
+#exit:CompoundStmt
+#end:9
+9 -> 1

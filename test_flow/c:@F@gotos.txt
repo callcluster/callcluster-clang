@@ -1,0 +1,31 @@
+#enter:CompoundStmt
+0 -> 2
+2 -> 3
+3 -> 4
+start -> 4
+4 -> 5
+5 -> 6
+6 -> 7
+#enter:IfStmt
+#enter:CompoundStmt
+7 -> 8
+#end:8
+8 -> end
+#exit:CompoundStmt
+#end:9
+#enter:CompoundStmt
+7 -> 10
+#end:10
+10 -> start
+#exit:CompoundStmt
+#end:11
+#exit:IfStmt
+11 -> 12
+#end:12
+12 -> 13
+end -> 13
+13 -> 1
+#end:14
+#exit:CompoundStmt
+#end:15
+15 -> 1

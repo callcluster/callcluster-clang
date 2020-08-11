@@ -1,0 +1,5 @@
+#enter:CompoundStmt
+0 -> 2
+#exit:CompoundStmt
+#end:2
+2 -> 1

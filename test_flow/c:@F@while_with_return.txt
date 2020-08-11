@@ -1,0 +1,29 @@
+#enter:CompoundStmt
+0 -> 2
+2 -> 3
+#enter:WhileStmt
+#enter:CompoundStmt
+3 -> 5
+#enter:IfStmt
+5 -> 1
+#end:6
+#exit:IfStmt
+6 -> 8
+#end:8
+#enter:IfStmt
+8 -> 3
+#exit:IfStmt
+8 -> 10
+#end:10
+10 -> 11
+#exit:CompoundStmt
+#end:11
+11 -> 12
+#exit:WhileStmt
+12 -> 3
+3 -> 4
+#end:4
+4 -> 13
+#exit:CompoundStmt
+#end:13
+13 -> 1

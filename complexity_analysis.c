@@ -386,10 +386,10 @@ void Visit_break(Visit* v)//PENSADO SOLAMENTE PARA CASE
     Node_addEdge(op->CompoundLast, op->BreakNode);
     op->CompoundLast=Node_create(v);
 
-    while(op->Kind!=CXCursor_IfStmt){
+    while(op!=NULL && op->Kind!=CXCursor_IfStmt){
         op = op->Tail;
     }
-    if(op != NULL && op==NULL) return;
+    if(op==NULL) return;
 
     if(op->IfTrueBranchVisited){
         op->IfFalseBranchVisited=1;
