@@ -338,8 +338,9 @@ void Visit_default(Visit* v)
     Operation_visit_case_default(v);
 }
 
-void break_flow(Visit* v){
+void break_flow(Visit* v, Node* target){
     Operation* op = v->OpStack;
+    Node_addEdge(Visit_getLast(v), target);
     op->CompoundLast=Node_create(v);
 
     while(op != NULL && op->Kind!=Op_IfStmt){
@@ -356,33 +357,24 @@ void break_flow(Visit* v){
 
 void Visit_break(Visit* v)
 {
-    Operation* op = v->OpStack;
-    Node_addEdge(op->CompoundLast, op->BreakNode);
-    break_flow(v);
-    
+    break_flow(v,v->OpStack->BreakNode);
 }
 
 void Visit_continue(Visit* v)
 {
-    Operation* op = v->OpStack;
-    Node_addEdge(op->CompoundLast, op->ContinueNode);
-    break_flow(v);
+    break_flow(v,v->OpStack->ContinueNode);
 }
 
 void Visit_return(Visit* v)
 {
-    Operation* op = v->OpStack;
-    Node_addEdge(Visit_getLast(v),v->ReturnNode);
-    break_flow(v);
+    break_flow(v,v->ReturnNode);
 }
+
 void Visit_goto(Visit* v, char* label){
-    Operation* op = v->OpStack;
     Node* gone_node=Node_create(v);
-    Node_addEdge(Visit_getLast(v),gone_node);
-    Visit_addLooseEnd(v,gone_node);
+    break_flow(v,gone_node);
     gone_node->GotoLabel=label;
     print_flow_goto(gone_node->NodeNumber,gone_node->GotoLabel);
-    break_flow(v);
 }
 
 void Visit_label(Visit* v, char* name)
