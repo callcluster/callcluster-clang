@@ -67,8 +67,10 @@ enum CXChildVisitResult general_visitor (CXCursor cursor, CXCursor parent, CXCli
         case CXCursor_LabelStmt:
         {
             CXString d = clang_getCursorDisplayName(cursor);
-            Visit_label(visit,mallocopy_ca(clang_getCString(d)));
+            char* copied = mallocopy_ca(clang_getCString(d));
+            Visit_label(visit,copied);
             clang_disposeString(d);
+            free(copied);
             clang_visitChildren(cursor, general_visitor, (CXClientData) visit);
             return CXChildVisit_Continue;
         }
@@ -82,7 +84,9 @@ enum CXChildVisitResult general_visitor (CXCursor cursor, CXCursor parent, CXCli
         default:
         if(clang_getCursorKind(cursor) == CXCursor_LabelRef){
             CXString d = clang_getCursorDisplayName(cursor);
-            Visit_goto(visit,mallocopy_ca(clang_getCString(d)));
+            char* copied = mallocopy_ca(clang_getCString(d));
+            Visit_goto(visit,copied);
+            free(copied);
             clang_disposeString(d);
         }else{
             if(clang_isStatement(clang_getCursorKind(parent))) Visit_expression(visit);
@@ -146,6 +150,16 @@ void set_label(NodeClientDataType client_data, ComplexityNode node, const char* 
     print_flow_labeled(n->NodeNumber,label);
 }
 
+void free_nodes(struct GraphNode* n)
+{
+    if(n!=NULL){
+        struct GraphNode* next=n->Previous;
+        free(n);
+        free_nodes(next);
+    }
+    
+}
+
 unsigned int get_complexity(CXCursor c)
 {
     ComplexityParameters parameters;
@@ -161,6 +175,7 @@ unsigned int get_complexity(CXCursor c)
     parameters.NodeClientData=(NodeClientDataType) &visit;
     Visit* v = Visit_create(&parameters);
     clang_visitChildren(c, general_visitor, (CXClientData) v);
+    free_nodes(visit.LastNode);
     unsigned int complexity = visit.edges_count-visit.vertices_count+2;
     Visit_dispose(v);
     return complexity;
