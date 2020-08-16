@@ -7,6 +7,7 @@ struct DefinitionData {
     unsigned int NumberOfLines;
     unsigned int NumberOfStatements;
     unsigned int CyclomaticComplexity;
+    unsigned int BasiliComplexity;
 };
 
 typedef struct DefinitionData DefinitionData;

@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "CabeComplexity/complexity_analysis.h"
+#include "basili_complexity.h"
 
 char* create_location_string(CXCursor c)
 {
@@ -77,6 +78,7 @@ DefinitionData* analyze(CXCursor c){
     ret->NumberOfStatements = number_of_statements(c);
     ret->Filename = create_filename_string(c);
     ret->CyclomaticComplexity = get_complexity(c);
+    ret->BasiliComplexity = get_basili_complexity(c);
 
     return ret;
 }

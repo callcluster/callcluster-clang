@@ -9,6 +9,7 @@ DefinitionData* create_DefinitionData()
     ret->NumberOfLines=0;
     ret->Filename=NULL;
     ret->CyclomaticComplexity=0;
+    ret->BasiliComplexity=0;
     return ret;
 }
 

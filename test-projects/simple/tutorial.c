@@ -228,7 +228,7 @@ void broken_while(){
 
 void while_with_unreachable_part(){
    int q = 0;
-   while(q < 10){
+   while(q < 10 && 15>0){
       q += 1;
       if(q > 8){
          break;
@@ -278,7 +278,7 @@ void gotos_evil(){
    start: q+=1;
    q=3;
    q+=1;
-   if(q==0)
+   if(q==0 && 7==(0+1+2+3+4))
       goto end;
    else
       goto start;

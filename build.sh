@@ -11,4 +11,4 @@ cd ..
 chmod a+x ./build/callclusterClang
 ./build/callclusterClang ./test-projects/simple/build --functions
 #./build/callclusterClang ../php-src/ --functions
-python3 test.py
+#python3 test.py

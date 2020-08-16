@@ -34,6 +34,7 @@ void functions_visitor(const char * name, const char * usr, unsigned int index, 
         cJSON_AddNumberToObject(f,"numberOfStatements",data->NumberOfStatements);
         cJSON_AddStringToObject(f,"filename",data->Filename);
         cJSON_AddNumberToObject(f,"cyclomaticComplexity",data->CyclomaticComplexity);
+        cJSON_AddNumberToObject(f,"basiliComplexity",data->BasiliComplexity);
     }
     cJSON_AddItemToArray(a,f);
 }
