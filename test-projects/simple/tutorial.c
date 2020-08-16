@@ -286,3 +286,56 @@ void gotos_evil(){
 
    while(1) goto end;
 }
+
+void many_logical_comparisons(){
+  int b = 0, q = 0, w = 1;
+  while(b==1 && q==4 || w==8){
+    if(w<0 || w>0){
+      for(int i=0;i<8;i++){
+        b+=1;
+      }
+    }
+  }
+}
+
+void no_care_for_returns(){
+  if(8==8){
+    return;
+  }else{
+    return;
+  }
+  if(9==9){
+    for(int i=0;i<0;i++){
+      if(8==8){
+        9+4;
+      }
+    }
+  }
+}
+
+void calculated_goto_rule(){
+  int a,b,c,d,e;
+  aa: a++;
+  bb: b++;
+  cc: c++;
+  dd: d++;
+  ee: e++;
+  goto aa;
+  void* omg = &&aa;
+  goto *omg;
+}
+
+
+void calculated_goto_rule_two(){
+  int a,b,c,d,e;
+ aa: a++;
+ bb: b++;
+ cc: c++;
+ dd: d++;
+ ee: e++;
+  goto aa;
+  void* omg = &&aa;
+  void* omgad = &&bb;
+  goto *omgad;
+  goto *omg;
+}
