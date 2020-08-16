@@ -6,6 +6,11 @@
 #define SHOW_PROGRESS 4
 unsigned int __verbosity__ = 0;
 
+unsigned int __mccabe__ = 0;
+
+unsigned int calculate_mccabe_complexity(){
+    return __mccabe__;
+}
 
 void set_parameters(int argc, char *argv[]){
     if(argc>=3){
@@ -17,6 +22,9 @@ void set_parameters(int argc, char *argv[]){
         }
         if(strstr(argv[2],"progress")!=NULL){
             __verbosity__ |= SHOW_PROGRESS;
+        }
+        if(strstr(argv[2],"mccabe")!=NULL){
+            __mccabe__ = 1;
         }
     }
 

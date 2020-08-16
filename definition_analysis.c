@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "complexity_analysis.h"
+#include "CabeComplexity/complexity_analysis.h"
 
 char* create_location_string(CXCursor c)
 {

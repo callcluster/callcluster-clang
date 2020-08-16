@@ -20,7 +20,7 @@ def getFlow(function_name):
     proc = subprocess.run([
         "./build/callclusterClang", 
         "./test-projects/simple/build",
-        "--flow",
+        "--flow--mccabe",
         function_name
         ],
         capture_output=True,

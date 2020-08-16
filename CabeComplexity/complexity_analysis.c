@@ -114,6 +114,7 @@ void add_edge(NodeClientDataType client_data, ComplexityNode from, ComplexityNod
 {
     struct GraphVisit* data = ((struct GraphVisit*) client_data);
     (data->edges_count)++;
+    if(to!=NULL && from!=NULL)
     print_flow_edge(
         ((GraphNode*)from)->NodeNumber,
         ((GraphNode*)to)->NodeNumber
@@ -162,6 +163,9 @@ void free_nodes(struct GraphNode* n)
 
 unsigned int get_complexity(CXCursor c)
 {
+    if(!calculate_mccabe_complexity()){
+        return 0;
+    }
     ComplexityParameters parameters;
     parameters.AddEdge=add_edge;
     parameters.CreateNode=create_node;
