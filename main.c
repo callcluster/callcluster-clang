@@ -6,48 +6,83 @@
 #include "GatheredCallgraph.h"
 #include "Visitor.h"
 #include <parameters.h>
+#include <string.h>
+
+
+char* mallocopy_mn(CXString s)
+{
+   const char* c_str = clang_getCString(s);
+   char* ret = malloc((strlen(c_str) + 1) * sizeof(char));
+   strcpy(ret,c_str);
+   return ret;
+}
+
+char* get_filename(CXCompileCommand command)
+{
+   CXString filename = clang_CompileCommand_getFilename(command);
+   CXString directory = clang_CompileCommand_getDirectory(command);
+   char* ret = malloc(sizeof(char)*(strlen(clang_getCString(filename)) + strlen(clang_getCString(directory)) + 10));
+   sprintf(ret,"%s/%s",clang_getCString(directory),clang_getCString(filename));
+   return ret;
+}
+
+void get_arguments(CXCompileCommand command, char*** argv_list_out, unsigned* argc_out)
+{
+   unsigned filename_found=0;
+   unsigned argc = clang_CompileCommand_getNumArgs(command);
+   CXString filename = clang_CompileCommand_getFilename(command);
+
+   char** argv = malloc((argc-1) * sizeof(char*));
+   int argv_i=0;
+   for(int i=0;i<argc;i++){
+      CXString arg = clang_CompileCommand_getArg(command,i);
+      if(strcmp(clang_getCString(arg),clang_getCString(filename)) == 0){
+         filename_found=1;
+      }else{
+         argv[argv_i]=mallocopy_mn(arg);
+         argv_i++;
+      }
+      clang_disposeString(arg);
+   }
+
+   *argv_list_out = argv;
+   *argc_out = argv_i;
+
+   clang_disposeString(filename);
+}
 
 void analyze_command(CXCompileCommand command, CXIndex cxindex, GatheredCallgraph gathered_callgraph)
 {
-   CXString filename = clang_CompileCommand_getFilename(command);
-
-   unsigned int num_args = clang_CompileCommand_getNumArgs(command);
-
-   CXString* args = (CXString*) malloc(num_args * sizeof(CXString));
-   for( unsigned int i = 0; i < num_args; i++ )
-   {
-      args[i] = clang_CompileCommand_getArg(command,i);
-   }
-
-   const char** cargs = malloc(num_args * sizeof(char*));
-   for( unsigned int i = 0; i < num_args; i++ )
-   {
-      cargs[i] = clang_getCString(args[i]);
-   }
-
+   char** argv;
+   unsigned argc;
+   get_arguments(command,&argv,&argc);
+   char* filename=get_filename(command);
 
    CXTranslationUnit tu;
-   clang_parseTranslationUnit2FullArgv(//o talvez clang_parseTranslationUnit2FullArgv ?
+   enum CXErrorCode err = clang_parseTranslationUnit2(
       cxindex,
-      NULL,
-      cargs,num_args,
+      filename,
+      argv,argc,
       0,0,
       CXTranslationUnit_None,
       &tu
    );
+   if(err != CXError_Success){
+      printf("Error %d loading %s\n",err,filename);
+   }
    visit_translationUnit(tu,gathered_callgraph);
    clang_disposeTranslationUnit(tu);
 
-   clang_disposeString(filename);
-   for(unsigned int i = 0; i < num_args; i++ )
+   for(unsigned int i = 0; i < argc; i++ )
    {
-      clang_disposeString(args[i]);
+      free(argv[i]);
    }
-   free(args);
-   free(cargs);
+   free(argv);
+   free(filename);
 }
 
 int main(int argc, char *argv[]) {
+   clang_enableStackTraces();
    if(argc < 2)
    {
       printf("Please pass the build folder where compile_commands.json is located.");
@@ -68,7 +103,7 @@ int main(int argc, char *argv[]) {
    unsigned int commands_number = clang_CompileCommands_getSize(commands);
    CXIndex index = clang_createIndex(1, 0);
    GatheredCallgraph gathered_callgraph = createGatheredCallgraph();
-   clang_CXIndex_setInvocationEmissionPathOption(index,"clang.log");
+   clang_CXIndex_setInvocationEmissionPathOption(index,"./clang.log");
    print_progress_total(commands_number);
    for(unsigned int c=0; c < commands_number; c++)
    {
