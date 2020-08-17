@@ -2,11 +2,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
 struct FunctionList {
     char* FunctionUsr;
     DefinitionData* data;
-    char* DisplayName;
+    DeclarationData* declaration_data;
     struct FunctionList* Previous;
 };
 
@@ -73,8 +72,8 @@ void disposeGatheredCallgraph(GatheredCallgraph callgraph)
             if(current->data!=NULL){
                 dispose_DefinitionData(current->data);
             }
-            if(current->DisplayName!=NULL){
-                free(current->DisplayName);
+            if(current->declaration_data!=NULL){
+                dispose_DeclarationData(current->declaration_data);
             }
             free(current);
             current = prev;
@@ -123,7 +122,7 @@ FunctionList* createFunctionList(const char* name, FunctionList* previous)
     FunctionList* ret = malloc(sizeof(FunctionList));
     ret->FunctionUsr = mallocopy(name);
     ret->Previous = previous;
-    ret->DisplayName = NULL;
+    ret->declaration_data = NULL;
     ret->data = NULL;
     return ret;
 }
@@ -158,15 +157,26 @@ void GatheredCallgraph_addDefinition(GatheredCallgraph callgraph, const char * d
 
     if(fun->data==NULL){
         fun->data=data;
+    }else{
+        dispose_DefinitionData(data);
     }
 }
 
-void GatheredCallgraph_addDeclaration(GatheredCallgraph callgraph, const char * declared_usr, const char * def_display_name)
+unsigned int GatheredCallgraph_wasDeclared(GatheredCallgraph callgraph, const char * declared_usr)
 {
     GatheredCallgraphImpl* cg = (GatheredCallgraphImpl*) callgraph;
     FunctionList* fun = get_or_add_function(cg,declared_usr);
-    if(fun->DisplayName==NULL){
-        fun->DisplayName = mallocopy(def_display_name);
+    return fun->declaration_data!=NULL;
+}
+
+void GatheredCallgraph_addDeclaration(GatheredCallgraph callgraph, const char * declared_usr, DeclarationData* data)
+{
+    GatheredCallgraphImpl* cg = (GatheredCallgraphImpl*) callgraph;
+    FunctionList* fun = get_or_add_function(cg,declared_usr);
+    if(fun->declaration_data==NULL){
+        fun->declaration_data = data;
+    }else{
+        dispose_DeclarationData(data);
     }
 }
 
@@ -193,7 +203,7 @@ void GatheredCallgraph_visitFunctions(GatheredCallgraph gathered_callgraph, Func
     }
     for(unsigned int i = 0; i < (cg->FunctonsSize); i++){
         visitor(
-            functions[i]->DisplayName,
+            functions[i]->declaration_data,
             functions[i]->FunctionUsr,
             i,
             functions[i]->data,

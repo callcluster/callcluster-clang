@@ -42,13 +42,14 @@ void CallgraphVisit_addFunctionDeclaration(CallgraphVisit v, CXCursor declared)
 {
     CallgraphVisitImpl* visit = (CallgraphVisitImpl*) v;
 
-    CXString display = clang_getCursorDisplayName(declared);
-
     CXString usr = clang_getCursorUSR(declared);
-    GatheredCallgraph_addDeclaration(visit->Callgraph, clang_getCString(usr), clang_getCString(display));
-    clang_disposeString(usr);
 
-    clang_disposeString(display);
+    if(!GatheredCallgraph_wasDeclared(visit->Callgraph, clang_getCString(usr))){
+        GatheredCallgraph_addDeclaration(visit->Callgraph, clang_getCString(usr), analyze_declaration(declared));
+    }
+
+    
+    clang_disposeString(usr);
 }
 
 void CallgraphVisit_setCurrentFunctionDefinition(CallgraphVisit v, CXCursor defined)

@@ -63,7 +63,7 @@ void Node_addFunction(Node* n, unsigned int f)
 }
 
 
-void visitor(const char * name, const char * usr, unsigned int index, DefinitionData* def_data, void* data)
+void visitor(DeclarationData * name, const char * usr, unsigned int index, DefinitionData* def_data, void* data)
 {
     if(def_data!=NULL)
     {
