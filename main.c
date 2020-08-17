@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <clang-c/Index.h>
 #include <clang-c/CXCompilationDatabase.h>
@@ -103,6 +104,8 @@ int main(int argc, char *argv[]) {
 
    set_parameters(argc,argv);
 
+   char* initial_work_dir = get_current_dir_name();
+
    CXCompileCommands commands = clang_CompilationDatabase_getAllCompileCommands(db);
    unsigned int commands_number = clang_CompileCommands_getSize(commands);
    CXIndex index = clang_createIndex(1, 0);
@@ -115,11 +118,13 @@ int main(int argc, char *argv[]) {
       CXCompileCommand command = clang_CompileCommands_getCommand(commands,c);
       analyze_command(command, index, gathered_callgraph);
    }
+   chdir(initial_work_dir);
    save(gathered_callgraph,"analysis.json");
    disposeGatheredCallgraph(gathered_callgraph);
    clang_disposeIndex(index);
    clang_CompileCommands_dispose(commands);
    clang_CompilationDatabase_dispose(db);
+   free(initial_work_dir);
 
    return 0;
 }

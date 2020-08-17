@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "parameters.h"
 
 typedef struct {
     unsigned int ifs;
@@ -125,10 +126,45 @@ unsigned int complexity(Counts counts)
     counts.defaults;
 }
 
+
+// from https://stackoverflow.com/questions/9052490/find-the-count-of-substring-in-string
+int ocurrences(const char* substr, const char* str)
+{
+    int count = 0;
+    const char *tmp = str;
+    while((tmp = strstr(tmp, substr)))
+    {
+        count++;
+        tmp++;
+    }
+    return count;
+}
+
+void fast_basili(const char* def, Counts* counts)
+{
+    counts->cases=ocurrences("case",def);
+    counts->ands_plus_ors=ocurrences("&&",def)+ocurrences("||",def);
+    counts->computed_gotos=ocurrences("goto *",def);
+    counts->defaults=ocurrences("default",def);
+    counts->fors=ocurrences("for",def);
+    counts->ifs=ocurrences("if",def);
+    counts->labels=ocurrences(":",def)-ocurrences("?",def);
+    counts->ternaries=ocurrences("?",def);
+    counts->whiles=ocurrences("while",def);
+}
+
 unsigned int get_basili_complexity(CXCursor c)
 {
     Counts counts;
     initialize_counts(&counts);
-    clang_visitChildren(c,feature_counter, (CXClientData) &counts);
+    if(calculate_basili_fast()){
+        CXPrintingPolicy policy = clang_getCursorPrintingPolicy(c);
+        CXString sp = clang_getCursorPrettyPrinted(c,policy);
+        fast_basili(clang_getCString(sp),&counts);
+        clang_disposeString(sp);
+        clang_PrintingPolicy_dispose(policy);
+    }else{
+        clang_visitChildren(c,feature_counter, (CXClientData) &counts);
+    }
     return complexity(counts);
 }

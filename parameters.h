@@ -16,4 +16,5 @@ void set_parameters(int argc, char *argv[]);
 void print_progress_total(unsigned int total);
 void print_progress_current(unsigned int current, unsigned int total);
 unsigned int calculate_mccabe_complexity();
+unsigned int calculate_basili_fast();
 #endif

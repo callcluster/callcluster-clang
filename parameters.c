@@ -8,6 +8,12 @@ unsigned int __verbosity__ = 0;
 
 unsigned int __mccabe__ = 0;
 
+unsigned int __fast_basili__ = 1;
+
+unsigned int calculate_basili_fast(){
+    return 0;
+}
+
 unsigned int calculate_mccabe_complexity(){
     return __mccabe__;
 }
@@ -25,6 +31,9 @@ void set_parameters(int argc, char *argv[]){
         }
         if(strstr(argv[2],"mccabe")!=NULL){
             __mccabe__ = 1;
+        }
+        if(strstr(argv[2],"slow_basili")!=NULL){
+            __fast_basili__ = 0;
         }
     }
 
