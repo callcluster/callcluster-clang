@@ -7,7 +7,7 @@
 #include "Visitor.h"
 #include <parameters.h>
 #include <string.h>
-
+#include <unistd.h>
 
 char* mallocopy_mn(CXString s)
 {
@@ -56,19 +56,22 @@ void analyze_command(CXCompileCommand command, CXIndex cxindex, GatheredCallgrap
    char** argv;
    unsigned argc;
    get_arguments(command,&argv,&argc);
-   char* filename=get_filename(command);
+   //char* filename=get_filename(command);
+   CXString filename = clang_CompileCommand_getFilename(command);
+   CXString directory = clang_CompileCommand_getDirectory(command);
 
    CXTranslationUnit tu;
+   chdir(clang_getCString(directory));//necessary to better simulate the compiler
    enum CXErrorCode err = clang_parseTranslationUnit2(
       cxindex,
-      filename,
+      clang_getCString(filename),
       argv,argc,
       0,0,
       CXTranslationUnit_None,
       &tu
    );
    if(err != CXError_Success){
-      printf("Error %d loading %s\n",err,filename);
+      printf("Error %d loading %s at %s\n",err,clang_getCString(filename), clang_getCString(directory));
    }
    visit_translationUnit(tu,gathered_callgraph);
    clang_disposeTranslationUnit(tu);
@@ -78,7 +81,8 @@ void analyze_command(CXCompileCommand command, CXIndex cxindex, GatheredCallgrap
       free(argv[i]);
    }
    free(argv);
-   free(filename);
+   clang_disposeString(filename);
+   clang_disposeString(directory);
 }
 
 int main(int argc, char *argv[]) {
