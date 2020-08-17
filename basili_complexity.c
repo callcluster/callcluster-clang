@@ -32,6 +32,7 @@ unsigned get_ands_plus_ors_in(CXCursor c)
         }
         clang_disposeString(spelling);
     }
+    clang_disposeTokens(tu,tokens,num_tokens);
     return ands+ors;
 }
 
