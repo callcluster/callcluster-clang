@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "CabeComplexity/complexity_analysis.h"
 #include "basili_complexity.h"
+#include <limits.h>
 
 char* create_location_string(CXCursor c)
 {
@@ -32,8 +33,8 @@ char* create_filename_string(CXCursor c)
     CXSourceLocation loc = clang_getCursorLocation(c);
     CXString filename;
     clang_getPresumedLocation(loc,&filename,NULL,NULL);
-    const char* c_filename = clang_getCString(filename);
-    char* ret=mallocopy_da(c_filename);
+    char* ret=malloc(sizeof(char)*PATH_MAX);
+    realpath(clang_getCString(filename),ret);
     clang_disposeString(filename);
     return ret;
 }

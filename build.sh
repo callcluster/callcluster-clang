@@ -10,6 +10,7 @@ cmake --build .
 #make CFLAGS="-pg" LDFLAGS="-pg" LDLIBS="-pg"
 cd ..
 chmod a+x ./build/callclusterClang
-#./build/callclusterClang ./test-projects/simple/build --functions
-./build/callclusterClang ../php-src/ --progress
-#python3 test.py
+./build/callclusterClang ./test-projects/simple/build --functions
+#./build/callclusterClang ../php-src/ --progress
+#./build/callclusterClang ../redis/ --progress
+python3 test.py
