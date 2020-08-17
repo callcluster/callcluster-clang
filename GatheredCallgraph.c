@@ -1,12 +1,24 @@
+#define _GNU_SOURCE
 #include "GatheredCallgraph.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <search.h>
+
+struct FunctionBucket {
+    struct hsearch_data * htab;
+    struct FunctionBucket* previous;
+};
+
+typedef struct FunctionBucket FunctionBucket;
+typedef struct FullFunctionData FullFunctionData;
+
 struct FunctionList {
     char* FunctionUsr;
     DefinitionData* data;
     DeclarationData* declaration_data;
     struct FunctionList* Previous;
+    unsigned int id;
 };
 
 typedef struct FunctionList FunctionList;
@@ -20,6 +32,7 @@ struct CallsSet {
 typedef struct CallsSet CallsSet;
 
 typedef struct  {
+    FunctionBucket* LastBucket;
     FunctionList* LastFunction;
     unsigned int FunctonsSize;
     CallsSet* Calls;
@@ -28,19 +41,44 @@ typedef struct  {
 
 void find_function(GatheredCallgraphImpl* cg, const char * name, int* id_out, FunctionList** function_out)
 {
+    FunctionBucket* current = cg->LastBucket;
+    ENTRY entry;
+    entry.key=name;
+    ENTRY* ret_entry=NULL;
+    while(ret_entry == NULL && current!=NULL){
+        hsearch_r(entry, FIND, &ret_entry, current->htab);
+        current = current->previous;
+    }
+
+    if(ret_entry==NULL){
+        if(id_out!=NULL){
+            *id_out = -1;
+        }
+        if(function_out!=NULL){
+            *function_out = NULL;
+        }
+    }else{
+        if(id_out!=NULL){
+            *id_out = ((FunctionList*)ret_entry->data)->id;
+        }
+        if(function_out!=NULL){
+            *function_out = (FunctionList*)ret_entry->data;
+        }
+    }
+
+    /*
     FunctionList* current = cg -> LastFunction;
-    int i = cg->FunctonsSize - 1;
     while(current != NULL){
         if(strcmp(current->FunctionUsr,name)==0){
             if(id_out!=NULL){
-                *id_out = i;
+                *id_out = current->id;
             }
             if(function_out!=NULL){
                 *function_out = current;
             }
             return;
         }
-        current = current -> Previous; i--;
+        current = current -> Previous;
     }
     if(id_out!=NULL){
         *id_out = -1;
@@ -49,6 +87,7 @@ void find_function(GatheredCallgraphImpl* cg, const char * name, int* id_out, Fu
         *function_out = NULL;
     }
     return;
+    */
 }
 
 GatheredCallgraph createGatheredCallgraph()
@@ -57,6 +96,7 @@ GatheredCallgraph createGatheredCallgraph()
     cg->Calls = NULL;
     cg->LastFunction = NULL;
     cg->FunctonsSize = 0;
+    cg->LastBucket = NULL;
     return cg;
 }
 
@@ -85,6 +125,16 @@ void disposeGatheredCallgraph(GatheredCallgraph callgraph)
             CallsSet* Next = current->Next;
             free(current);
             current = Next;
+        }
+    }
+    {
+        FunctionBucket* current = cg->LastBucket;
+        while(current!=NULL){
+            FunctionBucket* previous = current->previous;
+            hdestroy_r(current->htab);
+            free(current->htab);
+            free(current);
+            current = previous;
         }
     }
 
@@ -127,15 +177,45 @@ FunctionList* createFunctionList(const char* name, FunctionList* previous)
     return ret;
 }
 
+FunctionBucket* createEmptyBucket(FunctionBucket* previous)
+{
+    FunctionBucket* ret = malloc(sizeof(FunctionBucket));
+    ret->previous = previous;
+    ret->htab=calloc(1,sizeof(struct hsearch_data));
+    hcreate_r(1000,ret->htab);
+    return ret;
+}
+
+unsigned int addFunctionToBucket(FunctionBucket* bucket, FunctionList* added)
+{
+    ENTRY item;
+    ENTRY* retitem;
+    item.data=added;
+    item.key=added->FunctionUsr;
+    FunctionBucket* current_bucket=bucket;
+    return hsearch_r(item,ENTER,&retitem,current_bucket->htab);
+}
+
 FunctionList* addFunction(GatheredCallgraphImpl* cg, const char * name)
 {
     if(cg->LastFunction == NULL){
         cg->LastFunction = createFunctionList(name,NULL);
+        cg->LastFunction->id = 0;
         cg->FunctonsSize = 1;
     }else{
         FunctionList* previous = cg->LastFunction;
         cg->LastFunction = createFunctionList(name,previous);
+        cg->LastFunction->id = cg->FunctonsSize;
         cg->FunctonsSize += 1;
+    }
+
+    if(cg->LastBucket==NULL){
+        cg->LastBucket=createEmptyBucket(NULL);
+    }
+    unsigned int success = addFunctionToBucket(cg->LastBucket,cg->LastFunction);
+    if(!success){
+        cg->LastBucket = createEmptyBucket(cg->LastBucket);
+        addFunctionToBucket(cg->LastBucket, cg->LastFunction);
     }
     return cg->LastFunction;
 }
