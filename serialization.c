@@ -28,12 +28,17 @@ void functions_visitor(DeclarationData* decl_data, const char * usr, unsigned in
     cJSON* f = cJSON_CreateObject();
     cJSON_AddStringToObject(f,"name",decl_data->DisplayName);
     cJSON_AddStringToObject(f,"usr",usr);
-    if(data!=NULL){
+    if(data==NULL){
+        cJSON_AddStringToObject(f,"location",decl_data->Location);
+        cJSON_AddStringToObject(f,"filename",decl_data->Filename);
+    }else{
         cJSON_AddStringToObject(f,"location",data->Location);
         cJSON_AddNumberToObject(f,"numberOfLines",data->NumberOfLines);
         cJSON_AddNumberToObject(f,"numberOfStatements",data->NumberOfStatements);
         cJSON_AddStringToObject(f,"filename",data->Filename);
-        cJSON_AddNumberToObject(f,"cyclomaticComplexity",data->CyclomaticComplexity);
+        if(data->CyclomaticComplexity!=0){
+            cJSON_AddNumberToObject(f,"cyclomaticComplexity",data->CyclomaticComplexity);
+        }
         cJSON_AddNumberToObject(f,"basiliComplexity",data->BasiliComplexity);
     }
     cJSON_AddItemToArray(a,f);

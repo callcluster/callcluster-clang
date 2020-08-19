@@ -65,29 +65,6 @@ void find_function(GatheredCallgraphImpl* cg, const char * name, int* id_out, Fu
             *function_out = (FunctionList*)ret_entry->data;
         }
     }
-
-    /*
-    FunctionList* current = cg -> LastFunction;
-    while(current != NULL){
-        if(strcmp(current->FunctionUsr,name)==0){
-            if(id_out!=NULL){
-                *id_out = current->id;
-            }
-            if(function_out!=NULL){
-                *function_out = current;
-            }
-            return;
-        }
-        current = current -> Previous;
-    }
-    if(id_out!=NULL){
-        *id_out = -1;
-    }
-    if(function_out!=NULL){
-        *function_out = NULL;
-    }
-    return;
-    */
 }
 
 GatheredCallgraph createGatheredCallgraph()
