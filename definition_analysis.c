@@ -84,7 +84,7 @@ DefinitionData* analyze(CXCursor c){
     return ret;
 }
 
-char* create_display_name_string(CXCursor c)
+char* create_name_string(CXCursor c)
 {
     CXString s = clang_getCursorDisplayName(c);
     char* ret = mallocopy_da(clang_getCString(s));
@@ -95,7 +95,7 @@ char* create_display_name_string(CXCursor c)
 DeclarationData* analyze_declaration(CXCursor c)
 {
     DeclarationData* ret = create_DeclarationData();
-    ret->DisplayName = create_display_name_string(c);
+    ret->Name = create_name_string(c);
     ret->Filename=create_filename_string(c);
     ret->Location=create_location_string(c);
     return ret;

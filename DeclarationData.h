@@ -2,7 +2,7 @@
 #define DECLARATION_DATA_H
 
 struct DeclarationData {
-    char* DisplayName;
+    char* Name;
     char* Location;
     char* Filename;
 };

@@ -26,7 +26,7 @@ void functions_visitor(DeclarationData* decl_data, const char * usr, unsigned in
 {
     cJSON* a = (cJSON*) array;
     cJSON* f = cJSON_CreateObject();
-    cJSON_AddStringToObject(f,"name",decl_data->DisplayName);
+    cJSON_AddStringToObject(f,"name",decl_data->Name);
     cJSON_AddStringToObject(f,"usr",usr);
     if(data==NULL){
         cJSON_AddStringToObject(f,"location",decl_data->Location);

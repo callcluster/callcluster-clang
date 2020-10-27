@@ -4,7 +4,7 @@
 DeclarationData* create_DeclarationData()
 {
     DeclarationData* ret = malloc(sizeof(DeclarationData));
-    ret->DisplayName=NULL;
+    ret->Name=NULL;
     ret->Filename=NULL;
     ret->Location=NULL;
     return ret;
@@ -12,8 +12,8 @@ DeclarationData* create_DeclarationData()
 
 void dispose_DeclarationData(DeclarationData* d)
 {
-    if(d->DisplayName!=NULL){
-        free(d->DisplayName);
+    if(d->Name!=NULL){
+        free(d->Name);
     }
     if(d->Filename!=NULL){
         free(d->Filename);
