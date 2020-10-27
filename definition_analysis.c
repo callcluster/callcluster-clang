@@ -39,15 +39,15 @@ char* create_filename_string(CXCursor c)
     return ret;
 }
 
-unsigned int lines_of(CXCursor c)
+int lines_of(CXCursor c)
 {
     CXSourceRange r = clang_getCursorExtent(c);
     CXSourceLocation start = clang_getRangeStart(r);
-    unsigned int line_start;
+    int line_start;
     clang_getPresumedLocation(start,NULL,&line_start,NULL);
 
     CXSourceLocation end = clang_getRangeEnd(r);
-    unsigned int line_end;
+    int line_end;
     clang_getPresumedLocation(end,NULL,&line_end,NULL);
 
     return line_end - line_start + 1;
@@ -56,7 +56,7 @@ unsigned int lines_of(CXCursor c)
 // It doesn't count statements but the syntax rule called 'expression_statement' here: https://www.lysator.liu.se/c/ANSI-C-grammar-y.html#expression
 enum CXChildVisitResult statement_counter(CXCursor cursor, CXCursor parent, CXClientData client_data)
 {
-    unsigned int* statements = (unsigned int*)client_data;
+    int* statements = (int*)client_data;
     enum CXCursorKind k = clang_getCursorKind(cursor);
     if(clang_isExpression(k) && clang_isStatement(clang_getCursorKind(parent))){
         (*statements) += 1;
@@ -64,9 +64,9 @@ enum CXChildVisitResult statement_counter(CXCursor cursor, CXCursor parent, CXCl
     return CXChildVisit_Recurse;
 }
 
-unsigned int number_of_statements(CXCursor c)
+int number_of_statements(CXCursor c)
 {
-    unsigned int statements = 0;
+    int statements = 0;
     clang_visitChildren(c,statement_counter, (CXClientData) &statements);
     return statements;
 }

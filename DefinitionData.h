@@ -4,10 +4,10 @@
 struct DefinitionData {
     char* Location;
     char* Filename;
-    unsigned int linesOfCode;
-    unsigned int NumberOfStatements;
-    unsigned int CyclomaticComplexity;
-    unsigned int BasiliComplexity;
+    int linesOfCode;
+    int NumberOfStatements;
+    int CyclomaticComplexity;
+    int BasiliComplexity;
 };
 
 typedef struct DefinitionData DefinitionData;
