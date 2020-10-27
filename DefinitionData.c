@@ -6,7 +6,7 @@ DefinitionData* create_DefinitionData()
 {
     DefinitionData* ret = malloc(sizeof(DefinitionData));
     ret->Location=NULL;
-    ret->NumberOfLines=0;
+    ret->linesOfCode=0;
     ret->Filename=NULL;
     ret->CyclomaticComplexity=0;
     ret->BasiliComplexity=0;

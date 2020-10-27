@@ -4,7 +4,7 @@
 struct DefinitionData {
     char* Location;
     char* Filename;
-    unsigned int NumberOfLines;
+    unsigned int linesOfCode;
     unsigned int NumberOfStatements;
     unsigned int CyclomaticComplexity;
     unsigned int BasiliComplexity;

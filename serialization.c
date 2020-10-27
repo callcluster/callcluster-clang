@@ -33,7 +33,7 @@ void functions_visitor(DeclarationData* decl_data, const char * usr, unsigned in
         cJSON_AddStringToObject(f,"filename",decl_data->Filename);
     }else{
         cJSON_AddStringToObject(f,"location",data->Location);
-        cJSON_AddNumberToObject(f,"numberOfLines",data->NumberOfLines);
+        cJSON_AddNumberToObject(f,"linesOfCode",data->linesOfCode);
         cJSON_AddNumberToObject(f,"numberOfStatements",data->NumberOfStatements);
         cJSON_AddStringToObject(f,"filename",data->Filename);
         if(data->CyclomaticComplexity!=0){

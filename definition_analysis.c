@@ -75,7 +75,7 @@ DefinitionData* analyze(CXCursor c){
     DefinitionData* ret = create_DefinitionData();
 
     ret->Location = create_location_string(c);
-    ret->NumberOfLines = lines_of(c);
+    ret->linesOfCode = lines_of(c);
     ret->NumberOfStatements = number_of_statements(c);
     ret->Filename = create_filename_string(c);
     ret->CyclomaticComplexity = get_complexity(c);
